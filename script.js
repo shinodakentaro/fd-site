@@ -284,17 +284,6 @@ function showScreen(id) {
 function renderVoteScreen(typeKey) {
   const type = TYPES[typeKey];
 
-  // ハートのタイプ別カラークラス
-  document.getElementById('heart-seal').className = `heart-seal type-${typeKey}`;
-
-  // ハート内テキスト
-  document.getElementById('seal-label').textContent = type.name;
-  document.getElementById('seal-copy').textContent  = type.copy;
-
-  // タイプ名・コピー（ハート下）
-  document.getElementById('vote-type-headline').textContent = type.name;
-  document.getElementById('vote-type-copy').textContent     = type.copy;
-
   // 投票結果エリアをリセット・投票ボタンを再表示
   document.getElementById('vote-result').style.display = 'none';
   document.getElementById('vote-buttons').style.display = '';
