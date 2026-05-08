@@ -766,7 +766,7 @@ button:active { opacity: .8; transform: scale(.97); }
   justify-content: center;
 }
 .result-badge::after {
-  content: '&#10022;';
+  content: '\2726';
   font-size: 28px;
   color: var(--color-gold);
 }
