@@ -870,13 +870,13 @@ button:active { opacity: .8; transform: scale(.97); }
    夏のお手入れtipsセクション
    ======================================== */
 .tips-section {
-  padding: 4px 24px 20px;
+  padding: 12px 24px 32px;
 }
 .tips-section-header {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 14px;
+  gap: 10px;
+  margin-bottom: 20px;
 }
 .tips-season-badge {
   display: inline-flex;
@@ -884,14 +884,14 @@ button:active { opacity: .8; transform: scale(.97); }
   gap: 5px;
   background: linear-gradient(135deg, #ffe8b0 0%, #ffd070 100%);
   color: #7a5200;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
-  padding: 4px 10px;
+  padding: 6px 14px;
   border-radius: 20px;
   letter-spacing: .06em;
 }
 .tips-section-title {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 700;
   color: var(--color-text-mid);
   letter-spacing: .05em;
@@ -899,36 +899,36 @@ button:active { opacity: .8; transform: scale(.97); }
 .tips-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 16px;
 }
 .tip-card {
   background: var(--color-white);
-  border-radius: var(--radius-md);
-  padding: 14px 16px;
+  border-radius: var(--radius-lg);
+  padding: 20px 20px;
   display: flex;
   align-items: flex-start;
-  gap: 12px;
-  box-shadow: var(--shadow-sm);
-  border-left: 3px solid var(--color-gold-light);
+  gap: 16px;
+  box-shadow: var(--shadow-md);
+  border-left: 4px solid var(--color-gold-light);
 }
 .tip-icon {
-  font-size: 22px;
+  font-size: 28px;
   line-height: 1;
   flex-shrink: 0;
-  margin-top: 1px;
+  margin-top: 2px;
 }
 .tip-body {}
 .tip-title {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
   color: var(--color-text);
-  margin-bottom: 4px;
+  margin-bottom: 6px;
   letter-spacing: .03em;
 }
 .tip-text {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--color-text-mid);
-  line-height: 1.7;
+  line-height: 1.85;
   letter-spacing: .03em;
 }
 
