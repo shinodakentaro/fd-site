@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>今日の肌ムード診断</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- PC表示時のスマホフレーム -->
+  <div class="app-frame">
+
+    <!-- ===== デモ用タイプ選択バナー（URLパラメータなし時に表示） ===== -->
+    <div id="demo-selector" class="demo-selector" style="display:none;">
+      <p class="demo-selector-label">&#9662; デモ用：タイプを選んで確認</p>
+      <div class="demo-selector-btns" id="demo-selector-btns"></div>
+    </div>
+
+    <!-- ===== 投票画面（最初の画面） ===== -->
+    <!-- URLパラメータ ?type=xxx で肌タイプを受け取り表示 -->
+    <div id="screen-vote" class="screen active">
+
+      <!-- 背景装飾 -->
+      <div class="vote-bg">
+        <div class="vote-bg-circle vote-bg-c1"></div>
+        <div class="vote-bg-circle vote-bg-c2"></div>
+      </div>
+
+      <!-- ハート＋タイプ情報エリア -->
+      <div class="vote-type-area">
+        <p class="vote-area-eyebrow">あなたの肌タイプ</p>
+        <div class="seal-container">
+          <div class="heart-seal-shadow">
+            <div class="heart-seal" id="heart-seal">
+              <div class="seal-inner">
+                <div class="seal-type-label" id="seal-label"></div>
+                <div class="seal-copy" id="seal-copy"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <h2 class="vote-type-headline" id="vote-type-headline"></h2>
+        <p class="vote-type-copy" id="vote-type-copy"></p>
+      </div>
+
+      <!-- 投票セクション -->
+      <div class="vote-question-wrap">
+        <div class="vote-wave-deco"></div>
+        <h3 class="vote-title">体験してみて、<br>今日はどっち派？</h3>
+
+        <div class="vote-buttons" id="vote-buttons">
+          <button class="vote-btn vote-btn-glow" onclick="vote('glow')">
+            <div class="vote-btn-icon glow-icon"></div>
+            <span class="vote-btn-label">ツヤ派</span>
+            <span class="vote-btn-sub">みずみずしい光沢感</span>
+          </button>
+          <button class="vote-btn vote-btn-matte" onclick="vote('matte')">
+            <div class="vote-btn-icon matte-icon"></div>
+            <span class="vote-btn-label">マット派</span>
+            <span class="vote-btn-sub">さらっとした質感</span>
+          </button>
+        </div>
+
+        <!-- 投票後に表示される結果バー -->
+        <div class="vote-result" id="vote-result" style="display:none;">
+          <p class="vote-result-title">みんなの投票結果</p>
+          <div class="vote-bars">
+            <div class="vote-bar-row">
+              <span class="vote-bar-name glow-color">ツヤ派</span>
+              <div class="vote-bar-track">
+                <div class="vote-bar-fill glow-bar" id="bar-glow"></div>
+              </div>
+              <span class="vote-bar-pct" id="pct-glow">0%</span>
+            </div>
+            <div class="vote-bar-row">
+              <span class="vote-bar-name matte-color">マット派</span>
+              <div class="vote-bar-track">
+                <div class="vote-bar-fill matte-bar" id="bar-matte"></div>
+              </div>
+              <span class="vote-bar-pct" id="pct-matte">0%</span>
+            </div>
+          </div>
+          <button class="btn btn-primary btn-large" onclick="goToResultScreen()" style="margin-top:24px;">
+            結果を見る
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== C. 結果表示モード ===== -->
+
+    <!-- 5. 結果画面 -->
+    <div id="screen-result" class="screen">
+      <div class="result-header">
+        <div class="result-badge" id="result-badge"></div>
+        <h2 class="result-type-name" id="result-type-name"></h2>
+        <p class="result-comment" id="result-comment"></p>
+      </div>
+
+      <div class="product-section">
+        <p class="product-section-title">おすすめファンデーション</p>
+        <div class="product-cards">
+          <!-- ツヤタイプ -->
+          <div class="product-card" id="product-glow">
+            <div class="product-card-visual glow-visual">
+              <div class="product-shape glow-shape"></div>
+            </div>
+            <div class="product-card-info">
+              <span class="product-type-tag">ツヤタイプ</span>
+              <p class="product-name">Luminous Glow<br>Foundation</p>
+              <p class="product-desc">光をまとう薄膜テクスチャー</p>
+            </div>
+          </div>
+          <!-- マットタイプ -->
+          <div class="product-card" id="product-matte">
+            <div class="product-card-visual matte-visual">
+              <div class="product-shape matte-shape"></div>
+            </div>
+            <div class="product-card-info">
+              <span class="product-type-tag">マットタイプ</span>
+              <p class="product-name">Velvet Matte<br>Foundation</p>
+              <p class="product-desc">なめらかな素肌仕上がり</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 夏のお手入れtipsセクション（JavaScriptで動的生成） -->
+      <div id="summer-tips-section"></div>
+
+      <button class="btn btn-ghost btn-large" onclick="restartDiagnosis()">
+        もう一度診断する
+      </button>
+    </div>
+
+  </div><!-- /.app-frame -->
+
+  <script src="script.js"></script>
+</body>
+</html>
