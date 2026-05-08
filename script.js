@@ -284,6 +284,19 @@ function showScreen(id) {
 function renderVoteScreen(typeKey) {
   const type = TYPES[typeKey];
 
+  // タイプ情報エリアを更新
+  document.getElementById('vote-type-headline').textContent = type.name;
+  document.getElementById('vote-type-copy').textContent     = type.copy;
+  const heartColors = {
+    glow:    'linear-gradient(150deg, #fde8d0 0%, #f7c5a0 100%)',
+    clear:   'linear-gradient(150deg, #fce8f0 0%, #f2a7c3 100%)',
+    soft:    'linear-gradient(150deg, #f0e8f8 0%, #d4b8e8 100%)',
+    refined: 'linear-gradient(150deg, #e8eff8 0%, #a8c0d8 100%)',
+    natural: 'linear-gradient(150deg, #f0f5e8 0%, #c8d8a8 100%)',
+    mood:    'linear-gradient(150deg, #fde8d0 0%, #f2a7c3 50%, #a8c0d8 100%)',
+  };
+  document.getElementById('vote-heart').style.background = heartColors[typeKey] || heartColors.natural;
+
   // 投票結果エリアをリセット・投票ボタンを再表示
   document.getElementById('vote-result').style.display = 'none';
   document.getElementById('vote-buttons').style.display = '';

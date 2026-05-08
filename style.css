@@ -566,6 +566,17 @@ button:active { opacity: .8; transform: scale(.97); }
   background: radial-gradient(circle, rgba(201,169,110,.15) 0%, transparent 70%);
 }
 
+/* ハート（投票画面） */
+.vote-heart-wrap {
+  filter: drop-shadow(0 6px 16px rgba(217,127,168,.3));
+  margin-bottom: 12px;
+}
+.vote-heart {
+  width: 80px;
+  height: 74px;
+  clip-path: path('M 40 68 C 18 56 0 44 0 25 C 0 12 9 2 23 2 C 31 2 37 6 40 11 C 43 6 49 2 57 2 C 71 2 80 12 80 25 C 80 44 62 56 40 68 Z');
+}
+
 /* タイプ情報エリア（ハート＋テキスト） */
 .vote-type-area {
   position: relative;
