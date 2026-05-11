@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>肌ムードバトル</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ===== 投票画面（iPad用） ===== -->
+  <div id="screen-vote" class="screen vote-screen">
+    <div class="v-bg">
+      <div class="v-orb v-orb1"></div>
+      <div class="v-orb v-orb2"></div>
+      <div class="v-orb v-orb3"></div>
+    </div>
+
+    <div class="v-header">
+      <span class="v-event-badge">&#10022; SKIN MOOD BATTLE &#10022;</span>
+    </div>
+
+    <!-- キャラクターステージ（JS生成） -->
+    <div class="v-stage" id="v-stage"></div>
+
+    <!-- 投票ボタン -->
+    <div class="v-action" id="v-action">
+      <p class="v-question">今日はどっち派？</p>
+      <div class="v-btn-row">
+        <button class="v-btn v-btn-glow" onclick="castVote('glow')">
+          <div class="v-btn-shine"></div>
+          <span class="v-btn-icon">&#10024;</span>
+          <span class="v-btn-label">ツヤ派</span>
+          <span class="v-btn-sub">みずみずしく輝く</span>
+        </button>
+        <button class="v-btn v-btn-matte" onclick="castVote('matte')">
+          <div class="v-btn-shine"></div>
+          <span class="v-btn-icon">&#127807;</span>
+          <span class="v-btn-label">マット派</span>
+          <span class="v-btn-sub">さらっと上品に</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- 投票完了オーバーレイ -->
+    <div class="v-complete" id="v-complete">
+      <div class="vc-particles" id="vc-particles"></div>
+      <div class="vc-card">
+        <div class="vc-char-wrap" id="vc-char-wrap"></div>
+        <div class="vc-emoji" id="vc-emoji">&#10024;</div>
+        <h2 class="vc-title" id="vc-title">ツヤ派で参加！</h2>
+        <p class="vc-msg">会場モニターに<br><strong>参加しました！</strong></p>
+        <p class="vc-hint">&#128064; モニター画面を見てみよう</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== モニター画面（大型ディスプレイ用） ===== -->
+  <div id="screen-monitor" class="screen monitor-screen" style="display:none;">
+    <div class="m-bg">
+      <div class="m-bg-l"></div>
+      <div class="m-bg-r"></div>
+    </div>
+
+    <!-- タイトルバー -->
+    <div class="m-title-bar">
+      <div class="m-title-orn">&#9670; &#9670; &#9670;</div>
+      <h1 class="m-title">&#127800; 本日の肌ムードバトル &#127800;</h1>
+      <div class="m-title-orn">&#9670; &#9670; &#9670;</div>
+    </div>
+
+    <!-- バトルメインエリア -->
+    <div class="m-battle">
+
+      <!-- ツヤゾーン（左） -->
+      <div class="m-zone m-zone-glow">
+        <div class="m-zone-lbl">
+          <span class="mzl-icon">&#10024;</span>
+          <span class="mzl-name">ツヤ派</span>
+        </div>
+        <div class="m-zone-crowd" id="glow-crowd"></div>
+        <div class="m-zone-cnt">
+          <span class="mzc-num" id="glow-num">0</span>
+          <span class="mzc-unit">票</span>
+        </div>
+      </div>
+
+      <!-- 中央スコアボード -->
+      <div class="m-score">
+        <div class="m-pct-row">
+          <span class="m-pct m-pct-glow" id="pct-glow">58%</span>
+          <span class="m-pct-sep">:</span>
+          <span class="m-pct m-pct-matte" id="pct-matte">42%</span>
+        </div>
+        <div class="m-bar-wrap">
+          <div class="m-bar-glow"  id="bar-glow"  style="width:58%"></div>
+          <div class="m-bar-matte" id="bar-matte" style="width:42%"></div>
+        </div>
+        <div class="m-vs-badge">VS</div>
+        <div class="m-total" id="m-total">100 votes</div>
+      </div>
+
+      <!-- マットゾーン（右） -->
+      <div class="m-zone m-zone-matte">
+        <div class="m-zone-lbl">
+          <span class="mzl-icon">&#127807;</span>
+          <span class="mzl-name">マット派</span>
+        </div>
+        <div class="m-zone-crowd" id="matte-crowd"></div>
+        <div class="m-zone-cnt">
+          <span class="mzc-num" id="matte-num">0</span>
+          <span class="mzc-unit">票</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- フライングキャラクターステージ -->
+    <div class="m-fly-stage" id="fly-stage"></div>
+
+    <!-- パーティクルステージ -->
+    <div class="m-ptcl-stage" id="ptcl-stage"></div>
+
+    <!-- 最近の参加者バー -->
+    <div class="m-recent-bar">
+      <span class="m-recent-ttl">&#10022; 最近の参加者 &#10022;</span>
+      <div class="m-recent-list" id="recent-list"></div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
