@@ -10,7 +10,7 @@ const CHARACTERS = {
     desc:   'ポジティブオーラ全開！\nツヤ感で毎日をキラキラと輝かせる存在。',
     c1:     '#ff85a1',
     c2:     '#ffd700',
-    sym:    '\u2726',   // ✦
+    img:    'images/kirari.png',
   },
   urumin: {
     key:    'urumin',
@@ -20,7 +20,7 @@ const CHARACTERS = {
     desc:   'みずみずしさと透明感が武器。\n肌の奥からにじみ出る輝きを持つ。',
     c1:     '#7ecfd6',
     c2:     '#f2a7c3',
-    sym:    '\u273f',   // ✿
+    img:    'images/urumin.png',
   },
   sarasa: {
     key:    'sarasa',
@@ -30,7 +30,7 @@ const CHARACTERS = {
     desc:   'さらっとした洗練された仕上がりが信条。\n上品なマット感で存在感を放つ。',
     c1:     '#5a7a8f',
     c2:     '#c8b89a',
-    sym:    '\u25c6',   // ◆
+    img:    'images/sarasa.png',
   },
   fuwamaru: {
     key:    'fuwamaru',
@@ -40,7 +40,7 @@ const CHARACTERS = {
     desc:   'ふわふわのテクスチャーとやさしい雰囲気が魅力。\nマットでも柔らかな印象に仕上げる。',
     c1:     '#d4b8e8',
     c2:     '#f5e6d3',
-    sym:    '\u25cf',   // ●
+    img:    'images/fuwamaru.png',
   },
   mood: {
     key:    'mood',
@@ -50,7 +50,7 @@ const CHARACTERS = {
     desc:   'ツヤもマットも、気分次第。\nその日の自分に合わせて楽しむのが流儀。',
     c1:     '#f2a7c3',
     c2:     '#a8c0d8',
-    sym:    '\u25d1',   // ◑
+    img:    'images/mood.png',
   },
 };
 
@@ -102,8 +102,7 @@ function renderVoteStage(char) {
   const stage = document.getElementById('v-stage');
   stage.innerHTML = `
     <div class="char-av c-${char.key}">
-      <div class="char-glow-ring"></div>
-      <span class="char-sym">${char.sym}</span>
+      <img class="char-img" src="${char.img}" alt="${char.name}">
     </div>
     <div class="char-name">${char.name}</div>
     <p class="char-catch">${char.catch}</p>
@@ -145,8 +144,7 @@ function showVoteComplete(voteType) {
   const wrap = document.getElementById('vc-char-wrap');
   wrap.innerHTML = `
     <div class="char-av c-${currentChar.key}">
-      <div class="char-glow-ring"></div>
-      <span class="char-sym">${currentChar.sym}</span>
+      <img class="char-img" src="${currentChar.img}" alt="${currentChar.name}">
     </div>
   `;
 
@@ -185,10 +183,31 @@ function spawnBurst(isGlow) {
 let monData    = null;
 let lastUpdate = 0;
 
+function spawnBgBubbles() {
+  const bg    = document.querySelector('.m-bg');
+  const icons = ['✦', '✿', '★', '♡', '◆', '✨', '◇', '☆'];
+  for (let i = 0; i < 28; i++) {
+    const el   = document.createElement('div');
+    el.className = 'bg-bubble';
+    const isLeft = Math.random() > 0.5;
+    el.style.cssText = `
+      left:               ${Math.random() * 100}%;
+      font-size:          ${10 + Math.random() * 24}px;
+      animation-delay:    -${Math.random() * 12}s;
+      animation-duration: ${7 + Math.random() * 7}s;
+      color:              ${isLeft ? '#ff85a1' : '#7ecfd6'};
+      opacity:            ${0.12 + Math.random() * 0.2};
+    `;
+    el.textContent = icons[Math.floor(Math.random() * icons.length)];
+    bg.appendChild(el);
+  }
+}
+
 function initMonitor() {
   monData    = getVoteData();
   lastUpdate = monData.lastUpdate || 0;
 
+  spawnBgBubbles();
   updateDisplay(false);
 
   // 既存の投票データをゾーンに配置（最大12件）
@@ -262,10 +281,9 @@ function renderRecent(recent) {
     const isGlow = item.vote === 'glow';
     const tag    = isGlow ? 'ツヤ派' : 'マット派';
     const cls    = isGlow ? 'r-glow-tag' : 'r-matte-tag';
-    const bg     = `linear-gradient(135deg, ${char.c1}, ${char.c2})`;
     return `
       <div class="r-chip">
-        <div class="r-av" style="background:${bg}">${char.sym}</div>
+        <div class="r-av"><img src="${char.img}" alt="${char.name}"></div>
         <span class="r-name">${char.name}</span>
         <span class="r-vote ${cls}">${tag}</span>
       </div>
@@ -279,8 +297,7 @@ function flyCharacter(charKey, voteType) {
   const stage = document.getElementById('fly-stage');
   const el    = document.createElement('div');
   el.className = `fly-char to-${voteType}`;
-  el.style.background = `linear-gradient(135deg, ${char.c1}, ${char.c2})`;
-  el.innerHTML = `<span style="position:relative;z-index:1;">${char.sym}</span>`;
+  el.innerHTML = `<img class="char-img" src="${char.img}" alt="${char.name}">`;
   stage.appendChild(el);
 
   el.addEventListener('animationend', () => {
@@ -298,13 +315,12 @@ function placeInZone(charKey, voteType, animated) {
 
   el.className = 'zone-av' + (animated ? ' arriving' : '');
   el.style.cssText = `
-    left:       ${14 + Math.random() * 72}%;
-    top:        ${14 + Math.random() * 68}%;
-    background: linear-gradient(135deg, ${char.c1}, ${char.c2});
-    --dur:      ${2.4 + Math.random() * 2.2}s;
-    --delay:    -${Math.random() * 3}s;
+    left:    ${14 + Math.random() * 72}%;
+    top:     ${14 + Math.random() * 68}%;
+    --dur:   ${2.4 + Math.random() * 2.2}s;
+    --delay: -${Math.random() * 3}s;
   `;
-  el.innerHTML = `<span>${char.sym}</span><small>${char.name}</small>`;
+  el.innerHTML = `<img class="char-img" src="${char.img}" alt="${char.name}"><small>${char.name}</small>`;
   crowd.appendChild(el);
 
   // 多すぎたら古いものを削除
