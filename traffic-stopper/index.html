@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>肌タイプ診断</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ===== TOP ===== -->
+  <div id="screen-top" class="screen active">
+    <div class="top-bg">
+      <div class="top-orb top-orb-glow"></div>
+      <div class="top-orb top-orb-smooth"></div>
+    </div>
+    <div class="top-content">
+      <p class="event-badge">✦ @cosme FD EVENT ✦</p>
+      <h1 class="top-headline">あなたの肌は<br>どっちタイプ？</h1>
+      <p class="top-sub">5つの質問に答えてあなたに<br>ぴったりのファンデを見つけよう</p>
+      <div class="top-split-visual">
+        <div class="split-side split-glow">
+          <span class="split-icon">✨</span>
+          <span class="split-label">GLOW</span>
+          <span class="split-desc">光・ツヤ感</span>
+        </div>
+        <div class="split-vs">VS</div>
+        <div class="split-side split-smooth">
+          <span class="split-icon">🌸</span>
+          <span class="split-label">SMOOTH</span>
+          <span class="split-desc">パウダー・なめらか</span>
+        </div>
+      </div>
+      <button class="start-btn" onclick="startQuiz()">
+        <span>診断スタート</span>
+        <span class="btn-arrow">→</span>
+      </button>
+      <p class="top-note">所要時間 約1分 ／ 全5問</p>
+    </div>
+  </div>
+
+  <!-- ===== QUIZ ===== -->
+  <div id="screen-quiz" class="screen">
+    <div class="quiz-header">
+      <div class="quiz-progress-wrap">
+        <div class="quiz-progress-bar">
+          <div class="quiz-progress-fill" id="quiz-progress-fill"></div>
+        </div>
+        <span class="quiz-progress-label" id="quiz-progress-label">1 / 5</span>
+      </div>
+    </div>
+    <div class="quiz-body" id="quiz-body">
+      <!-- JS で生成 -->
+    </div>
+  </div>
+
+  <!-- ===== SCAN ===== -->
+  <div id="screen-scan" class="screen">
+    <div class="scan-wrap">
+      <p class="scan-title">肌データを解析中</p>
+      <div class="scan-hand-wrap" id="scan-hand-wrap">
+        <div class="scan-hand-emoji">✋</div>
+        <div class="scan-laser" id="scan-laser"></div>
+        <div class="scan-grid"></div>
+        <div class="scan-dots" id="scan-dots"></div>
+      </div>
+      <div class="scan-progress-wrap">
+        <div class="scan-progress-bar">
+          <div class="scan-progress-fill" id="scan-progress-fill"></div>
+        </div>
+        <p class="scan-status" id="scan-status">スキャン中...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== RESULT ===== -->
+  <div id="screen-result" class="screen">
+    <div class="result-header" id="result-header">
+      <div class="result-cat-badge" id="result-cat-badge">GLOW</div>
+      <h2 class="result-name" id="result-name">爆モテGLOW</h2>
+      <p class="result-tagline" id="result-tagline"></p>
+    </div>
+    <div class="result-body" id="result-body">
+      <!-- JS で生成 -->
+    </div>
+    <div class="result-actions">
+      <button class="btn-print" onclick="goToReceipt()">🖨 レシートを印刷</button>
+      <button class="btn-restart" onclick="goToTop()">最初からやり直す</button>
+    </div>
+  </div>
+
+  <!-- ===== RECEIPT ===== -->
+  <div id="screen-receipt" class="screen">
+    <div class="receipt-preview-actions no-print">
+      <button class="btn-print" onclick="window.print()">🖨 印刷する</button>
+      <button class="btn-back" onclick="showScreen('screen-result')">← 結果に戻る</button>
+    </div>
+    <div class="receipt-preview-wrap">
+      <div id="receipt-content" class="receipt-paper">
+        <!-- JS で生成 -->
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

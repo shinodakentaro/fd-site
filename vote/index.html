@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>GLOW or SMOOTH 投票</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ===== 投票画面 ===== -->
+  <div id="screen-vote" class="screen active">
+    <div class="v-bg">
+      <div class="v-orb v-orb-glow"></div>
+      <div class="v-orb v-orb-smooth"></div>
+    </div>
+
+    <div class="v-header">
+      <span class="v-badge">✦ @cosme FD EVENT ✦</span>
+      <h1 class="v-title">あなたはどっち派？</h1>
+      <p class="v-sub">体験してみて、今日の気分を投票しよう</p>
+    </div>
+
+    <div class="v-btns" id="v-btns">
+
+      <button class="v-btn v-btn-glow" onclick="castVote('glow')">
+        <div class="v-btn-shine"></div>
+        <div class="v-btn-icon glow-icon-inner"></div>
+        <span class="v-btn-label">GLOW</span>
+        <span class="v-btn-sub">光・ツヤ感で輝く</span>
+      </button>
+
+      <button class="v-btn v-btn-smooth" onclick="castVote('smooth')">
+        <div class="v-btn-shine"></div>
+        <div class="v-btn-icon smooth-icon-inner"></div>
+        <span class="v-btn-label">SMOOTH</span>
+        <span class="v-btn-sub">パウダー・なめらかに</span>
+      </button>
+
+    </div>
+  </div>
+
+  <!-- ===== 投票完了 ===== -->
+  <div id="screen-done" class="screen">
+    <div class="done-bg" id="done-bg">
+      <div class="done-particles" id="done-particles"></div>
+    </div>
+    <div class="done-card">
+      <div class="done-emoji" id="done-emoji">✨</div>
+      <h2 class="done-title" id="done-title">GLOW派で参加！</h2>
+      <p class="done-msg">サイネージ画面に<br><strong>参加しました！</strong></p>
+      <p class="done-hint">🔍 モニター画面を見てみよう</p>
+      <button class="done-reset-btn" onclick="resetVote()">もう一度投票する</button>
+    </div>
+  </div>
+
+  <script src="../shared/vote-store.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
