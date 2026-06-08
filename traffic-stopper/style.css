@@ -538,6 +538,13 @@ button:active { opacity: .82; transform: scale(.97); }
   line-height: 1.6;
 }
 
+.rc-chara-img {
+  display: block;
+  width: 100%;
+  max-width: 120px;
+  margin: 6px auto;
+}
+
 .rc-logo {
   text-align: center; font-weight: 700;
   font-size: 14px; letter-spacing: .1em;
