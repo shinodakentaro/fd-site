@@ -58,6 +58,7 @@ const results = {
     category:  'GLOW',
     name:      '爆モテGLOW',
     subCopy:   '輝きで人を惹きつける、存在感MAX！',
+    recommend: 'GLOWシリーズ ツヤ感ファンデーション',
     desc:      '光をまとうようなツヤ感で、どんな場所でも視線を集める存在に。あなたの魅力を最大限に引き出すGLOW仕上げが、今日の主役にしてくれます。',
     color1:    '#ffd700',
     color2:    '#ff85a1',
@@ -86,6 +87,7 @@ const results = {
     category:  'GLOW',
     name:      '透明感覚醒GLOW',
     subCopy:   '肌の奥からにじむ、澄んだ輝き',
+    recommend: 'GLOWシリーズ 透明感ファンデーション',
     desc:      '雑味のない、透き通るような光感が魅力。くすみゼロの肌で、素肌が完璧に整ったような自然な輝きを放てます。',
     color1:    '#7ecfd6',
     color2:    '#f2a7c3',
@@ -114,6 +116,7 @@ const results = {
     category:  'GLOW',
     name:      '多幸感GLOW',
     subCopy:   '幸せオーラが溢れ出す、ハッピーな輝き',
+    recommend: 'GLOWシリーズ 血色感ファンデーション',
     desc:      'ふんわりとした光感と、自然な血色感が合わさったような幸せオーラが魅力。見ているだけで元気をもらえる、ポジティブな輝きがあなたの個性です。',
     color1:    '#ffb347',
     color2:    '#ff85a1',
@@ -142,6 +145,7 @@ const results = {
     category:  'SMOOTH',
     name:      '盛れ確SMOOTH',
     subCopy:   '完璧カバーで、最高の自分に',
+    recommend: 'SMOOTHシリーズ カバーファンデーション',
     desc:      'カバー力と仕上がりの美しさを両立。毛穴・シミ・色ムラをしっかりカバーしながら、やりすぎ感のないスムース仕上がりで"盛れ確定"の肌を演出します。',
     color1:    '#a8c8d8',
     color2:    '#c8b89a',
@@ -170,6 +174,7 @@ const results = {
     category:  'SMOOTH',
     name:      '元から美肌SMOOTH',
     subCopy:   'すっぴん以上の、ナチュラル美肌',
+    recommend: 'SMOOTHシリーズ ナチュラルファンデーション',
     desc:      '素肌感を残しながらキレイに整えたような、ナチュラルビューティーが光ります。「そのまま？」と言われる無敵の素肌仕上がりを実現。',
     color1:    '#d4b8e8',
     color2:    '#c8b89a',
@@ -198,6 +203,7 @@ const results = {
     category:  'SMOOTH',
     name:      '清潔感無双SMOOTH',
     subCopy:   'クリーンで凛とした、完璧な印象',
+    recommend: 'SMOOTHシリーズ マットファンデーション',
     desc:      'テカりゼロのマット肌で、どんな場面でも清潔感あふれる印象を作れます。時間が経っても崩れにくく、凛とした美しさが続きます。',
     color1:    '#5a7a8f',
     color2:    '#a8c8d8',
@@ -275,7 +281,12 @@ const questions = [
 const eventConfig = {
   name:    '@cosme FD EVENT',
   date:    '2026.6.XX',
-  product: 'FOUNDATION',
+  product: {
+    name:           'FOUNDATION',
+    lineup:         'GLOW / SMOOTH',
+    url:            'https://www.cosme.net/',  // 差し替え用
+    qrPlaceholder:  '[QR]',                    // 実運用時は QR コード画像に差し替え
+  },
 };
 
 /* ========================================
@@ -475,52 +486,140 @@ function renderResult() {
 
 /* ========================================
    12. レシート画面
-   results と同じデータを使って生成
    ======================================== */
-function goToReceipt() {
+
+/**
+ * レシートDOM生成
+ * #receipt-content (iPad プレビュー) と
+ * #receipt-print-target (印刷専用) の両方に同じ HTML を挿入する。
+ */
+function buildReceiptDOM() {
   const r   = results[state.resultKey];
   const now = new Date();
-  const dateStr = `${now.getFullYear()}.${now.getMonth()+1}.${now.getDate()} ${now.getHours()}:${String(now.getMinutes()).padStart(2,'0')}`;
+  const dateStr = `${now.getFullYear()}.${String(now.getMonth()+1).padStart(2,'0')}.${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
 
-  const monoImg  = r.imgPathMono
+  const monoImg = r.imgPathMono
     ? `<img class="rc-chara-img" src="${r.imgPathMono}" alt="${r.name}">`
     : '';
-  const tipsLines = r.tips.map(t => `<div class="rc-tip">・${t.title}</div>`).join('');
-  const luckLines = `
-    <div class="rc-luck">仕事運 ${r.luck.work}</div>
-    <div class="rc-luck">恋愛運 ${r.luck.love}</div>
-    <div class="rc-luck">金　運 ${r.luck.money}</div>
-  `;
 
-  document.getElementById('receipt-content').innerHTML = `
-    <div class="rc-logo">${eventConfig.name}</div>
-    ${monoImg}
-    <div class="rc-dash">--------------------------------</div>
+  const html = `
+    <div class="rc-event-name">${eventConfig.name}</div>
+    <div class="rc-hr"></div>
     <div class="rc-date">${dateStr}</div>
-    <div class="rc-dash">--------------------------------</div>
-    <div class="rc-result-block">
+    <div class="rc-hr-dot"></div>
+    <div class="rc-result-section">
+      ${monoImg}
       <div class="rc-category">[${r.category}]</div>
       <div class="rc-name">${r.name}</div>
       <div class="rc-subcopy">${r.subCopy}</div>
     </div>
-    <div class="rc-dash">- - - - - - - - - - - - - - - -</div>
-    <div class="rc-msg">"${state.message}"</div>
-    <div class="rc-dash">- - - - - - - - - - - - - - - -</div>
+    <div class="rc-hr-dot"></div>
+    <div class="rc-msg">&ldquo;${state.message}&rdquo;</div>
+    <div class="rc-hr-dot"></div>
     <div class="rc-section-title">今日の運勢</div>
-    ${luckLines}
-    <div class="rc-item">ラッキー: ${r.luckyItem}</div>
-    <div class="rc-dash">- - - - - - - - - - - - - - - -</div>
-    <div class="rc-section-title">お手入れポイント</div>
-    ${tipsLines}
-    <div class="rc-dash">--------------------------------</div>
+    <div class="rc-luck-table">
+      <div class="rc-luck-row"><span class="rc-luck-label">仕事運</span><span class="rc-luck-stars">${r.luck.work}</span></div>
+      <div class="rc-luck-row"><span class="rc-luck-label">恋愛運</span><span class="rc-luck-stars">${r.luck.love}</span></div>
+      <div class="rc-luck-row"><span class="rc-luck-label">金　運</span><span class="rc-luck-stars">${r.luck.money}</span></div>
+    </div>
+    <div class="rc-lucky-item">🍀 ラッキーアイテム: ${r.luckyItem}</div>
+    <div class="rc-hr-dot"></div>
+    <div class="rc-product-section">
+      <div class="rc-section-title">おすすめアイテム</div>
+      <div class="rc-recommend">${r.recommend}</div>
+      <div class="rc-product-name">${eventConfig.product.name} ${eventConfig.product.lineup}</div>
+    </div>
+    <div class="rc-qr-section">
+      <div class="rc-qr-box">${eventConfig.product.qrPlaceholder}</div>
+      <div class="rc-qr-label">詳細はこちら</div>
+    </div>
+    <div class="rc-hr"></div>
     <div class="rc-footer">ご来場ありがとうございます</div>
     <div class="rc-footer">スタッフにお声がけください</div>
-    <div class="rc-dash">--------------------------------</div>
-    <div class="rc-footer">${eventConfig.product} / ${eventConfig.name}</div>
+    <div class="rc-hr"></div>
+    <div class="rc-footer-small">${eventConfig.name} / ${eventConfig.date}</div>
   `;
 
+  document.getElementById('receipt-content').innerHTML      = html;
+  document.getElementById('receipt-print-target').innerHTML = html;
+}
+
+/** レシート画面へ遷移 */
+function goToReceipt() {
+  buildReceiptDOM();
   showScreen('screen-receipt');
 }
+
+/** 印刷エントリーポイント */
+function printReceipt() {
+  buildReceiptDOM(); // 最新状態で再生成してから印刷
+  // printByWebPRNT(); // Star webPRNT Browser 使用時はこちらをアンコメント
+  printByBrowser();
+}
+
+/** window.print() による印刷（@media print で receipt-print-target のみ表示） */
+function printByBrowser() {
+  window.print();
+}
+
+/*
+  ──────────────────────────────────────────────
+  printByWebPRNT() — Star webPRNT Browser SDK 実装スタブ
+  ──────────────────────────────────────────────
+  対象機種: Star mC-Print3 MCP31LB BK JP (Bluetooth / iPad)
+  SDK:      Star WebPRNT Browser (http://192.168.x.x/StarWebPRNT/SendMessage)
+            ※ iPad の Star webPRNT Browser アプリ内で動作させること
+
+  実装手順:
+  1. Star webPRNT SDK JS を読み込む
+       <script src="StarWebPRNTBuilder.js"></script>
+  2. StarWebPrintBuilder でコマンドを組み立てる
+  3. StarWebPrintTrader.sendMessage() で送信する
+
+  実装例 (コメントアウト):
+
+  function printByWebPRNT() {
+    const builder = new StarWebPrintBuilder();
+    const request = builder.createInitializationElement();
+
+    // 文字コード設定 (UTF-8)
+    request += builder.createCodePageElement({ codepage: 'UTF-8' });
+
+    // センタリング
+    request += builder.createAlignmentElement({ position: 'center' });
+
+    // イベント名 (大文字・太字)
+    request += builder.createTextElement({ emphasis: true, data: eventConfig.name + '\n' });
+    request += builder.createTextElement({ emphasis: false, data: '--------------------------------\n' });
+
+    // 診断結果
+    const r = results[state.resultKey];
+    request += builder.createTextElement({ data: '[' + r.category + '] ' + r.name + '\n' });
+    request += builder.createTextElement({ data: r.subCopy + '\n' });
+    request += builder.createTextElement({ data: '--------------------------------\n' });
+
+    // 運勢
+    request += builder.createTextElement({ data: '仕事運 ' + r.luck.work + '\n' });
+    request += builder.createTextElement({ data: '恋愛運 ' + r.luck.love + '\n' });
+    request += builder.createTextElement({ data: '金  運 ' + r.luck.money + '\n' });
+
+    // カット
+    request += builder.createCutPaperElement({ feed: true });
+
+    const trader = new StarWebPrintTrader({ url: 'http://localhost:8008/StarWebPRNT/SendMessage' });
+    trader.onReceive = function(response) {
+      if (trader.isTimeoutError(response))   console.warn('webPRNT: timeout');
+      else if (trader.isInvalidResponse(response)) console.warn('webPRNT: invalid response');
+      else console.log('webPRNT: 印刷完了');
+    };
+    trader.onError = function(xhr, errorThrown) {
+      console.error('webPRNT: 通信エラー', errorThrown);
+      // フォールバック: ブラウザ印刷
+      printByBrowser();
+    };
+    trader.sendMessage({ request });
+  }
+*/
 
 /* ========================================
    13. TOP に戻る

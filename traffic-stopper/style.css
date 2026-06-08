@@ -1,32 +1,65 @@
 /* ========================================
    Design Tokens
+   Figmaの変数と対応させて値を更新してください。
    ======================================== */
 :root {
-  --glow-gold:    #ffd700;
-  --glow-pink:    #ff85a1;
-  --glow-peach:   #fde8d0;
-  --glow-amber:   #ffb347;
-  --smooth-slate: #5a7a8f;
-  --smooth-cool:  #a8c8d8;
-  --smooth-beige: #c8b89a;
-  --smooth-lav:   #d4b8e8;
+
+  /* --- Brand Colors (GLOW) --- */
+  --glow-gold:    #ffd700;   /* Figma: color/glow/primary   */
+  --glow-amber:   #ffb347;   /* Figma: color/glow/accent    */
+  --glow-peach:   #fde8d0;   /* Figma: color/glow/light     */
+  --glow-pink:    #ff85a1;   /* Figma: color/glow/sub       */
+
+  /* --- Brand Colors (SMOOTH) --- */
+  --smooth-slate: #5a7a8f;   /* Figma: color/smooth/primary */
+  --smooth-cool:  #a8c8d8;   /* Figma: color/smooth/accent  */
+  --smooth-beige: #c8b89a;   /* Figma: color/smooth/light   */
+  --smooth-lav:   #d4b8e8;   /* Figma: color/smooth/sub     */
+
+  /* --- Neutral --- */
   --white:        #ffffff;
   --off-white:    #fdfaf8;
   --bg:           #f8f3ee;
   --text:         #2d1f1a;
   --text-mid:     #7a5c4e;
   --text-light:   #b09080;
-  --gold:         #c9a96e;
+  --gold:         #c9a96e;   /* Figma: color/accent/gold    */
 
+  /* --- Spacing (iPad) --- */
+  --space-xs:  8px;
+  --space-sm:  16px;
+  --space-md:  24px;
+  --space-lg:  40px;
+  --space-xl:  64px;
+
+  /* --- Font Sizes (iPad) --- */
+  --fs-label:   13px;   /* バッジ・タグ   */
+  --fs-caption: 16px;   /* 補足テキスト   */
+  --fs-body:    20px;   /* 本文           */
+  --fs-sub:     24px;   /* サブ見出し     */
+  --fs-head:    32px;   /* 質問文         */
+  --fs-title:   44px;   /* 結果名         */
+  --fs-hero:    52px;   /* 投票ボタン     */
+
+  /* --- Button (iPad 11inch: 大きく押しやすく) --- */
+  --btn-height:     80px;    /* 最小タップ高さ */
+  --btn-font-size:  var(--fs-sub);
+  --btn-radius:     var(--radius-lg);
+  --btn-padding-h:  var(--space-lg);
+
+  /* --- Border Radius --- */
   --radius-sm:  10px;
   --radius-md:  20px;
   --radius-lg:  32px;
+
+  /* --- Shadows --- */
   --shadow-sm:  0 2px 12px rgba(45,31,26,.08);
   --shadow-md:  0 6px 28px rgba(45,31,26,.12);
   --shadow-lg:  0 12px 48px rgba(45,31,26,.18);
 
-  /* iPad 11inch想定: 834×1194px (portrait) */
+  /* --- Font Stack --- */
   --font: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Meiryo', sans-serif;
+  --font-receipt: 'Courier New', 'Courier', monospace;
 }
 
 /* ========================================
@@ -510,119 +543,190 @@ button:active { opacity: .82; transform: scale(.97); }
 }
 
 /* ========================================
-   RECEIPT PREVIEW
+   RECEIPT SCREEN (iPad 表示用)
    ======================================== */
 #screen-receipt {
-  background: #e8e0d8;
+  background: #ddd5ca;
   align-items: center;
-  padding-bottom: 40px;
+  padding-bottom: var(--space-lg);
 }
 
-.receipt-preview-actions {
-  padding: 32px 40px 20px;
-  display: flex; gap: 16px; align-items: center;
-  width: 100%; max-width: 500px;
+/* コントロールバー */
+.receipt-ctrl {
+  width: 100%; padding: var(--space-lg) var(--space-lg) var(--space-sm);
+  display: flex; gap: var(--space-sm); align-items: center;
 }
 .btn-back {
   background: transparent; color: var(--text-mid);
-  font-size: 18px; font-weight: 600;
-  padding: 16px 24px; border-radius: var(--radius-md);
-  border: 2px solid #c8b8b0;
+  font-size: var(--fs-caption); font-weight: 600;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-md);
+  border: 2px solid #b8a89a;
+  letter-spacing: .04em;
 }
 
-.receipt-preview-wrap {
-  display: flex; justify-content: center;
+/* プレビューラッパー */
+.receipt-preview-outer {
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
 }
+.receipt-preview-label {
+  font-size: var(--fs-label); color: rgba(45,31,26,.4);
+  letter-spacing: .1em; font-weight: 600;
+}
+.receipt-preview-inner {
+  background: #b8b0a8;
+  padding: 12px;
+  border-radius: 4px;
+  box-shadow: 0 6px 24px rgba(0,0,0,.25);
+}
+
+/* 印刷専用ターゲットは画面上では非表示 */
+.print-only { display: none; }
 
 /* ========================================
-   RECEIPT PAPER (preview + print target)
+   RECEIPT CONTENT
+   iPad プレビュー / @media print 共通スタイル
    ======================================== */
-.receipt-paper {
-  background: var(--white);
-  width: 300px;
-  padding: 20px 16px;
-  font-family: 'Courier New', 'Courier', monospace;
-  font-size: 13px;
+#receipt-content,
+#receipt-print-target {
+  background: #fff;
+  width: 302px;          /* 80mm ≒ 302px @96dpi プレビュー幅 */
+  font-family: var(--font-receipt);
+  font-size: 12px;
   color: #111;
-  box-shadow: 0 4px 24px rgba(0,0,0,.2);
-  border-radius: 4px;
-  line-height: 1.6;
+  line-height: 1.65;
+  padding: 14px 12px;
 }
 
-.rc-chara-img {
-  display: block;
-  width: 100%;
-  max-width: 120px;
-  margin: 6px auto;
-}
-
-.rc-logo {
+/* ---- ヘッダー ---- */
+.rc-event-name {
   text-align: center; font-weight: 700;
-  font-size: 14px; letter-spacing: .1em;
-  margin-bottom: 4px;
+  font-size: 13px; letter-spacing: .14em;
+  margin-bottom: 2px;
 }
 .rc-date {
-  text-align: center; font-size: 11px;
-  color: #555; margin-bottom: 4px;
+  text-align: center; font-size: 10px;
+  color: #666; margin-bottom: 4px;
 }
-.rc-dash {
-  font-size: 10px; color: #999;
-  margin: 5px 0; letter-spacing: 0;
+
+/* ---- 区切り線 ---- */
+.rc-hr {
+  border: none; border-top: 1px solid #333;
+  margin: 8px 0;
 }
-.rc-result-block { margin: 8px 0; }
+.rc-hr-dot {
+  border-top-style: dashed;
+  border-color: #aaa;
+}
+
+/* ---- キャラ・結果 ---- */
+.rc-result-section { text-align: center; padding: 6px 0; }
+.rc-chara-img {
+  display: block;
+  width: 80px; height: 80px;
+  object-fit: contain;
+  margin: 0 auto 6px;
+}
 .rc-category {
-  font-size: 11px; font-weight: 700; color: #555;
-  letter-spacing: .08em; margin-bottom: 2px;
+  font-size: 10px; font-weight: 700;
+  letter-spacing: .14em; color: #555;
+  margin-bottom: 2px;
 }
 .rc-name {
-  font-size: 15px; font-weight: 700; margin-bottom: 2px;
+  font-size: 16px; font-weight: 700;
+  letter-spacing: .04em; margin-bottom: 3px;
 }
 .rc-subcopy {
-  font-size: 11px; color: #333; margin-bottom: 4px;
+  font-size: 10px; color: #444;
+  line-height: 1.5;
 }
-.rc-msg {
-  font-size: 11px; color: #444; line-height: 1.5;
-  font-style: italic; margin: 6px 0;
-}
+
+/* ---- 運勢 ---- */
+.rc-luck-section { padding: 4px 0; }
 .rc-section-title {
-  font-size: 11px; font-weight: 700;
-  letter-spacing: .06em; margin: 6px 0 3px;
+  font-size: 10px; font-weight: 700;
+  letter-spacing: .1em; margin-bottom: 4px;
 }
-.rc-luck {
-  font-size: 11px; margin: 2px 0; color: #333;
+.rc-luck-table { width: 100%; border-collapse: collapse; }
+.rc-luck-label {
+  font-size: 10px; width: 46px;
+  padding: 1px 0; color: #333;
 }
-.rc-item {
-  font-size: 11px; margin: 4px 0; color: #333;
+.rc-luck-val  { font-size: 11px; letter-spacing: .05em; }
+.rc-lucky-item {
+  font-size: 10px; margin-top: 5px; color: #333;
 }
-.rc-tips { margin: 4px 0; }
-.rc-tip {
-  font-size: 11px; margin: 3px 0; color: #333;
+
+/* ---- 商品情報 ---- */
+.rc-product-section { padding: 4px 0; }
+.rc-product-name {
+  font-size: 12px; font-weight: 700; margin-bottom: 2px;
 }
-.rc-footer {
-  text-align: center; font-size: 11px;
-  color: #555; line-height: 1.8;
+.rc-product-lineup { font-size: 10px; color: #555; }
+
+/* ---- QR ---- */
+.rc-qr-section {
+  text-align: center; padding: 6px 0;
 }
+.rc-qr-box {
+  width: 80px; height: 80px;
+  border: 2px solid #333;
+  margin: 0 auto 4px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 9px; color: #999; letter-spacing: .04em;
+  /* 実装時: <img src="qr.png"> に置き換える */
+}
+.rc-qr-img {
+  display: block; width: 80px; height: 80px;
+  margin: 0 auto 4px; object-fit: contain;
+}
+.rc-qr-label { font-size: 10px; color: #555; margin-bottom: 2px; }
+.rc-qr-url   { font-size: 9px; color: #888; word-break: break-all; }
+
+/* ---- フッター ---- */
+.rc-footer { text-align: center; font-size: 10px; color: #555; line-height: 1.8; }
 
 /* ========================================
-   PRINT STYLES (Star MCP31LB BK JP 58mm)
+   PRINT STYLES
+   対象プリンター: Star mC-Print3 MCP31LB BK JP
+   用紙幅: 80mm / 印刷幅: 72mm
+   iPad Safari → Star webPRNT Browser 経由での印刷を想定
+   window.print() フォールバック時にも適用される
    ======================================== */
 @media print {
+
   @page {
-    size: 58mm auto;
-    margin: 0;
+    size: 80mm auto;
+    margin: 2mm 4mm;
   }
 
+  /* 画面要素をすべて非表示 */
   body > * { display: none !important; }
-  #screen-receipt { display: block !important; }
-  .no-print { display: none !important; }
 
-  .receipt-preview-wrap { display: block; }
-
-  .receipt-paper {
-    width: 54mm;
-    box-shadow: none;
-    border-radius: 0;
-    padding: 3mm 2mm;
-    font-size: 10pt;
+  /* 印刷専用ターゲットのみ表示 */
+  .print-only {
+    display: block !important;
+    position: fixed; top: 0; left: 0;
   }
+
+  /* レシート本体 */
+  #receipt-print-target {
+    width: 72mm;
+    padding: 0;
+    background: #fff;
+    font-family: var(--font-receipt);
+    font-size: 9pt;
+    color: #000;
+    line-height: 1.6;
+  }
+
+  /* 印刷時の画像サイズ調整 */
+  #receipt-print-target .rc-chara-img,
+  #receipt-print-target .rc-qr-img {
+    width: 60px; height: 60px;
+  }
+  #receipt-print-target .rc-qr-box {
+    width: 60px; height: 60px;
+  }
+  #receipt-print-target .rc-name { font-size: 14pt; }
 }

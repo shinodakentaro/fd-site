@@ -91,15 +91,26 @@
 
   <!-- ===== RECEIPT ===== -->
   <div id="screen-receipt" class="screen">
-    <div class="receipt-preview-actions no-print">
-      <button class="btn-print" onclick="window.print()">🖨 印刷する</button>
-      <button class="btn-back" onclick="showScreen('screen-result')">← 結果に戻る</button>
+
+    <!-- 画面表示用コントロール（印刷時は非表示） -->
+    <div class="receipt-ctrl no-print">
+      <button class="btn-print" onclick="printReceipt()">🖨 印刷する</button>
+      <button class="btn-back"  onclick="showScreen('screen-result')">← 結果に戻る</button>
     </div>
-    <div class="receipt-preview-wrap">
-      <div id="receipt-content" class="receipt-paper">
-        <!-- JS で生成 -->
+
+    <!-- レシートプレビュー（画面用ラッパー） -->
+    <div class="receipt-preview-outer no-print">
+      <div class="receipt-preview-label">印刷プレビュー（80mm）</div>
+      <div class="receipt-preview-inner">
+        <div id="receipt-content"><!-- buildReceiptDOM() で生成 --></div>
       </div>
     </div>
+
+    <!-- 印刷専用ターゲット（@media print のみ表示） -->
+    <div class="print-only">
+      <div id="receipt-print-target"><!-- buildReceiptDOM() で同期 --></div>
+    </div>
+
   </div>
 
   <script src="script.js"></script>
