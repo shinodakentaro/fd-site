@@ -385,6 +385,26 @@ button:active { opacity: .82; transform: scale(.97); }
   display: flex; flex-direction: column; gap: 24px;
 }
 
+/* キャラクター画像 */
+.result-chara-img {
+  display: block;
+  width: 160px; height: 160px;
+  object-fit: contain;
+  margin: 0 auto;
+  border-radius: 50%;
+  background: rgba(255,255,255,.5);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ランダムメッセージ */
+.result-random-msg {
+  font-size: 19px; color: var(--text-mid);
+  font-style: italic; line-height: 1.7;
+  letter-spacing: .03em; margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f0e8e0;
+}
+
 .result-desc-card {
   background: var(--white);
   border-radius: var(--radius-md);
@@ -395,6 +415,39 @@ button:active { opacity: .82; transform: scale(.97); }
   font-size: 20px; color: var(--text);
   line-height: 1.85; letter-spacing: .03em;
 }
+
+/* 運勢カード */
+.result-luck-card {
+  background: var(--white);
+  border-radius: var(--radius-md);
+  padding: 28px 36px;
+  box-shadow: var(--shadow-sm);
+}
+.luck-heading {
+  font-size: 16px; font-weight: 700;
+  color: var(--gold); letter-spacing: .12em;
+  margin-bottom: 16px;
+}
+.luck-grid {
+  display: flex; flex-direction: column; gap: 10px;
+  margin-bottom: 16px;
+}
+.luck-row {
+  display: flex; align-items: center; gap: 12px;
+}
+.luck-label {
+  font-size: 16px; font-weight: 700;
+  color: var(--text-mid); width: 56px; flex-shrink: 0;
+  letter-spacing: .04em;
+}
+.luck-stars { font-size: 20px; line-height: 1; }
+.star-on  { color: #f5b800; }
+.star-off { color: #d8ccc4; }
+.luck-item {
+  font-size: 17px; color: var(--text);
+  letter-spacing: .03em; line-height: 1.6;
+}
+.luck-item strong { color: var(--text); font-weight: 700; }
 
 .result-tips { display: flex; flex-direction: column; gap: 0; }
 .tips-heading {
@@ -487,7 +540,7 @@ button:active { opacity: .82; transform: scale(.97); }
 
 .rc-logo {
   text-align: center; font-weight: 700;
-  font-size: 15px; letter-spacing: .1em;
+  font-size: 14px; letter-spacing: .1em;
   margin-bottom: 4px;
 }
 .rc-date {
@@ -495,25 +548,40 @@ button:active { opacity: .82; transform: scale(.97); }
   color: #555; margin-bottom: 4px;
 }
 .rc-dash {
-  font-size: 11px; color: #999;
-  margin: 6px 0; letter-spacing: 0;
+  font-size: 10px; color: #999;
+  margin: 5px 0; letter-spacing: 0;
 }
-.rc-result {
-  margin: 8px 0;
+.rc-result-block { margin: 8px 0; }
+.rc-category {
+  font-size: 11px; font-weight: 700; color: #555;
+  letter-spacing: .08em; margin-bottom: 2px;
 }
-.rc-line {
-  font-size: 13px; margin: 4px 0; font-weight: 600;
+.rc-name {
+  font-size: 15px; font-weight: 700; margin-bottom: 2px;
+}
+.rc-subcopy {
+  font-size: 11px; color: #333; margin-bottom: 4px;
+}
+.rc-msg {
+  font-size: 11px; color: #444; line-height: 1.5;
+  font-style: italic; margin: 6px 0;
 }
 .rc-section-title {
-  font-size: 12px; font-weight: 700;
-  letter-spacing: .06em; margin: 4px 0;
+  font-size: 11px; font-weight: 700;
+  letter-spacing: .06em; margin: 6px 0 3px;
+}
+.rc-luck {
+  font-size: 11px; margin: 2px 0; color: #333;
+}
+.rc-item {
+  font-size: 11px; margin: 4px 0; color: #333;
 }
 .rc-tips { margin: 4px 0; }
 .rc-tip {
-  font-size: 12px; margin: 3px 0; color: #333;
+  font-size: 11px; margin: 3px 0; color: #333;
 }
 .rc-footer {
-  text-align: center; font-size: 12px;
+  text-align: center; font-size: 11px;
   color: #555; line-height: 1.8;
 }
 
