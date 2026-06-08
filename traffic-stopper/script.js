@@ -429,8 +429,7 @@ function renderResult() {
 
   // キャラ画像
   const imgTag = r.imgPath
-    ? `<img class="result-chara-img" src="${r.imgPath}" alt="${r.name}"
-         onerror="console.error('画像ロード失敗:', this.src); this.replaceWith(Object.assign(document.createElement('div'), {className:'result-chara-fallback', textContent:'${r.name}'}));">`
+    ? `<img class="result-chara-img" src="${r.imgPath}" alt="${r.name}">`
     : '';
 
   // ランダムメッセージ
