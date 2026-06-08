@@ -427,9 +427,10 @@ function renderResult() {
   header.style.background   = `linear-gradient(135deg, ${r.color1}33, ${r.color2}44)`;
   header.style.borderBottom  = `3px solid ${r.color1}`;
 
-  // キャラ画像（画像なければ非表示）
+  // キャラ画像
   const imgTag = r.imgPath
-    ? `<img class="result-chara-img" src="${r.imgPath}" alt="${r.name}" onerror="this.style.display='none'">`
+    ? `<img class="result-chara-img" src="${r.imgPath}" alt="${r.name}"
+         onerror="console.error('画像ロード失敗:', this.src); this.replaceWith(Object.assign(document.createElement('div'), {className:'result-chara-fallback', textContent:'${r.name}'}));">`
     : '';
 
   // ランダムメッセージ

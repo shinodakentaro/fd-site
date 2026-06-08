@@ -396,6 +396,17 @@ button:active { opacity: .82; transform: scale(.97); }
   box-shadow: var(--shadow-sm);
 }
 
+/* 画像ロード失敗時フォールバック */
+.result-chara-fallback {
+  width: 160px; height: 160px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #fce8f0, #f5ede4);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 700; color: var(--text-mid);
+  margin: 0 auto;
+  border: 2px dashed #e8ddd8;
+}
+
 /* ランダムメッセージ */
 .result-random-msg {
   font-size: 19px; color: var(--text-mid);
