@@ -235,42 +235,42 @@ const results = {
 const questions = [
   {
     id: 1,
-    text: '今日なりたい印象は？',
+    text: '朝の理想の過ごし方は？',
     options: [
-      { label: 'A', icon: '✨', text: 'もっとキラキラ輝きたい' },
-      { label: 'B', icon: '💎', text: 'スッキリ・上品に整えたい' },
+      { label: 'A', icon: '🌅', text: 'ゆっくり\n自分のペースで準備する' },
+      { label: 'B', icon: '😴', text: 'ギリギリまで\n寝ていたい' },
     ],
   },
   {
     id: 2,
-    text: '気になる肌悩みは？',
+    text: '休日の過ごし方といえば？',
     options: [
-      { label: 'A', icon: '💧', text: 'くすみ・乾燥・暗さが気になる' },
-      { label: 'B', icon: '🌿', text: 'テカリ・毛穴・崩れが気になる' },
+      { label: 'A', icon: '🌿', text: '外に出て\nアクティブに動く' },
+      { label: 'B', icon: '🛋️', text: '家でのんびり\nリラックス' },
     ],
   },
   {
     id: 3,
-    text: '好きな仕上がりイメージは？',
+    text: 'スキンケアのポイントは？',
     options: [
-      { label: 'A', icon: '🌟', text: 'みずみずしい光沢感' },
-      { label: 'B', icon: '🌸', text: 'さらっとパウダー感' },
+      { label: 'A', icon: '💧', text: '保湿をしっかり\nうるおいキープ' },
+      { label: 'B', icon: '⚡', text: '時短で\nシンプルケア' },
     ],
   },
   {
     id: 4,
-    text: '今日の気分は？',
+    text: '気分転換の方法は？',
     options: [
-      { label: 'A', icon: '💄', text: '華やかにキメたい' },
-      { label: 'B', icon: '🍃', text: '自然体が一番' },
+      { label: 'A', icon: '💬', text: '友達と話して\n気持ちを発散' },
+      { label: 'B', icon: '🌙', text: 'ひとりで\n静かに過ごす' },
     ],
   },
   {
     id: 5,
-    text: 'メイクで大切にしたいのは？',
+    text: '今の自分に近いのは？',
     options: [
-      { label: 'A', icon: '🔆', text: 'ツヤ・光感・透明感' },
-      { label: 'B', icon: '🛡️', text: '崩れにくさ・均一な仕上がり' },
+      { label: 'A', icon: '☀️', text: '明るく\nポジティブ' },
+      { label: 'B', icon: '🍃', text: '落ち着いて\nマイペース' },
     ],
   },
 ];
@@ -335,6 +335,8 @@ function showScreen(id) {
    8. クイズ
    ======================================== */
 function startQuiz() {
+  document.getElementById('bg2').classList.remove('hidden');
+  document.body.classList.remove('result-mode');
   state.answers   = [];
   state.resultKey = null;
   state.message   = '';
@@ -346,67 +348,87 @@ function renderQuestion(index) {
   const q     = questions[index];
   const total = questions.length;
 
-  document.getElementById('quiz-progress-fill').style.width   = (index / total * 100) + '%';
-  document.getElementById('quiz-progress-label').textContent  = `${index + 1} / ${total}`;
+  const dotsHTML = questions.map((_, i) => {
+    let cls = '';
+    if (i < index)      cls = 'done';
+    else if (i === index) cls = 'current';
+    return `<div class="progress-dot ${cls}"></div>`;
+  }).join('');
 
   document.getElementById('quiz-body').innerHTML = `
-    <div class="quiz-qnum">Q${q.id}</div>
-    <h2 class="quiz-question">${q.text}</h2>
-    <div class="quiz-options">
-      ${q.options.map((opt, i) => `
-        <button class="quiz-option" onclick="answerQuestion(${index}, ${i})">
-          <span class="opt-icon">${opt.icon}</span>
-          <span class="opt-label">${opt.label}</span>
-          <span class="opt-text">${opt.text}</span>
-        </button>
-      `).join('')}
+    <div class="quiz-content-wrapper">
+      <div class="quiz-header">
+        <div class="quiz-header-text">
+          <h1>今日のあなたは<br>どんなキャラクター？</h1>
+          <p>5つの質問と手の甲スキャンで<br>今日のキャラクターが決まる！</p>
+        </div>
+        <div class="icon-wrap">
+          <div class="icon-circle"></div>
+          <div class="icon-silhouette">
+            <svg viewBox="0 0 200 320" xmlns="http://www.w3.org/2000/svg" fill="#ab886a">
+              <circle cx="100" cy="48" r="40"/>
+              <path d="M70 88 Q60 110 50 160 Q40 200 45 260 L155 260 Q160 200 150 160 Q140 110 130 88 Z"/>
+              <path d="M68 100 Q40 130 28 180 Q24 195 35 198 Q46 200 52 185 Q62 145 78 118 Z"/>
+              <path d="M132 100 Q160 130 172 180 Q176 195 165 198 Q154 200 148 185 Q138 145 122 118 Z"/>
+              <path d="M70 255 Q62 290 58 340 Q56 355 70 356 Q84 357 86 342 Q88 310 92 278 Z"/>
+              <path d="M130 255 Q138 290 142 340 Q144 355 130 356 Q116 357 114 342 Q112 310 108 278 Z"/>
+            </svg>
+          </div>
+          <span class="icon-q">?</span>
+        </div>
+      </div>
+
+      <div class="quiz-question-section">
+        <div class="question-label-row">
+          <span class="q-number">Q${q.id}</span>
+          <span class="q-text">${q.text}</span>
+        </div>
+        <div class="quiz-choices">
+          ${q.options.map((opt, i) => `
+            <div class="choice-card" onclick="answerQuestion(${index}, ${i})">
+              <span class="choice-letter">${opt.label}</span>
+              <div class="choice-text-wrap">
+                <div class="choice-text">
+                  <p>${opt.text.replace(/\n/g, '<br>')}</p>
+                </div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+        <div class="progress-dots">${dotsHTML}</div>
+      </div>
     </div>
   `;
 }
 
 function answerQuestion(qIndex, optIndex) {
+  const cards = document.querySelectorAll('.choice-card');
+  if (cards[optIndex]) cards[optIndex].classList.add('selected');
+
   state.answers[qIndex] = optIndex;
 
-  if (qIndex + 1 < questions.length) {
-    renderQuestion(qIndex + 1);
-  } else {
-    startScan();
-  }
+  setTimeout(() => {
+    if (qIndex + 1 < questions.length) {
+      renderQuestion(qIndex + 1);
+    } else {
+      startScan();
+    }
+  }, 300);
 }
 
 /* ========================================
    9. スキャン演出
    ======================================== */
 function startScan() {
+  document.getElementById('bg2').classList.add('hidden');
   showScreen('screen-scan');
+}
 
-  const fill   = document.getElementById('scan-progress-fill');
-  const status = document.getElementById('scan-status');
-  const steps  = [
-    { pct: 20,  text: '皮脂バランスをチェック中...' },
-    { pct: 45,  text: '水分量を測定中...' },
-    { pct: 68,  text: 'テクスチャー適性を解析中...' },
-    { pct: 88,  text: 'あなたのタイプを特定中...' },
-    { pct: 100, text: '解析完了！' },
-  ];
-
-  fill.style.width = '0%';
-  let i = 0;
-
-  (function next() {
-    if (i >= steps.length) {
-      setTimeout(() => {
-        calcResult();
-        renderResult();
-        showScreen('screen-result');
-      }, 600);
-      return;
-    }
-    const s = steps[i++];
-    fill.style.width   = s.pct + '%';
-    status.textContent = s.text;
-    setTimeout(next, 480);
-  })();
+function confirmScan() {
+  calcResult();
+  renderResult();
+  showScreen('screen-result');
+  document.body.classList.add('result-mode');
 }
 
 /* ========================================
@@ -429,58 +451,29 @@ function renderResult() {
   const r = results[state.resultKey];
 
   // ヘッダー
-  document.getElementById('result-cat-badge').textContent = r.category;
-  document.getElementById('result-cat-badge').className   = `result-cat-badge cat-${r.category.toLowerCase()}`;
-  document.getElementById('result-name').textContent      = r.name;
-  document.getElementById('result-tagline').textContent   = r.subCopy;
-
-  const header = document.getElementById('result-header');
-  header.style.background   = `linear-gradient(135deg, ${r.color1}33, ${r.color2}44)`;
-  header.style.borderBottom  = `3px solid ${r.color1}`;
+  document.getElementById('result-name').textContent    = r.name;
+  document.getElementById('result-tagline').textContent = r.subCopy;
 
   // キャラ画像
   const imgTag = r.imgPath
     ? `<img class="result-chara-img" src="${r.imgPath}" alt="${r.name}">`
     : '';
 
-  // ランダムメッセージ
-  const msgTag = `<p class="result-random-msg">&ldquo;${state.message}&rdquo;</p>`;
-
   // 運勢
   const luckTag = `
     <div class="result-luck-card">
-      <p class="luck-heading">✦ 今日の運勢</p>
       <div class="luck-grid">
         <div class="luck-row"><span class="luck-label">仕事運</span><span class="luck-stars">${renderStars(r.luck.work)}</span></div>
         <div class="luck-row"><span class="luck-label">恋愛運</span><span class="luck-stars">${renderStars(r.luck.love)}</span></div>
         <div class="luck-row"><span class="luck-label">金　運</span><span class="luck-stars">${renderStars(r.luck.money)}</span></div>
       </div>
-      <p class="luck-item">🍀 ラッキーアイテム: <strong>${r.luckyItem}</strong></p>
+      <p class="luck-item">ラッキーアイテム: <strong>${r.luckyItem}</strong></p>
     </div>
   `;
 
-  // Tipsカード
-  const tipsTag = r.tips.map(tip => `
-    <div class="tip-card">
-      <span class="tip-icon">${tip.icon}</span>
-      <div>
-        <p class="tip-title">${tip.title}</p>
-        <p class="tip-body">${tip.body}</p>
-      </div>
-    </div>
-  `).join('');
-
   document.getElementById('result-body').innerHTML = `
     ${imgTag}
-    <div class="result-desc-card">
-      ${msgTag}
-      <p class="result-desc">${r.desc}</p>
-    </div>
     ${luckTag}
-    <div class="result-tips">
-      <p class="tips-heading">✦ お手入れのポイント</p>
-      ${tipsTag}
-    </div>
   `;
 }
 
@@ -625,15 +618,12 @@ function printByBrowser() {
    13. TOP に戻る
    ======================================== */
 function goToTop() {
-  state.answers   = [];
-  state.resultKey = null;
-  state.message   = '';
-  showScreen('screen-top');
+  startQuiz();
 }
 
 /* ========================================
    14. 初期化
    ======================================== */
 document.addEventListener('DOMContentLoaded', () => {
-  showScreen('screen-top');
+  startQuiz();
 });
