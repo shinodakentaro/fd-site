@@ -271,14 +271,15 @@ body.result-mode .bg-full-layer {
 /* ? アイコン */
 .icon-wrap {
   position: relative;
-  width: 180px;
-  height: 180px;
+  width: 200px;
+  height: 200px;
   flex-shrink: 0;
   opacity: .6;
+  margin-right: 20px;
 }
 .icon-circle {
-  width: 180px;
-  height: 180px;
+  width: 200px;
+  height: 200px;
   border-radius: 50%;
   border: 3px dashed var(--brand-light);
   position: absolute;
