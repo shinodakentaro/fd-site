@@ -398,6 +398,7 @@ function renderQuestion(index) {
         <div class="progress-dots">${dotsHTML}</div>
       </div>
     </div>
+    ${index > 0 ? `<button class="quiz-back-btn" onclick="renderQuestion(${index - 1})">← 戻る</button>` : ''}
   `;
 }
 
@@ -487,50 +488,53 @@ function renderResult() {
  * #receipt-print-target (印刷専用) の両方に同じ HTML を挿入する。
  */
 function buildReceiptDOM() {
-  const r   = results[state.resultKey];
-  const now = new Date();
-  const dateStr = `${now.getFullYear()}.${String(now.getMonth()+1).padStart(2,'0')}.${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+  const r = results[state.resultKey];
 
   const monoImg = r.imgPathMono
     ? `<img class="rc-chara-img" src="${r.imgPathMono}" alt="${r.name}">`
-    : '';
+    : `<div class="rc-chara-placeholder">キャラクター入る</div>`;
 
   const html = `
-    <div class="rc-event-name">${eventConfig.name}</div>
-    <div class="rc-hr"></div>
-    <div class="rc-date">${dateStr}</div>
-    <div class="rc-hr-dot"></div>
-    <div class="rc-result-section">
-      ${monoImg}
-      <div class="rc-category">[${r.category}]</div>
-      <div class="rc-name">${r.name}</div>
-      <div class="rc-subcopy">${r.subCopy}</div>
+    <div class="rc-title-row">
+      <div class="rc-title-line"></div>
+      <span class="rc-title-text">診断結果</span>
+      <div class="rc-title-line"></div>
     </div>
+
+    <div class="rc-name">${r.name}</div>
+    <div class="rc-subcopy">${r.subCopy}</div>
+
+    <div class="rc-chara-area">${monoImg}</div>
+
     <div class="rc-hr-dot"></div>
-    <div class="rc-msg">&ldquo;${state.message}&rdquo;</div>
+
+    <div class="rc-luck-center">
+      <div>仕事運　${r.luck.work}</div>
+      <div>恋愛運　${r.luck.love}</div>
+      <div>金　運　${r.luck.money}</div>
+    </div>
+
     <div class="rc-hr-dot"></div>
-    <div class="rc-section-title">今日の運勢</div>
-    <div class="rc-luck-table">
-      <div class="rc-luck-row"><span class="rc-luck-label">仕事運</span><span class="rc-luck-stars">${r.luck.work}</span></div>
-      <div class="rc-luck-row"><span class="rc-luck-label">恋愛運</span><span class="rc-luck-stars">${r.luck.love}</span></div>
-      <div class="rc-luck-row"><span class="rc-luck-label">金　運</span><span class="rc-luck-stars">${r.luck.money}</span></div>
+
+    <div class="rc-lucky-center">
+      <div>【ラッキーアイテム】</div>
+      <div>${r.luckyItem}</div>
     </div>
-    <div class="rc-lucky-item">🍀 ラッキーアイテム: ${r.luckyItem}</div>
+
     <div class="rc-hr-dot"></div>
-    <div class="rc-product-section">
-      <div class="rc-section-title">おすすめアイテム</div>
-      <div class="rc-recommend">${r.recommend}</div>
-      <div class="rc-product-name">${eventConfig.product.name} ${eventConfig.product.lineup}</div>
+
+    <div class="rc-message">すてきな日になりますように♡</div>
+
+    <div class="rc-product-area">
+      <img class="rc-product-img" src="../assets/receipt/product.png" alt="商品イラスト">
     </div>
-    <div class="rc-qr-section">
-      <div class="rc-qr-box">${eventConfig.product.qrPlaceholder}</div>
-      <div class="rc-qr-label">詳細はこちら</div>
+
+    <div class="rc-brand-row-wrap">
+      <div class="rc-brand-row">
+        <div class="rc-brand-name">SHISEIDO<br>ブランドサイト</div>
+        <div class="rc-qr-box">${eventConfig.product.qrPlaceholder}</div>
+      </div>
     </div>
-    <div class="rc-hr"></div>
-    <div class="rc-footer">ご来場ありがとうございます</div>
-    <div class="rc-footer">スタッフにお声がけください</div>
-    <div class="rc-hr"></div>
-    <div class="rc-footer-small">${eventConfig.name} / ${eventConfig.date}</div>
   `;
 
   document.getElementById('receipt-content').innerHTML      = html;
