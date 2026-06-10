@@ -593,12 +593,19 @@ body.result-mode .bg-full-layer {
   display: flex; flex-direction: column; gap: 16px;
 }
 
+@keyframes chara-fadein {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
 /* キャラクター画像 */
 .result-chara-img {
   display: block;
   width: 300px; height: 300px;
   object-fit: contain;
   margin: 0 auto;
+  opacity: 0;
+  animation: chara-fadein 1.4s ease-in-out 0.6s forwards;
 }
 .result-chara-fallback {
   width: 160px; height: 160px;
@@ -760,7 +767,8 @@ body.result-mode .bg-full-layer {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 10px;
+  margin-top: 16px;
+  margin-bottom: 16px;
 }
 .rc-title-line {
   flex: 1;
@@ -844,7 +852,7 @@ body.result-mode .bg-full-layer {
 /* ── メッセージ ── */
 .rc-message {
   text-align: center;
-  font-size: 11px;
+  font-size: 15px;
   color: #333;
   padding: 6px 0;
   letter-spacing: .06em;
