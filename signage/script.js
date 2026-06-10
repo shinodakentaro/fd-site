@@ -32,7 +32,6 @@ function init() {
     }
   });
 
-  scheduleDemo();
 }
 
 /* ----------------------------------------
@@ -176,19 +175,5 @@ function initCanvas() {
   loop();
 }
 
-/* ----------------------------------------
-   デモ自動投票
-   ---------------------------------------- */
-function scheduleDemo() {
-  function next() {
-    const delay = 6000 + Math.random() * 10000;
-    setTimeout(() => {
-      const type = Math.random() > .45 ? 'glow' : 'smooth';
-      VoteStore.cast(type);
-      next();
-    }, delay);
-  }
-  next();
-}
 
 document.addEventListener('DOMContentLoaded', init);
