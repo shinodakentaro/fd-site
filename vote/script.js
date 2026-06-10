@@ -10,6 +10,9 @@ function castVote(type) {
   if (hasVoted) return;
   hasVoted = true;
 
+  // 二重タップ防止：ボタンを即座に無効化
+  document.querySelectorAll('.v-btn').forEach(btn => btn.disabled = true);
+
   VoteStore.cast(type);
   showDoneScreen(type);
 }
@@ -46,6 +49,7 @@ function resetVote() {
   document.getElementById('bg2').classList.remove('hidden');
   document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
   document.getElementById('screen-vote').classList.add('active');
+  document.querySelectorAll('.v-btn').forEach(btn => btn.disabled = false);
 }
 
 /* ── 紙吹雪エフェクト ── */
