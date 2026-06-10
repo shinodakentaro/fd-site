@@ -63,6 +63,20 @@ body {
   z-index: 1;
 }
 
+/* ── 全幅ヘッダー ── */
+.sg-header {
+  position: relative;
+  z-index: 2;
+  width: 100vw;
+  height: 160px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 0 60px;
+}
+
 /* ── ルートレイアウト ── */
 .sg-root {
   position: relative;
@@ -70,7 +84,7 @@ body {
   display: flex;
   align-items: stretch;
   width: 100vw;
-  height: calc(100vh - 140px);
+  height: calc(100vh - 160px - 140px);
 }
 
 /* ========================================
@@ -146,24 +160,24 @@ body {
   align-items: center;
   justify-content: center;
   gap: 20px;
-  padding: 40px 0;
+  padding: 20px 0;
 }
 
 .sg-title {
-  font-size: 32px;
+  font-size: 60px;
   font-weight: 500;
   color: #ab886a;
-  letter-spacing: 1.6px;
+  letter-spacing: 3px;
   text-align: center;
   white-space: nowrap;
+  line-height: 1;
 }
 .sg-subtitle {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 500;
   color: #ab886a;
   letter-spacing: 1px;
   text-align: center;
-  line-height: 1.8;
   opacity: 0.7;
 }
 
