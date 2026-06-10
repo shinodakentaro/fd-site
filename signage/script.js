@@ -75,16 +75,16 @@ function updateLead(glow, smooth, animated) {
   const leadNameEl = document.getElementById('sg-lead-name');
   if (!leadEl || !leadNameEl) return;
 
+  leadEl.style.visibility = 'visible';
+
   if (glow === smooth) {
-    leadEl.style.visibility = 'hidden';
+    leadEl.textContent = '現在同点！';
     return;
   }
 
-  leadEl.style.visibility = 'visible';
   const name = glow > smooth ? 'ツヤ派' : 'なめらか派';
-
   if (leadNameEl.textContent !== name) {
-    leadNameEl.textContent = name;
+    leadEl.innerHTML = `現在は <span id="sg-lead-name">${name}</span> がリード中！`;
     if (animated) {
       leadEl.classList.remove('updated');
       void leadEl.offsetHeight;
