@@ -1,259 +1,283 @@
 /* ========================================
    GLOW vs SMOOTH サイネージ
-   横長モニター想定 (1920×1080 / 1280×720)
+   1920×1080 landscape モニター
    ======================================== */
-:root {
-  --glow-gold:   #ffd700;
-  --glow-amber:  #ffaa00;
-  --glow-pink:   #ff85a1;
-  --smt-blue:    #4a8faf;
-  --smt-cool:    #a8c8d8;
-  --smt-lav:     #c8b8e8;
-  --white:       #ffffff;
-  --text-dark:   #1a1008;
-  --font: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Meiryo', sans-serif;
-}
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-html, body {
-  height: 100%; width: 100%;
-  font-family: var(--font);
-  background: #0d0810;
-  overflow: hidden;
-  -webkit-font-smoothing: antialiased;
-}
-
-/* ========================================
-   Root Layout (横3分割)
-   ======================================== */
-.s-root {
-  display: grid;
-  grid-template-columns: 1fr 320px 1fr;
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  width: 100vw;
   height: 100vh;
-  position: relative;
   overflow: hidden;
+  background: #fff;
+  position: relative;
 }
 
-/* ========================================
-   Canvas (背景パーティクル)
-   ======================================== */
-#particle-canvas {
-  position: fixed; inset: 0;
+/* ── bg_full アニメーション背景 ── */
+.bg-full-layer {
+  position: fixed;
+  width: 172.8vw;
+  height: 172.8vh;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 0;
+  animation: floatBg 48s ease-in-out infinite;
+}
+.bg-full-layer img {
   width: 100%; height: 100%;
-  pointer-events: none; z-index: 0;
+  object-fit: contain;
 }
 
-/* ========================================
-   ZONE (共通)
-   ======================================== */
-.zone {
-  position: relative; overflow: hidden;
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: space-between;
-  padding: 48px 32px 40px;
+@keyframes floatBg {
+  0%   { transform: translate(-50%, -50%)  scale(1)    rotate(0deg); }
+  12%  { transform: translate(-47%, -53%)  scale(1.03) rotate(2deg); }
+  25%  { transform: translate(-52%, -48%)  scale(0.98) rotate(-1deg); }
+  37%  { transform: translate(-48%, -52%)  scale(1.02) rotate(3deg); }
+  50%  { transform: translate(-53%, -47%)  scale(0.97) rotate(-2deg); }
+  62%  { transform: translate(-49%, -51%)  scale(1.03) rotate(1.5deg); }
+  75%  { transform: translate(-51%, -53%)  scale(0.98) rotate(-1.5deg); }
+  87%  { transform: translate(-48%, -49%)  scale(1.02) rotate(2.5deg); }
+  100% { transform: translate(-50%, -50%)  scale(1)    rotate(0deg); }
+}
+
+/* ── bg_2 ── */
+.bg-2-layer {
+  position: fixed;
+  width: 3016px;
+  height: 3016px;
+  top: -800px;
+  left: -1400px;
+  pointer-events: none;
+  z-index: 0;
+}
+.bg-2-layer img { width: 100%; height: 100%; }
+
+/* ── Canvas ── */
+#particle-canvas {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
   z-index: 1;
 }
 
-.zone-bg-glow {
-  position: absolute; inset: 0;
-  background: linear-gradient(180deg, rgba(255,180,0,.08) 0%, rgba(255,100,50,.06) 100%);
-}
-.zone-bg-smooth {
-  position: absolute; inset: 0;
-  background: linear-gradient(180deg, rgba(100,180,220,.08) 0%, rgba(80,100,200,.06) 100%);
-}
-
-/* Label */
-.zone-label {
-  position: relative; z-index: 1;
-  display: flex; flex-direction: column;
-  align-items: center; gap: 6px;
-  text-align: center;
-}
-.zone-icon  { font-size: 56px; line-height: 1; }
-.zone-name  {
-  font-size: 52px; font-weight: 900;
-  letter-spacing: .12em;
-}
-.zone-glow  .zone-name  { color: var(--glow-gold); text-shadow: 0 0 20px rgba(255,215,0,.6); }
-.zone-smooth .zone-name { color: var(--smt-cool);  text-shadow: 0 0 20px rgba(168,200,216,.6); }
-.zone-sub {
-  font-size: 18px; font-weight: 500;
-  letter-spacing: .08em;
-  color: rgba(255,255,255,.6);
+/* ── ルートレイアウト ── */
+.sg-root {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: stretch;
+  width: 100vw;
+  height: calc(100vh - 140px);
 }
 
-/* Crowd */
-.zone-crowd {
-  position: relative; z-index: 1;
-  flex: 1; width: 100%;
-  margin: 20px 0;
+/* ========================================
+   ゾーン（左右）
+   ======================================== */
+.sg-zone {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 60px 40px 0;
+  gap: 20px;
 }
 
-/* zone avatar chip */
-.z-chip {
-  position: absolute;
-  background: rgba(255,255,255,.12);
-  border: 1.5px solid rgba(255,255,255,.2);
-  border-radius: 24px;
-  padding: 6px 14px;
-  font-size: 14px; font-weight: 700;
-  color: var(--white);
-  letter-spacing: .04em;
-  animation: z-float var(--dur) var(--delay) ease-in-out infinite alternate;
-  white-space: nowrap;
-}
-.z-chip.arriving {
-  animation: z-arrive .5s ease-out forwards, z-float var(--dur) var(--delay) ease-in-out infinite alternate .5s;
-}
-@keyframes z-arrive {
-  from { transform: scale(0) translateY(20px); opacity: 0; }
-  to   { transform: scale(1) translateY(0);    opacity: 1; }
-}
-@keyframes z-float {
-  from { transform: translateY(0px) rotate(-1deg); }
-  to   { transform: translateY(-8px) rotate(1deg); }
+.sg-team-label {
+  font-size: 36px;
+  font-weight: 500;
+  color: #ab886a;
+  letter-spacing: 2px;
+  opacity: 0.7;
 }
 
-/* Count */
-.zone-count {
-  position: relative; z-index: 1;
-  display: flex; align-items: baseline; gap: 6px;
-}
-.zone-num {
-  font-size: 96px; font-weight: 900; line-height: 1;
-  letter-spacing: -.02em;
-}
-.zone-glow   .zone-num { color: var(--glow-gold); text-shadow: 0 0 32px rgba(255,215,0,.5); }
-.zone-smooth .zone-num { color: var(--smt-cool);  text-shadow: 0 0 32px rgba(168,200,216,.5); }
-.zone-unit {
-  font-size: 28px; font-weight: 700;
-  color: rgba(255,255,255,.7); letter-spacing: .06em;
+.sg-count-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
 }
 
-/* count pop animation */
+.sg-count-type {
+  font-size: 44px;
+  font-weight: 500;
+  color: #ab886a;
+  letter-spacing: 2.2px;
+}
+
+.sg-count-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.sg-count-num {
+  font-size: 120px;
+  font-weight: 500;
+  color: #ab886a;
+  line-height: 1;
+  letter-spacing: -2px;
+}
+
 @keyframes count-pop {
-  0%   { transform: scale(1); }
-  40%  { transform: scale(1.2); }
+  0%   { transform: scale(1.15); }
   100% { transform: scale(1); }
 }
 
-/* ========================================
-   CENTER
-   ======================================== */
-.center {
-  position: relative; z-index: 1;
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  padding: 32px 20px;
-  gap: 20px;
-  background: rgba(255,255,255,.04);
-  border-left:  1px solid rgba(255,255,255,.08);
-  border-right: 1px solid rgba(255,255,255,.08);
+.sg-count-unit {
+  font-size: 40px;
+  font-weight: 500;
+  color: #ab886a;
+  opacity: 0.7;
 }
 
-.center-title-bar {
-  display: flex; align-items: center; gap: 10px;
-  text-align: center;
-}
-.center-deco { font-size: 11px; color: rgba(255,255,255,.3); letter-spacing: .1em; }
-.center-title {
-  font-size: 16px; font-weight: 700;
-  color: rgba(255,255,255,.7);
-  letter-spacing: .12em; white-space: nowrap;
-}
-
-/* PCT Row */
-.score-pct-row {
-  display: flex; align-items: center; gap: 10px;
-}
-.score-pct {
-  font-size: 52px; font-weight: 900;
-  line-height: 1; letter-spacing: -.02em;
-  transition: all .4s ease;
-}
-.pct-glow   { color: var(--glow-gold); text-shadow: 0 0 20px rgba(255,215,0,.5); }
-.pct-smooth { color: var(--smt-cool);  text-shadow: 0 0 20px rgba(168,200,216,.5); }
-.score-sep  { font-size: 32px; color: rgba(255,255,255,.4); font-weight: 700; }
-
-/* Bar */
-.score-bar-wrap {
-  width: 100%;
-  height: 16px; border-radius: 8px; overflow: hidden;
-  background: rgba(255,255,255,.08);
+/* キャラクター */
+.sg-chara-row {
   display: flex;
-}
-.score-bar-glow {
-  height: 100%;
-  background: linear-gradient(90deg, var(--glow-amber), var(--glow-gold));
-  transition: width .9s cubic-bezier(.4,0,.2,1);
-  box-shadow: 0 0 10px rgba(255,200,0,.5);
-}
-.score-bar-smooth {
-  height: 100%;
-  background: linear-gradient(90deg, var(--smt-blue), var(--smt-cool));
-  transition: width .9s cubic-bezier(.4,0,.2,1);
-  box-shadow: 0 0 10px rgba(100,180,220,.5);
+  align-items: flex-end;
+  justify-content: center;
+  gap: 12px;
+  margin-top: auto;
 }
 
-/* VS Badge */
-.vs-badge {
-  font-size: 40px; font-weight: 900;
-  color: rgba(255,255,255,.25);
-  letter-spacing: .18em;
+.sg-chara {
+  width: 180px;
+  height: 180px;
+  object-fit: contain;
+  object-position: bottom;
+  animation: chara-bounce 1.6s ease-in-out infinite;
 }
+.sg-chara-2 { animation-delay: 0.2s; }
+.sg-chara-3 { animation-delay: 0.4s; }
 
-.total-votes {
-  font-size: 18px; color: rgba(255,255,255,.5);
-  letter-spacing: .08em; font-weight: 600;
+@keyframes chara-bounce {
+  0%,  100% { transform: translateY(0); }
+  40%        { transform: translateY(-20px); }
+  55%        { transform: translateY(-12px); }
+  70%        { transform: translateY(-20px); }
 }
-
-/* Recent Bar */
-.recent-bar {
-  width: 100%;
-  display: flex; flex-direction: column; align-items: center; gap: 10px;
-  margin-top: 8px;
-}
-.recent-label {
-  font-size: 11px; color: rgba(255,255,255,.35);
-  letter-spacing: .16em; font-weight: 600;
-}
-.recent-list {
-  display: flex; flex-direction: column; gap: 6px; width: 100%;
-}
-
-.r-chip {
-  background: rgba(255,255,255,.07);
-  border: 1px solid rgba(255,255,255,.12);
-  border-radius: 20px;
-  padding: 6px 14px;
-  display: flex; align-items: center; gap: 8px;
-  font-size: 13px; color: rgba(255,255,255,.75);
-  animation: r-enter .3s ease both;
-}
-@keyframes r-enter {
-  from { opacity: 0; transform: translateY(-8px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-.r-vote {
-  font-size: 11px; font-weight: 700; letter-spacing: .06em;
-  padding: 2px 8px; border-radius: 10px; margin-left: auto;
-}
-.r-glow-tag   { background: rgba(255,215,0,.25);  color: var(--glow-gold); }
-.r-smooth-tag { background: rgba(168,200,216,.25); color: var(--smt-cool); }
 
 /* ========================================
-   Flying Particle (new vote burst)
+   中央
+   ======================================== */
+.sg-center {
+  width: 340px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 40px 0;
+}
+
+.sg-title {
+  font-size: 28px;
+  font-weight: 500;
+  color: #ab886a;
+  letter-spacing: 1.4px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.sg-vs {
+  font-size: 80px;
+  font-weight: 500;
+  color: #ab886a;
+  letter-spacing: 4px;
+  line-height: 1;
+  opacity: 0.4;
+}
+
+/* バーグラフ */
+.sg-bar-wrap {
+  width: 280px;
+  height: 16px;
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  background: rgba(171, 136, 106, 0.15);
+}
+
+.sg-bar-glow,
+.sg-bar-smooth {
+  height: 100%;
+  transition: width 0.8s cubic-bezier(.4,0,.2,1);
+}
+.sg-bar-glow   { background: #ab886a; }
+.sg-bar-smooth { background: rgba(171, 136, 106, 0.4); }
+
+/* パーセント */
+.sg-pct-row {
+  width: 280px;
+  display: flex;
+  justify-content: space-between;
+}
+.sg-pct {
+  font-size: 24px;
+  font-weight: 500;
+  color: #ab886a;
+  letter-spacing: 1px;
+  opacity: 0.7;
+}
+
+/* ========================================
+   下部バー
+   ======================================== */
+.sg-bottom {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  height: 140px;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid rgba(171, 136, 106, 0.2);
+}
+
+.sg-lead {
+  font-size: 40px;
+  font-weight: 500;
+  color: #ab886a;
+  letter-spacing: 2px;
+}
+
+@keyframes lead-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.5; }
+}
+.sg-lead.updated {
+  animation: lead-pulse 1s ease-in-out;
+}
+
+.sg-cta {
+  font-size: 26px;
+  font-weight: 500;
+  color: #ab886a;
+  letter-spacing: 1.3px;
+  opacity: 0.6;
+}
+
+/* ========================================
+   投票バースト演出
    ======================================== */
 .vote-burst {
   position: fixed;
   border-radius: 50%;
   pointer-events: none;
-  animation: vb-fly .8s ease-out forwards;
   z-index: 10;
+  animation: burst-fly 0.8s ease-out forwards;
 }
-@keyframes vb-fly {
-  0%   { transform: translate(0,0) scale(1); opacity: 1; }
-  100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
+@keyframes burst-fly {
+  0%   { opacity: 1; transform: translate(0, 0) scale(1); }
+  100% { opacity: 0; transform: translate(var(--tx), var(--ty)) scale(0); }
 }

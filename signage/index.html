@@ -4,79 +4,84 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>GLOW vs SMOOTH BATTLE</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-  <div class="s-root">
+<!-- 背景レイヤー -->
+<div class="bg-full-layer">
+  <img src="../2607_@cosmeFD_event_code/imge/bg_full.png" alt="" />
+</div>
+<div class="bg-2-layer">
+  <img src="../2607_@cosmeFD_event_code/imge/bg_2.svg" alt="" />
+</div>
 
-    <!-- 背景パーティクルステージ -->
-    <canvas id="particle-canvas"></canvas>
+<!-- Canvas パーティクル -->
+<canvas id="particle-canvas"></canvas>
 
-    <!-- ===== GLOW ZONE (左) ===== -->
-    <div class="zone zone-glow">
-      <div class="zone-bg-glow"></div>
-      <div class="zone-label">
-        <span class="zone-icon">✨</span>
-        <span class="zone-name">GLOW</span>
-        <span class="zone-sub">光・ツヤ感</span>
-      </div>
-      <div class="zone-crowd" id="glow-crowd"></div>
-      <div class="zone-count">
-        <span class="zone-num" id="glow-num">0</span>
-        <span class="zone-unit">票</span>
-      </div>
-    </div>
+<div class="sg-root">
 
-    <!-- ===== CENTER ===== -->
-    <div class="center">
-      <div class="center-title-bar">
-        <span class="center-deco">◆◆◆</span>
-        <h1 class="center-title">本日の肌ムードバトル</h1>
-        <span class="center-deco">◆◆◆</span>
-      </div>
-
-      <!-- パーセントスコア -->
-      <div class="score-pct-row">
-        <span class="score-pct pct-glow" id="pct-glow">50%</span>
-        <span class="score-sep">:</span>
-        <span class="score-pct pct-smooth" id="pct-smooth">50%</span>
-      </div>
-
-      <!-- バーグラフ -->
-      <div class="score-bar-wrap">
-        <div class="score-bar-glow"   id="bar-glow"   style="width:50%"></div>
-        <div class="score-bar-smooth" id="bar-smooth" style="width:50%"></div>
-      </div>
-
-      <div class="vs-badge">VS</div>
-      <div class="total-votes" id="total-votes">0 votes</div>
-
-      <!-- 最近の参加者 -->
-      <div class="recent-bar">
-        <span class="recent-label">✦ 最近の参加 ✦</span>
-        <div class="recent-list" id="recent-list"></div>
+  <!-- ===== GLOW ZONE (左) ===== -->
+  <div class="sg-zone sg-zone-glow">
+    <p class="sg-team-label">GLOW チーム</p>
+    <div class="sg-count-block">
+      <span class="sg-count-type">ツヤ派</span>
+      <div class="sg-count-row">
+        <span class="sg-count-num" id="glow-num">0</span>
+        <span class="sg-count-unit">票</span>
       </div>
     </div>
+    <div class="sg-chara-row" id="glow-crowd">
+      <img class="sg-chara sg-chara-1" src="../assets/images/chara01.png" alt="">
+      <img class="sg-chara sg-chara-2" src="../assets/images/chara02.png" alt="">
+      <img class="sg-chara sg-chara-3" src="../assets/images/chara03.png" alt="">
+    </div>
+  </div>
 
-    <!-- ===== SMOOTH ZONE (右) ===== -->
-    <div class="zone zone-smooth">
-      <div class="zone-bg-smooth"></div>
-      <div class="zone-label">
-        <span class="zone-icon">🌸</span>
-        <span class="zone-name">SMOOTH</span>
-        <span class="zone-sub">パウダー・なめらか</span>
-      </div>
-      <div class="zone-crowd" id="smooth-crowd"></div>
-      <div class="zone-count">
-        <span class="zone-num" id="smooth-num">0</span>
-        <span class="zone-unit">票</span>
+  <!-- ===== CENTER ===== -->
+  <div class="sg-center">
+    <h1 class="sg-title">本日の仕上がり対決</h1>
+    <div class="sg-vs">VS</div>
+    <div class="sg-bar-wrap">
+      <div class="sg-bar-glow"   id="bar-glow"   style="width:50%"></div>
+      <div class="sg-bar-smooth" id="bar-smooth" style="width:50%"></div>
+    </div>
+    <div class="sg-pct-row">
+      <span class="sg-pct sg-pct-glow"   id="pct-glow">50%</span>
+      <span class="sg-pct sg-pct-smooth" id="pct-smooth">50%</span>
+    </div>
+  </div>
+
+  <!-- ===== SMOOTH ZONE (右) ===== -->
+  <div class="sg-zone sg-zone-smooth">
+    <p class="sg-team-label">SMOOTH チーム</p>
+    <div class="sg-count-block">
+      <span class="sg-count-type">なめらか派</span>
+      <div class="sg-count-row">
+        <span class="sg-count-num" id="smooth-num">0</span>
+        <span class="sg-count-unit">票</span>
       </div>
     </div>
+    <div class="sg-chara-row" id="smooth-crowd">
+      <img class="sg-chara sg-chara-1" src="../assets/images/chara04.png" alt="">
+      <img class="sg-chara sg-chara-2" src="../assets/images/chara05.png" alt="">
+      <img class="sg-chara sg-chara-3" src="../assets/images/chara06.png" alt="">
+    </div>
+  </div>
 
-  </div><!-- /.s-root -->
+</div>
 
-  <script src="../shared/vote-store.js"></script>
-  <script src="script.js"></script>
+<!-- ===== 下部バー ===== -->
+<div class="sg-bottom">
+  <p class="sg-lead" id="sg-lead">現在は <span id="sg-lead-name">ツヤ派</span> がリード中！</p>
+  <p class="sg-cta">あなたの一票で結果が変わるかも？</p>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+<script src="../shared/firebase-config.js"></script>
+<script src="../shared/vote-store.js"></script>
+<script src="script.js"></script>
 </body>
 </html>

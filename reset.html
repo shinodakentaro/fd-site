@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>投票管理 — リセット</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      background: #f8f3ee;
+      color: #2d1f1a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 48px 56px;
+      width: 100%;
+      max-width: 500px;
+      box-shadow: 0 8px 32px rgba(0,0,0,.1);
+    }
+    h1 {
+      font-size: 24px;
+      font-weight: 500;
+      color: #ab886a;
+      letter-spacing: 1.2px;
+      margin-bottom: 32px;
+      text-align: center;
+    }
+    .current {
+      background: #f8f3ee;
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-bottom: 32px;
+      text-align: center;
+    }
+    .current-label {
+      font-size: 13px;
+      color: #999;
+      letter-spacing: .08em;
+      margin-bottom: 10px;
+    }
+    .current-nums {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+    }
+    .current-item { text-align: center; }
+    .current-type {
+      font-size: 13px;
+      color: #ab886a;
+      letter-spacing: .06em;
+      margin-bottom: 4px;
+    }
+    .current-num {
+      font-size: 48px;
+      font-weight: 500;
+      color: #ab886a;
+      line-height: 1;
+    }
+    .section-title {
+      font-size: 13px;
+      color: #999;
+      letter-spacing: .08em;
+      margin-bottom: 12px;
+    }
+    .input-row {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 12px;
+    }
+    .input-group {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    label {
+      font-size: 13px;
+      color: #ab886a;
+      letter-spacing: .06em;
+    }
+    input[type="number"] {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1.5px solid #e0d4c8;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 20px;
+      font-weight: 500;
+      color: #2d1f1a;
+      text-align: center;
+      outline: none;
+    }
+    input[type="number"]:focus { border-color: #ab886a; }
+    .btn {
+      width: 100%;
+      padding: 16px;
+      border: none;
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: 16px;
+      font-weight: 500;
+      letter-spacing: .08em;
+      cursor: pointer;
+      transition: opacity .15s;
+    }
+    .btn:active { opacity: .8; }
+    .btn-set {
+      background: #ab886a;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+    .btn-reset {
+      background: #f0e8e0;
+      color: #ab886a;
+    }
+    .divider {
+      border: none;
+      border-top: 1px solid #f0e8e0;
+      margin: 28px 0;
+    }
+    .status {
+      text-align: center;
+      font-size: 14px;
+      color: #ab886a;
+      min-height: 22px;
+      margin-top: 12px;
+      letter-spacing: .06em;
+    }
+    .status.error { color: #c0392b; }
+  </style>
+</head>
+<body>
+<div class="card">
+  <h1>投票管理</h1>
+
+  <!-- 現在の票数 -->
+  <div class="current">
+    <p class="current-label">現在の票数</p>
+    <div class="current-nums">
+      <div class="current-item">
+        <p class="current-type">ツヤ派（GLOW）</p>
+        <p class="current-num" id="c-glow">—</p>
+      </div>
+      <div class="current-item">
+        <p class="current-type">なめらか派（SMOOTH）</p>
+        <p class="current-num" id="c-smooth">—</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 初期値設定 -->
+  <p class="section-title">初期値を設定して開始</p>
+  <div class="input-row">
+    <div class="input-group">
+      <label>GLOW（ツヤ派）</label>
+      <input type="number" id="init-glow" value="0" min="0" />
+    </div>
+    <div class="input-group">
+      <label>SMOOTH（なめらか派）</label>
+      <input type="number" id="init-smooth" value="0" min="0" />
+    </div>
+  </div>
+  <button class="btn btn-set" onclick="setVotes()">この値で設定する</button>
+
+  <hr class="divider" />
+
+  <!-- リセット -->
+  <button class="btn btn-reset" onclick="resetVotes()">0 にリセットする</button>
+
+  <p class="status" id="status"></p>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+<script src="shared/firebase-config.js"></script>
+<script src="shared/vote-store.js"></script>
+<script>
+  // 現在の票数をリアルタイム表示
+  VoteStore.subscribe(data => {
+    document.getElementById('c-glow').textContent   = (data.glow   || 0).toLocaleString('ja-JP');
+    document.getElementById('c-smooth').textContent = (data.smooth || 0).toLocaleString('ja-JP');
+  });
+
+  function showStatus(msg, isError = false) {
+    const el = document.getElementById('status');
+    el.textContent = msg;
+    el.className   = 'status' + (isError ? ' error' : '');
+    setTimeout(() => { el.textContent = ''; }, 3000);
+  }
+
+  function setVotes() {
+    const glow   = parseInt(document.getElementById('init-glow').value,   10) || 0;
+    const smooth = parseInt(document.getElementById('init-smooth').value, 10) || 0;
+    VoteStore.set(glow, smooth)
+      .then(() => showStatus(`設定しました（GLOW: ${glow} / SMOOTH: ${smooth}）`))
+      .catch(e  => showStatus('エラー: ' + e.message, true));
+  }
+
+  function resetVotes() {
+    if (!confirm('票数を 0 にリセットしますか？')) return;
+    VoteStore.reset()
+      .then(() => showStatus('リセットしました'))
+      .catch(e  => showStatus('エラー: ' + e.message, true));
+  }
+</script>
+</body>
+</html>

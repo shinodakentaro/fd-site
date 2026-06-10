@@ -1,45 +1,60 @@
 /**
- * vote-store.js
- * 投票データ管理モジュール
- * localStorage使用。Firebase等への差し替えは cast/get/subscribe を置き換えるだけでOK。
+ * vote-store.js  — Firebase Realtime Database 版
+ *
+ * データ構造:
+ *   votes: { glow: 0, smooth: 0, updatedAt: timestamp }
+ *
+ * API:
+ *   VoteStore.cast(type)          — glow / smooth を +1（トランザクション）
+ *   VoteStore.subscribe(callback) — リアルタイム購読（初回も即座に発火）
+ *   VoteStore.set(glow, smooth)   — 任意の値に設定（管理用）
+ *   VoteStore.reset()             — 0 にリセット（管理用）
  */
-const VOTE_KEY = 'gs-battle-v1';
 
-const VoteStore = {
-  /** 現在の投票データを取得 */
-  get() {
-    try {
-      const raw = localStorage.getItem(VOTE_KEY);
-      if (raw) return JSON.parse(raw);
-    } catch (e) { /* ignore */ }
-    return { glow: 0, smooth: 0, recent: [], lastUpdate: 0 };
-  },
+const VoteStore = (() => {
+  const ref = () => firebase.database().ref('votes');
 
-  /** 投票を記録して更新後データを返す */
-  cast(type) {
-    const data = this.get();
-    data[type] = (data[type] || 0) + 1;
-    data.recent.unshift({ type, time: Date.now() });
-    if (data.recent.length > 60) data.recent = data.recent.slice(0, 60);
-    data.lastUpdate = Date.now();
-    localStorage.setItem(VOTE_KEY, JSON.stringify(data));
-    return data;
-  },
+  return {
+    /** glow または smooth を +1 する（アトミックなトランザクション） */
+    cast(type) {
+      ref().transaction(current => {
+        if (current === null) {
+          return {
+            glow:      type === 'glow'   ? 1 : 0,
+            smooth:    type === 'smooth' ? 1 : 0,
+            updatedAt: Date.now(),
+          };
+        }
+        return {
+          glow:      (current.glow   || 0) + (type === 'glow'   ? 1 : 0),
+          smooth:    (current.smooth || 0) + (type === 'smooth' ? 1 : 0),
+          updatedAt: Date.now(),
+        };
+      });
+    },
 
-  /** ポーリングで変更を監視。戻り値はintervalId（clearIntervalで停止可） */
-  subscribe(callback, interval = 1500) {
-    let last = this.get().lastUpdate;
-    return setInterval(() => {
-      const data = this.get();
-      if (data.lastUpdate > last) {
-        last = data.lastUpdate;
+    /**
+     * リアルタイム購読
+     * 初回接続時・データ変更時に callback({ glow, smooth, updatedAt }) を呼ぶ
+     * 戻り値: 購読解除関数
+     */
+    subscribe(callback) {
+      const handler = snap => {
+        const data = snap.val() || { glow: 0, smooth: 0, updatedAt: 0 };
         callback(data);
-      }
-    }, interval);
-  },
+      };
+      ref().on('value', handler);
+      return () => ref().off('value', handler);
+    },
 
-  /** データリセット（管理用） */
-  reset() {
-    localStorage.removeItem(VOTE_KEY);
-  },
-};
+    /** 任意の値に設定（管理・reset.html 用） */
+    set(glow = 0, smooth = 0) {
+      return ref().set({ glow, smooth, updatedAt: Date.now() });
+    },
+
+    /** 0にリセット（管理・reset.html 用） */
+    reset() {
+      return this.set(0, 0);
+    },
+  };
+})();

@@ -1,234 +1,253 @@
 /* ========================================
    GLOW or SMOOTH 投票画面
-   iPad 11inch (834×1194) portrait 想定
+   iPad 11inch (1180×820px) landscape 固定
    ======================================== */
-:root {
-  --glow-gold:   #ffd700;
-  --glow-amber:  #ffb347;
-  --glow-peach:  #fde8d0;
-  --glow-pink:   #ff85a1;
-  --smt-slate:   #5a7a8f;
-  --smt-cool:    #a8c8d8;
-  --smt-lav:     #d4b8e8;
-  --white:       #ffffff;
-  --text:        #2d1f1a;
-  --text-mid:    #7a5c4e;
-  --bg:          #f8f3ee;
-  --font: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Meiryo', sans-serif;
-}
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html, body {
+* { -webkit-tap-highlight-color: transparent; }
+
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  background: #fff;
+  width: 1180px;
+  height: 820px;
+  overflow: hidden;
+  position: relative;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── bg_full アニメーション背景 ── */
+.bg-full-layer {
+  position: fixed;
+  width: 172.8vw;
+  height: 172.8vh;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 0;
+  animation: floatBg 48s ease-in-out infinite;
+}
+.bg-full-layer img {
+  width: 100%;
   height: 100%;
-  font-family: var(--font);
-  background: var(--bg);
-  -webkit-font-smoothing: antialiased;
+  object-fit: contain;
+}
+
+@keyframes floatBg {
+  0%   { transform: translate(-50%, -50%)  scale(1)    rotate(0deg); }
+  12%  { transform: translate(-47%, -53%)  scale(1.03) rotate(2deg); }
+  25%  { transform: translate(-52%, -48%)  scale(0.98) rotate(-1deg); }
+  37%  { transform: translate(-48%, -52%)  scale(1.02) rotate(3deg); }
+  50%  { transform: translate(-53%, -47%)  scale(0.97) rotate(-2deg); }
+  62%  { transform: translate(-49%, -51%)  scale(1.03) rotate(1.5deg); }
+  75%  { transform: translate(-51%, -53%)  scale(0.98) rotate(-1.5deg); }
+  87%  { transform: translate(-48%, -49%)  scale(1.02) rotate(2.5deg); }
+  100% { transform: translate(-50%, -50%)  scale(1)    rotate(0deg); }
+}
+
+/* ── bg_2（投票画面のみ表示） ── */
+.bg-2-layer {
+  position: fixed;
+  width: 3016px;
+  height: 3016px;
+  top: 0px;
+  left: -1300px;
+  pointer-events: none;
+  z-index: 0;
+}
+.bg-2-layer img { width: 100%; height: 100%; }
+.bg-2-layer.hidden { display: none; }
+
+/* ── 画面共通 ── */
+.screen {
+  display: none;
+  width: 1180px;
+  height: 820px;
+  position: relative;
+  z-index: 1;
   overflow: hidden;
 }
-button {
-  border: none; cursor: pointer; font-family: inherit;
-  -webkit-tap-highlight-color: transparent;
-  transition: opacity .15s, transform .12s;
-}
-button:active { opacity: .85; transform: scale(.96); }
-
-/* ========================================
-   Screen
-   ======================================== */
-.screen { display: none; min-height: 100dvh; }
 .screen.active { display: flex; }
 
 /* ========================================
-   VOTE SCREEN
+   投票画面
    ======================================== */
 #screen-vote {
   flex-direction: column;
   align-items: center;
-  background: linear-gradient(160deg, #fff8f5 0%, #fce8f0 45%, #eef5f8 100%);
-  position: relative; overflow: hidden;
-}
-
-.v-orb {
-  position: absolute; border-radius: 50%;
-  filter: blur(90px); pointer-events: none;
-}
-.v-orb-glow {
-  width: 600px; height: 600px; top: -200px; right: -200px;
-  background: radial-gradient(circle, rgba(255,215,0,.25) 0%, rgba(255,133,161,.2) 60%, transparent 100%);
-}
-.v-orb-smooth {
-  width: 500px; height: 500px; bottom: -150px; left: -150px;
-  background: radial-gradient(circle, rgba(90,122,143,.2) 0%, rgba(168,200,216,.18) 60%, transparent 100%);
 }
 
 .v-header {
-  position: relative; z-index: 1;
-  padding: 64px 48px 40px;
-  text-align: center; width: 100%;
-}
-.v-badge {
-  display: inline-block;
-  font-size: 13px; font-weight: 700; letter-spacing: .22em;
-  color: #c9a96e;
-  border: 1.5px solid rgba(201,169,110,.4);
-  padding: 8px 28px; border-radius: 30px;
-  margin-bottom: 28px;
+  padding: 100px 80px 36px;
+  text-align: center;
+  width: 100%;
+  flex-shrink: 0;
 }
 .v-title {
-  font-size: 52px; font-weight: 800;
-  color: var(--text); letter-spacing: .02em;
-  margin-bottom: 14px; line-height: 1.2;
+  color: #fff;
+  font-size: 80px;
+  font-weight: 500;
+  line-height: 1.35;
+  letter-spacing: 3px;
+  margin-bottom: 14px;
 }
 .v-sub {
-  font-size: 20px; color: var(--text-mid);
-  line-height: 1.7; letter-spacing: .04em;
+  color: #ab886a;
+  font-size: 30px;
+  font-weight: 500;
+  line-height: 1.6;
+  letter-spacing: 1.1px;
+  opacity: 0.7;
 }
 
-/* Vote Buttons */
+/* 投票ボタン群 */
 .v-btns {
-  position: relative; z-index: 1;
-  display: flex; gap: 28px;
-  padding: 0 48px 64px; width: 100%;
-  flex: 1; align-items: stretch;
+  display: flex;
+  gap: 40px;
+  padding: 0 80px 32px;
+  width: 100%;
+  flex: 1;
+  align-items: stretch;
 }
 
 .v-btn {
-  flex: 1; border-radius: 32px;
-  padding: 48px 32px;
-  display: flex; flex-direction: column;
-  align-items: center; gap: 16px;
-  position: relative; overflow: hidden;
-  box-shadow: 0 12px 48px rgba(0,0,0,.12);
-  transition: transform .2s, box-shadow .2s;
+  flex: 1;
+  border-radius: 24px;
+  border: 2px solid transparent;
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0 24px 32px;
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+  overflow: hidden;
 }
-.v-btn:hover { transform: translateY(-4px); box-shadow: 0 20px 60px rgba(0,0,0,.18); }
-.v-btn:active { transform: scale(.97); }
-
-.v-btn-glow {
-  background: linear-gradient(150deg, #fff8e0 0%, #fde8d0 40%, #ffd07a 80%, #ffb347 100%);
-  border: 2.5px solid rgba(255,215,0,.5);
-}
-.v-btn-smooth {
-  background: linear-gradient(150deg, #eef5f8 0%, #d8eaf0 40%, #a8c8d8 80%, #7aaac0 100%);
-  border: 2.5px solid rgba(90,122,143,.4);
-}
-
-/* shine overlay */
-.v-btn-shine {
-  position: absolute; inset: 0;
-  background: linear-gradient(135deg, rgba(255,255,255,.4) 0%, transparent 55%);
-  pointer-events: none; border-radius: inherit;
+.v-btn:active {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(171, 136, 106, 0.3);
+  background: rgba(255, 255, 255, 0.95);
 }
 
-/* icon circle */
-.v-btn-icon {
-  width: 100px; height: 100px; border-radius: 50%;
-  flex-shrink: 0;
-}
-.glow-icon-inner {
-  background: radial-gradient(circle at 33% 33%, #fff 0%, #ffd700 35%, #ff8c00 80%);
-  box-shadow: 0 0 30px rgba(255,200,0,.6), inset 0 4px 10px rgba(255,255,255,.5);
-}
-.smooth-icon-inner {
-  background: radial-gradient(circle at 50% 50%, #f0f8ff 0%, #a8c8d8 50%, #5a7a8f 100%);
-  box-shadow: 0 4px 20px rgba(90,122,143,.3), inset 0 2px 6px rgba(255,255,255,.4);
+.v-btn-label-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
 }
 
 .v-btn-label {
-  font-size: 52px; font-weight: 900;
-  letter-spacing: .08em;
+  font-size: 52px;
+  font-weight: 500;
+  letter-spacing: 3.2px;
+  color: #ab886a;
+  line-height: 1;
 }
-.v-btn-glow  .v-btn-label { color: #8a5000; }
-.v-btn-smooth .v-btn-label { color: #2a4a5a; }
-
 .v-btn-sub {
-  font-size: 20px; color: var(--text-mid);
-  letter-spacing: .04em; font-weight: 500;
+  font-size: 22px;
+  font-weight: 500;
+  letter-spacing: 1.1px;
+  color: #ab886a;
+  opacity: 0.6;
+}
+
+/* キャラクター行 */
+.v-chara-row {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 8px;
+  flex-shrink: 0;
+  margin-top: 0;
+  width: 100%;
+}
+.v-chara {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  object-position: bottom;
+  animation: chara-bounce 1.6s ease-in-out infinite;
+}
+.v-chara:nth-child(2) { animation-delay: 0.2s; }
+.v-chara:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes chara-bounce {
+  0%,  100% { transform: translateY(0);    }
+  40%        { transform: translateY(-16px); }
+  55%        { transform: translateY(-10px); }
+  70%        { transform: translateY(-16px); }
 }
 
 /* ========================================
-   DONE SCREEN
+   投票完了画面
    ======================================== */
 #screen-done {
-  align-items: center; justify-content: center;
-  position: relative; overflow: hidden;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
-.done-bg {
-  position: absolute; inset: 0;
-  transition: background .5s ease;
-}
-.done-bg-glow   { background: linear-gradient(135deg, #2a1a00 0%, #4a2800 50%, #1a0a00 100%); }
-.done-bg-smooth { background: linear-gradient(135deg, #0a1a22 0%, #1a2e3a 50%, #0a1218 100%); }
-
-.done-particles {
-  position: absolute; inset: 0; pointer-events: none;
-}
-
-/* particle */
-.dp {
-  position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  border-radius: 50%;
-  animation: dp-burst linear forwards;
-  opacity: 0;
-}
-@keyframes dp-burst {
-  0%   { transform: translate(-50%,-50%) rotate(var(--a)) translateX(0)    scale(1);   opacity: 1; }
-  80%  { opacity: 1; }
-  100% { transform: translate(-50%,-50%) rotate(var(--a)) translateX(var(--d)) scale(0); opacity: 0; }
-}
-
-.done-card {
-  position: relative; z-index: 1;
-  background: rgba(255,255,255,.12);
-  backdrop-filter: blur(20px);
-  border: 1.5px solid rgba(255,255,255,.25);
-  border-radius: 36px;
-  padding: 56px 64px;
+.done-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
   text-align: center;
-  display: flex; flex-direction: column;
-  align-items: center; gap: 16px;
-  max-width: 560px; width: 90%;
-  box-shadow: 0 20px 60px rgba(0,0,0,.3);
 }
 
-.done-emoji {
-  font-size: 72px; line-height: 1;
-  animation: done-pop .5s cubic-bezier(.175,.885,.32,1.275) both;
-}
-@keyframes done-pop {
-  from { transform: scale(0); opacity: 0; }
-  to   { transform: scale(1); opacity: 1; }
+.done-label {
+  font-size: 24px;
+  font-weight: 500;
+  color: #ab886a;
+  letter-spacing: 1.2px;
+  opacity: 0.7;
 }
 
 .done-title {
-  font-size: 44px; font-weight: 800;
-  color: var(--white); letter-spacing: .05em;
-  animation: done-fade-up .4s .15s ease both;
-}
-.done-msg {
-  font-size: 22px; color: rgba(255,255,255,.85);
-  line-height: 1.8; letter-spacing: .04em;
-  animation: done-fade-up .4s .25s ease both;
-}
-.done-msg strong { color: var(--white); }
-.done-hint {
-  font-size: 18px; color: rgba(255,255,255,.6);
-  letter-spacing: .04em;
-  animation: done-fade-up .4s .35s ease both;
+  font-size: 88px;
+  font-weight: 500;
+  color: #ab886a;
+  letter-spacing: 4.4px;
+  line-height: 1.2;
 }
 
-@keyframes done-fade-up {
-  from { opacity: 0; transform: translateY(16px); }
-  to   { opacity: 1; transform: translateY(0); }
+.done-msg {
+  font-size: 28px;
+  font-weight: 500;
+  color: #ab886a;
+  line-height: 1.7;
+  letter-spacing: 1.4px;
+}
+
+.done-timer {
+  font-size: 20px;
+  font-weight: 500;
+  color: #ab886a;
+  opacity: 0.5;
+  letter-spacing: 1px;
+  margin-top: 4px;
 }
 
 .done-reset-btn {
-  background: rgba(255,255,255,.18);
-  color: var(--white); font-size: 18px; font-weight: 600;
-  padding: 18px 40px; border-radius: 40px;
-  border: 1.5px solid rgba(255,255,255,.3);
-  letter-spacing: .06em; margin-top: 12px;
+  margin-top: 8px;
+  width: 420px;
+  height: 76px;
+  background: rgba(255, 255, 255, 0.8);
+  border: none;
+  border-radius: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+  font-family: inherit;
+  font-size: 26px;
+  font-weight: 500;
+  color: #ab886a;
+  letter-spacing: 1.3px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  opacity: 0.8;
 }
+.done-reset-btn:active { opacity: 1; }

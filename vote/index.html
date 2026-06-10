@@ -4,57 +4,64 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>GLOW or SMOOTH 投票</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-  <!-- ===== 投票画面 ===== -->
-  <div id="screen-vote" class="screen active">
-    <div class="v-bg">
-      <div class="v-orb v-orb-glow"></div>
-      <div class="v-orb v-orb-smooth"></div>
-    </div>
+<!-- 背景レイヤー（全画面共通） -->
+<div class="bg-full-layer">
+  <img src="../2607_@cosmeFD_event_code/imge/bg_full.png" alt="" />
+</div>
+<div class="bg-2-layer" id="bg2">
+  <img src="../2607_@cosmeFD_event_code/imge/bg_2.svg" alt="" />
+</div>
 
-    <div class="v-header">
-      <span class="v-badge">✦ @cosme FD EVENT ✦</span>
-      <h1 class="v-title">あなたはどっち派？</h1>
-      <p class="v-sub">体験してみて、今日の気分を投票しよう</p>
-    </div>
-
-    <div class="v-btns" id="v-btns">
-
-      <button class="v-btn v-btn-glow" onclick="castVote('glow')">
-        <div class="v-btn-shine"></div>
-        <div class="v-btn-icon glow-icon-inner"></div>
-        <span class="v-btn-label">GLOW</span>
-        <span class="v-btn-sub">光・ツヤ感で輝く</span>
-      </button>
-
-      <button class="v-btn v-btn-smooth" onclick="castVote('smooth')">
-        <div class="v-btn-shine"></div>
-        <div class="v-btn-icon smooth-icon-inner"></div>
-        <span class="v-btn-label">SMOOTH</span>
-        <span class="v-btn-sub">パウダー・なめらかに</span>
-      </button>
-
-    </div>
+<!-- ===== 投票画面 ===== -->
+<div id="screen-vote" class="screen active">
+  <div class="v-header">
+    <h1 class="v-title">あなたはどっち派？</h1>
+    <p class="v-sub">試して気に入った仕上がりに投票してください</p>
   </div>
-
-  <!-- ===== 投票完了 ===== -->
-  <div id="screen-done" class="screen">
-    <div class="done-bg" id="done-bg">
-      <div class="done-particles" id="done-particles"></div>
-    </div>
-    <div class="done-card">
-      <div class="done-emoji" id="done-emoji">✨</div>
-      <h2 class="done-title" id="done-title">GLOW派で参加！</h2>
-      <p class="done-msg">サイネージ画面に<br><strong>参加しました！</strong></p>
-      <p class="done-hint">🔍 モニター画面を見てみよう</p>
-      <button class="done-reset-btn" onclick="resetVote()">もう一度投票する</button>
-    </div>
+  <div class="v-btns" id="v-btns">
+    <button class="v-btn v-btn-glow" onclick="castVote('glow')">
+      <div class="v-btn-label-wrap">
+        <span class="v-btn-label">GLOW チーム</span>
+      </div>
+      <div class="v-chara-row">
+        <img class="v-chara" src="../assets/images/chara01.png" alt="">
+        <img class="v-chara" src="../assets/images/chara02.png" alt="">
+        <img class="v-chara" src="../assets/images/chara03.png" alt="">
+      </div>
+    </button>
+    <button class="v-btn v-btn-smooth" onclick="castVote('smooth')">
+      <div class="v-btn-label-wrap">
+        <span class="v-btn-label">SMOOTH チーム</span>
+      </div>
+      <div class="v-chara-row">
+        <img class="v-chara" src="../assets/images/chara04.png" alt="">
+        <img class="v-chara" src="../assets/images/chara05.png" alt="">
+        <img class="v-chara" src="../assets/images/chara06.png" alt="">
+      </div>
+    </button>
   </div>
+</div>
 
-  <script src="../shared/vote-store.js"></script>
-  <script src="script.js"></script>
+<!-- ===== 投票完了 ===== -->
+<div id="screen-done" class="screen">
+  <div class="done-content">
+    <p class="done-label">投票ありがとうございます</p>
+    <h2 class="done-title" id="done-title">GLOW派！</h2>
+    <p class="done-msg">サイネージ画面に<br>参加しました</p>
+    <p class="done-timer" id="done-timer">10秒後に自動でもどります</p>
+    <button class="done-reset-btn" onclick="resetVote()">もう一度投票する</button>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+<script src="../shared/firebase-config.js"></script>
+<script src="../shared/vote-store.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
