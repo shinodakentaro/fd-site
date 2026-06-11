@@ -664,8 +664,8 @@ function printByWebPRNT() {
     : 'http://localhost:8008/StarWebPRNT/SendMessage';
 
   Promise.all([
-    _loadImageCanvas(r.imgPathMono, 350),
-    _loadImageCanvas('../assets/receipt/product.png', 250),
+    _loadImageCanvas(r.imgPathMono, 500),
+    _loadImageCanvas('../assets/receipt/product.png', 400),
   ]).then(function (images) {
     _sendWebPRNTRequest(r, printerUrl, images[0], images[1]);
   });
@@ -726,7 +726,7 @@ function _sendWebPRNTRequest(r, printerUrl, charaImg, productImg) {
   request += builder.createTextElement({ emphasis: false, codepage: 'utf8',
     data: 'ブランドサイトはこちら\n' });
   request += builder.createQrCodeElement({
-    model: 'model2', level: 'level_m', cell: 5,
+    model: 'model2', level: 'level_m', cell: 7,
     data: eventConfig.product.url });
   request += builder.createTextElement({ codepage: 'utf8', data: '\n' });
 
