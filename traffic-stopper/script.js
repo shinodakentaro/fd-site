@@ -614,9 +614,7 @@ function goToReceipt() {
 }
 
 /** 印刷エントリーポイント — WebPRNT SDK があればそちらを優先、なければブラウザ印刷 */
-function printReceipt() {
-  // 二重押し防止
-  const btn = document.querySelector('#screen-result .btn-print');
+function printReceipt(btn) {
   if (btn) btn.disabled = true;
 
   buildReceiptDOM();
@@ -765,8 +763,7 @@ function _sendWebPRNTRequest(r, printerUrl, charaImg, productImg) {
    13. TOP に戻る
    ======================================== */
 function goToTop() {
-  const btn = document.querySelector('#screen-result .btn-print');
-  if (btn) btn.disabled = false;
+  document.querySelectorAll('#screen-result .btn-print').forEach(b => b.disabled = false);
   startQuiz();
 }
 
