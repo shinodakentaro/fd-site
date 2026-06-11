@@ -660,7 +660,7 @@ function printByWebPRNT() {
     : 'http://localhost:8008/StarWebPRNT/SendMessage';
 
   Promise.all([
-    _loadImageCanvas(r.imgPathMono, 200),
+    _loadImageCanvas(r.imgPathMono, 350),
     _loadImageCanvas('../assets/receipt/product.png', 250),
   ]).then(function (images) {
     _sendWebPRNTRequest(r, printerUrl, images[0], images[1]);
@@ -675,25 +675,23 @@ function _sendWebPRNTRequest(r, printerUrl, charaImg, productImg) {
   request += builder.createInitializationElement();
   request += builder.createAlignmentElement({ position: 'center' });
 
-  // イベント名（太字）
-  request += builder.createTextElement({ emphasis: true, codepage: 'utf8',
-    data: eventConfig.name + '\n' });
-  request += builder.createTextElement({ emphasis: false, codepage: 'utf8',
+  // 診断結果タイトル
+  request += builder.createTextElement({ codepage: 'utf8', data: '診断結果\n' });
+  request += builder.createTextElement({ codepage: 'utf8',
     data: '================================\n' });
-  request += builder.createTextElement({ codepage: 'utf8', data: '\n診断結果\n\n' });
-
-  // キャラクターイラスト（モノクロ）
-  if (charaImg) {
-    request += builder.createBitImageElement({
-      context: charaImg.ctx, x: 0, y: 0, width: charaImg.w, height: charaImg.h });
-    request += builder.createTextElement({ codepage: 'utf8', data: '\n' });
-  }
 
   // 結果名（2倍サイズ・太字）
   request += builder.createTextElement({ emphasis: true, width: 2, height: 2,
     codepage: 'utf8', data: r.name + '\n' });
   request += builder.createTextElement({ emphasis: false, width: 1, height: 1,
     codepage: 'utf8', data: r.subCopy + '\n' });
+
+  // キャラクターイラスト（サブコピーの下・大きく）
+  if (charaImg) {
+    request += builder.createBitImageElement({
+      context: charaImg.ctx, x: 0, y: 0, width: charaImg.w, height: charaImg.h });
+    request += builder.createTextElement({ codepage: 'utf8', data: '\n' });
+  }
 
   request += builder.createTextElement({ codepage: 'utf8',
     data: '--------------------------------\n' });
@@ -711,7 +709,7 @@ function _sendWebPRNTRequest(r, printerUrl, charaImg, productImg) {
   request += builder.createTextElement({ emphasis: false, codepage: 'utf8',
     data: '--------------------------------\n' });
   request += builder.createTextElement({ codepage: 'utf8',
-    data: 'すてきな日になりますように\n\n' });
+    data: 'すてきな日になりますように♡\n\n' });
 
   // 商品イラスト
   if (productImg) {
@@ -720,9 +718,7 @@ function _sendWebPRNTRequest(r, printerUrl, charaImg, productImg) {
     request += builder.createTextElement({ codepage: 'utf8', data: '\n' });
   }
 
-  // ブランド名 + QRコード
-  request += builder.createTextElement({ emphasis: true, codepage: 'utf8',
-    data: eventConfig.product.name + '\n' });
+  // ブランドサイト + QRコード
   request += builder.createTextElement({ emphasis: false, codepage: 'utf8',
     data: 'ブランドサイトはこちら\n' });
   request += builder.createQrCodeElement({
