@@ -71,9 +71,8 @@ function updateDisplay(animated) {
    リード表示更新
    ---------------------------------------- */
 function updateLead(glow, smooth, animated) {
-  const leadEl     = document.getElementById('sg-lead');
-  const leadNameEl = document.getElementById('sg-lead-name');
-  if (!leadEl || !leadNameEl) return;
+  const leadEl = document.getElementById('sg-lead');
+  if (!leadEl) return;
 
   leadEl.style.visibility = 'visible';
 
@@ -82,8 +81,10 @@ function updateLead(glow, smooth, animated) {
     return;
   }
 
-  const name = glow > smooth ? 'ツヤ派' : 'なめらか派';
-  if (leadNameEl.textContent !== name) {
+  // 同点時に span が削除されている場合があるので、ここで再取得する
+  const name       = glow > smooth ? 'ツヤ派' : 'なめらか派';
+  const leadNameEl = document.getElementById('sg-lead-name');
+  if (!leadNameEl || leadNameEl.textContent !== name) {
     leadEl.innerHTML = `現在は <span id="sg-lead-name">${name}</span> がリード中！`;
     if (animated) {
       leadEl.classList.remove('updated');
