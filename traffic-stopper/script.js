@@ -694,14 +694,12 @@ function _sendWebPRNTRequest(r, printerUrl, ctx, imgW, imgH) {
   request += builder.createTextElement({ codepage: 'utf8',
     data: '--------------------------------\n' });
 
-  // 運勢（左揃え）
-  request += builder.createAlignmentElement({ position: 'left' });
+  // 運勢（センタリング）
   request += builder.createTextElement({ codepage: 'utf8', data: '仕事運  ' + r.luck.work  + '\n' });
   request += builder.createTextElement({ codepage: 'utf8', data: '恋愛運  ' + r.luck.love  + '\n' });
   request += builder.createTextElement({ codepage: 'utf8', data: '金　運  ' + r.luck.money + '\n' });
 
-  // ラッキーアイテム・メッセージ（センタリング）
-  request += builder.createAlignmentElement({ position: 'center' });
+  // ラッキーアイテム・メッセージ
   request += builder.createTextElement({ codepage: 'utf8',
     data: '--------------------------------\n' });
   request += builder.createTextElement({ codepage: 'utf8', data: '【ラッキーアイテム】\n' });
