@@ -680,57 +680,69 @@ function _sendWebPRNTRequest(r, printerUrl, charaImg, productImg) {
   request += builder.createAlignmentElement({ position: 'center' });
 
   // 診断結果タイトル
+  request += builder.createFeedElement({ line: 2 });
   request += builder.createTextElement({ codepage: 'utf8', data: '診断結果\n' });
   request += builder.createTextElement({ codepage: 'utf8',
     data: '================================\n' });
+  request += builder.createFeedElement({ line: 2 });
 
   // 結果名（2倍サイズ・太字）
   request += builder.createTextElement({ emphasis: true, width: 2, height: 2,
     codepage: 'utf8', data: r.name + '\n' });
+  request += builder.createFeedElement({ line: 1 });
   request += builder.createTextElement({ emphasis: false, width: 1, height: 1,
     codepage: 'utf8', data: r.subCopy + '\n' });
+  request += builder.createFeedElement({ line: 2 });
 
   // キャラクターイラスト（サブコピーの下・大きく）
   if (charaImg) {
     request += builder.createBitImageElement({
       context: charaImg.ctx, x: 0, y: 0, width: charaImg.w, height: charaImg.h });
-    request += builder.createTextElement({ codepage: 'utf8', data: '\n' });
+    request += builder.createFeedElement({ line: 2 });
   }
 
   request += builder.createTextElement({ codepage: 'utf8',
     data: '--------------------------------\n' });
+  request += builder.createFeedElement({ line: 1 });
 
   // 運勢（センタリング）
   request += builder.createTextElement({ codepage: 'utf8', data: '仕事運  ' + r.luck.work  + '\n' });
   request += builder.createTextElement({ codepage: 'utf8', data: '恋愛運  ' + r.luck.love  + '\n' });
   request += builder.createTextElement({ codepage: 'utf8', data: '金　運  ' + r.luck.money + '\n' });
+  request += builder.createFeedElement({ line: 1 });
 
   // ラッキーアイテム・メッセージ
   request += builder.createTextElement({ codepage: 'utf8',
     data: '--------------------------------\n' });
+  request += builder.createFeedElement({ line: 1 });
   request += builder.createTextElement({ codepage: 'utf8', data: '【ラッキーアイテム】\n' });
   request += builder.createTextElement({ emphasis: true, codepage: 'utf8', data: r.luckyItem + '\n' });
+  request += builder.createFeedElement({ line: 1 });
   request += builder.createTextElement({ emphasis: false, codepage: 'utf8',
     data: '--------------------------------\n' });
+  request += builder.createFeedElement({ line: 2 });
   request += builder.createTextElement({ codepage: 'utf8',
-    data: 'すてきな日になりますように♡\n\n' });
+    data: 'すてきな日になりますように♡\n' });
+  request += builder.createFeedElement({ line: 3 });
 
   // 商品イラスト
   if (productImg) {
     request += builder.createBitImageElement({
       context: productImg.ctx, x: 0, y: 0, width: productImg.w, height: productImg.h });
-    request += builder.createTextElement({ codepage: 'utf8', data: '\n' });
+    request += builder.createFeedElement({ line: 2 });
   }
 
   // ブランドサイト + QRコード
   request += builder.createTextElement({ emphasis: false, codepage: 'utf8',
     data: 'ブランドサイトはこちら\n' });
+  request += builder.createFeedElement({ line: 1 });
   request += builder.createQrCodeElement({
     model: 'model2', level: 'level_m', cell: 7,
     data: eventConfig.product.url });
-  request += builder.createTextElement({ codepage: 'utf8', data: '\n' });
+  request += builder.createFeedElement({ line: 2 });
 
-  request += builder.createTextElement({ codepage: 'utf8', data: eventConfig.date + '\n\n' });
+  request += builder.createTextElement({ codepage: 'utf8', data: eventConfig.date + '\n' });
+  request += builder.createFeedElement({ line: 2 });
 
   // カット
   request += builder.createCutPaperElement({ feed: true });
