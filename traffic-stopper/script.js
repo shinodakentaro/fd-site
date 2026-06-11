@@ -628,8 +628,29 @@ function printByBrowser() {
   window.print();
 }
 
+/** 画像を canvas に描画して返す（失敗時は null） */
+function _loadImageCanvas(src, targetWidth) {
+  return new Promise(function (resolve) {
+    const img = new Image();
+    img.onload = function () {
+      const w = targetWidth;
+      const h = Math.round(img.naturalHeight * (w / img.naturalWidth));
+      const canvas = document.createElement('canvas');
+      canvas.width  = w;
+      canvas.height = h;
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, w, h);
+      ctx.drawImage(img, 0, 0, w, h);
+      resolve({ ctx, w, h });
+    };
+    img.onerror = function () { resolve(null); };
+    img.src = src;
+  });
+}
+
 /** Star WebPRNT Browser 経由で mC-Print3 に送信
- *  キャラ画像（モノクロ版）を canvas に描画してからコマンドを組み立てる */
+ *  キャラ画像・商品イラストを並行ロードしてからコマンドを組み立てる */
 function printByWebPRNT() {
   const r = results[state.resultKey];
 
@@ -638,34 +659,16 @@ function printByWebPRNT() {
     ? 'http://localhost:8001/StarWebPRNT/SendMessage'
     : 'http://localhost:8008/StarWebPRNT/SendMessage';
 
-  // キャラ画像をcanvasに描いてからコマンド送信
-  const img = new Image();
-
-  img.onload = function () {
-    const IMG_W = 200; // レシート上の印刷幅(dots)
-    const IMG_H = Math.round(img.naturalHeight * (IMG_W / img.naturalWidth));
-
-    const canvas = document.createElement('canvas');
-    canvas.width  = IMG_W;
-    canvas.height = IMG_H;
-    const ctx = canvas.getContext('2d');
-    ctx.fillStyle = '#ffffff';
-    ctx.fillRect(0, 0, IMG_W, IMG_H);
-    ctx.drawImage(img, 0, 0, IMG_W, IMG_H);
-
-    _sendWebPRNTRequest(r, printerUrl, ctx, IMG_W, IMG_H);
-  };
-
-  img.onerror = function () {
-    // 画像ロード失敗時はイラストなしで印刷
-    _sendWebPRNTRequest(r, printerUrl, null, 0, 0);
-  };
-
-  img.src = r.imgPathMono;
+  Promise.all([
+    _loadImageCanvas(r.imgPathMono, 200),
+    _loadImageCanvas('../assets/receipt/product.png', 250),
+  ]).then(function (images) {
+    _sendWebPRNTRequest(r, printerUrl, images[0], images[1]);
+  });
 }
 
 /** コマンド組み立て & 送信 */
-function _sendWebPRNTRequest(r, printerUrl, ctx, imgW, imgH) {
+function _sendWebPRNTRequest(r, printerUrl, charaImg, productImg) {
   const builder = new StarWebPrintBuilder();
   let request = '';
 
@@ -680,8 +683,9 @@ function _sendWebPRNTRequest(r, printerUrl, ctx, imgW, imgH) {
   request += builder.createTextElement({ codepage: 'utf8', data: '\n診断結果\n\n' });
 
   // キャラクターイラスト（モノクロ）
-  if (ctx) {
-    request += builder.createBitImageElement({ context: ctx, x: 0, y: 0, width: imgW, height: imgH });
+  if (charaImg) {
+    request += builder.createBitImageElement({
+      context: charaImg.ctx, x: 0, y: 0, width: charaImg.w, height: charaImg.h });
     request += builder.createTextElement({ codepage: 'utf8', data: '\n' });
   }
 
@@ -708,6 +712,24 @@ function _sendWebPRNTRequest(r, printerUrl, ctx, imgW, imgH) {
     data: '--------------------------------\n' });
   request += builder.createTextElement({ codepage: 'utf8',
     data: 'すてきな日になりますように\n\n' });
+
+  // 商品イラスト
+  if (productImg) {
+    request += builder.createBitImageElement({
+      context: productImg.ctx, x: 0, y: 0, width: productImg.w, height: productImg.h });
+    request += builder.createTextElement({ codepage: 'utf8', data: '\n' });
+  }
+
+  // ブランド名 + QRコード
+  request += builder.createTextElement({ emphasis: true, codepage: 'utf8',
+    data: eventConfig.product.name + '\n' });
+  request += builder.createTextElement({ emphasis: false, codepage: 'utf8',
+    data: 'ブランドサイトはこちら\n' });
+  request += builder.createQrCodeElement({
+    model: 'model2', level: 'level_m', cell: 5,
+    data: eventConfig.product.url });
+  request += builder.createTextElement({ codepage: 'utf8', data: '\n' });
+
   request += builder.createTextElement({ codepage: 'utf8', data: eventConfig.date + '\n\n' });
 
   // カット
