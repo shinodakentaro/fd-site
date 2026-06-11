@@ -613,11 +613,14 @@ function goToReceipt() {
   showScreen('screen-receipt');
 }
 
-/** 印刷エントリーポイント */
+/** 印刷エントリーポイント — WebPRNT SDK があればそちらを優先、なければブラウザ印刷 */
 function printReceipt() {
-  buildReceiptDOM(); // 最新状態で再生成してから印刷
-  // printByWebPRNT(); // Star webPRNT Browser 使用時はこちらをアンコメント
-  printByBrowser();
+  buildReceiptDOM();
+  if (typeof StarWebPrintBuilder !== 'undefined' && typeof StarWebPrintTrader !== 'undefined') {
+    printByWebPRNT();
+  } else {
+    printByBrowser();
+  }
 }
 
 /** window.print() による印刷（@media print で receipt-print-target のみ表示） */
@@ -625,64 +628,89 @@ function printByBrowser() {
   window.print();
 }
 
-/*
-  ──────────────────────────────────────────────
-  printByWebPRNT() — Star webPRNT Browser SDK 実装スタブ
-  ──────────────────────────────────────────────
-  対象機種: Star mC-Print3 MCP31LB BK JP (Bluetooth / iPad)
-  SDK:      Star WebPRNT Browser (http://192.168.x.x/StarWebPRNT/SendMessage)
-            ※ iPad の Star webPRNT Browser アプリ内で動作させること
+/** Star WebPRNT Browser 経由で mC-Print3 に送信 */
+function printByWebPRNT() {
+  const r = results[state.resultKey];
 
-  実装手順:
-  1. Star webPRNT SDK JS を読み込む
-       <script src="StarWebPRNTBuilder.js"></script>
-  2. StarWebPrintBuilder でコマンドを組み立てる
-  3. StarWebPrintTrader.sendMessage() で送信する
+  // Star WebPRNT Browser の新旧バージョンでポートが異なる
+  const useNewApi = navigator.userAgent.indexOf('webPRNTSupportMessageHandler') !== -1;
+  const printerUrl = useNewApi
+    ? 'http://localhost:8001/StarWebPRNT/SendMessage'
+    : 'http://localhost:8008/StarWebPRNT/SendMessage';
 
-  実装例 (コメントアウト):
+  const builder = new StarWebPrintBuilder();
+  let request = '';
 
-  function printByWebPRNT() {
-    const builder = new StarWebPrintBuilder();
-    const request = builder.createInitializationElement();
+  request += builder.createInitializationElement();
 
-    // 文字コード設定 (UTF-8)
-    request += builder.createCodePageElement({ codepage: 'UTF-8' });
+  // ─── センタリング ───
+  request += builder.createAlignmentElement({ position: 'center' });
 
-    // センタリング
-    request += builder.createAlignmentElement({ position: 'center' });
+  // イベント名（太字）
+  request += builder.createTextElement({ emphasis: true, codepage: 'utf8',
+    data: eventConfig.name + '\n' });
+  request += builder.createTextElement({ emphasis: false, codepage: 'utf8',
+    data: '================================\n' });
 
-    // イベント名 (大文字・太字)
-    request += builder.createTextElement({ emphasis: true, data: eventConfig.name + '\n' });
-    request += builder.createTextElement({ emphasis: false, data: '--------------------------------\n' });
+  // 診断結果タイトル
+  request += builder.createTextElement({ codepage: 'utf8', data: '\n診断結果\n\n' });
 
-    // 診断結果
-    const r = results[state.resultKey];
-    request += builder.createTextElement({ data: '[' + r.category + '] ' + r.name + '\n' });
-    request += builder.createTextElement({ data: r.subCopy + '\n' });
-    request += builder.createTextElement({ data: '--------------------------------\n' });
+  // 結果名（2倍サイズ・太字）
+  request += builder.createTextElement({ emphasis: true, width: 2, height: 2,
+    codepage: 'utf8', data: r.name + '\n' });
 
-    // 運勢
-    request += builder.createTextElement({ data: '仕事運 ' + r.luck.work + '\n' });
-    request += builder.createTextElement({ data: '恋愛運 ' + r.luck.love + '\n' });
-    request += builder.createTextElement({ data: '金  運 ' + r.luck.money + '\n' });
+  // サブコピー
+  request += builder.createTextElement({ emphasis: false, width: 1, height: 1,
+    codepage: 'utf8', data: r.subCopy + '\n' });
 
-    // カット
-    request += builder.createCutPaperElement({ feed: true });
+  request += builder.createTextElement({ codepage: 'utf8',
+    data: '--------------------------------\n' });
 
-    const trader = new StarWebPrintTrader({ url: 'http://localhost:8008/StarWebPRNT/SendMessage' });
-    trader.onReceive = function(response) {
-      if (trader.isTimeoutError(response))   console.warn('webPRNT: timeout');
-      else if (trader.isInvalidResponse(response)) console.warn('webPRNT: invalid response');
-      else console.log('webPRNT: 印刷完了');
-    };
-    trader.onError = function(xhr, errorThrown) {
-      console.error('webPRNT: 通信エラー', errorThrown);
-      // フォールバック: ブラウザ印刷
-      printByBrowser();
-    };
-    trader.sendMessage({ request });
-  }
-*/
+  // ─── 左揃え（運勢） ───
+  request += builder.createAlignmentElement({ position: 'left' });
+  request += builder.createTextElement({ codepage: 'utf8', data: '仕事運  ' + r.luck.work  + '\n' });
+  request += builder.createTextElement({ codepage: 'utf8', data: '恋愛運  ' + r.luck.love  + '\n' });
+  request += builder.createTextElement({ codepage: 'utf8', data: '金　運  ' + r.luck.money + '\n' });
+
+  // ─── センタリング（ラッキーアイテム・メッセージ） ───
+  request += builder.createAlignmentElement({ position: 'center' });
+  request += builder.createTextElement({ codepage: 'utf8',
+    data: '--------------------------------\n' });
+  request += builder.createTextElement({ codepage: 'utf8', data: '【ラッキーアイテム】\n' });
+  request += builder.createTextElement({ emphasis: true, codepage: 'utf8', data: r.luckyItem + '\n' });
+
+  request += builder.createTextElement({ emphasis: false, codepage: 'utf8',
+    data: '--------------------------------\n' });
+  request += builder.createTextElement({ codepage: 'utf8',
+    data: 'すてきな日になりますように\n\n' });
+
+  // イベント日付
+  request += builder.createTextElement({ codepage: 'utf8', data: eventConfig.date + '\n\n' });
+
+  // カット
+  request += builder.createCutPaperElement({ feed: true });
+
+  const trader = new StarWebPrintTrader({ url: printerUrl });
+
+  trader.onReceive = function (response) {
+    if (response.traderSuccess !== 'true') {
+      console.warn('webPRNT: 印刷失敗', response);
+      printByBrowser(); // フォールバック
+    }
+  };
+
+  trader.onError = function (response) {
+    console.error('webPRNT: 通信エラー', response);
+    printByBrowser(); // フォールバック
+  };
+
+  trader.onTimeout = function () {
+    console.warn('webPRNT: タイムアウト');
+    printByBrowser(); // フォールバック
+  };
+
+  trader.sendMessage({ request });
+}
 
 /* ========================================
    13. TOP に戻る
