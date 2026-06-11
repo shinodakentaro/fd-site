@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WebPRNT テスト印刷</title>
+
+  <script src="StarWebPrintBuilder.js"></script>
+  <script src="StarWebPrintTrader.js"></script>
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, 'Noto Sans JP', sans-serif;
+      background: #f5f0eb;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 24px;
+      gap: 24px;
+    }
+
+    h1 {
+      font-size: 20px;
+      color: #333;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 24px;
+      width: 100%;
+      max-width: 480px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+    }
+
+    .card h2 {
+      font-size: 14px;
+      color: #888;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .status-box {
+      background: #f8f8f8;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 14px;
+      color: #444;
+      min-height: 48px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+
+    .status-box.ok    { border-color: #4caf50; background: #f0faf0; color: #2e7d32; }
+    .status-box.error { border-color: #f44336; background: #fff0f0; color: #c62828; }
+    .status-box.info  { border-color: #ab886a; background: #fdf6ef; color: #7a5c40; }
+
+    button {
+      width: 100%;
+      padding: 16px;
+      border: none;
+      border-radius: 10px;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    button:active { opacity: 0.7; }
+    button:disabled { opacity: 0.4; cursor: default; }
+
+    .btn-print {
+      background: #ab886a;
+      color: #fff;
+      max-width: 480px;
+      width: 100%;
+    }
+
+    .note {
+      font-size: 12px;
+      color: #999;
+      text-align: center;
+      line-height: 1.6;
+      max-width: 480px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>mC-Print3 テスト印刷</h1>
+
+  <div class="card">
+    <h2>SDK 状態</h2>
+    <div class="status-box" id="sdk-status">確認中...</div>
+  </div>
+
+  <div class="card">
+    <h2>印刷ステータス</h2>
+    <div class="status-box info" id="print-status">「テスト印刷」ボタンを押してください</div>
+  </div>
+
+  <button class="btn-print" id="btn-print" onclick="runTestPrint()" disabled>
+    テスト印刷
+  </button>
+
+  <p class="note">
+    このページは Star WebPRNT Browser (iOS アプリ) で開いてください。<br>
+    プリンタは Bluetooth 接続済みの状態で実行してください。
+  </p>
+
+  <script>
+    /* ============================================================
+       設定
+       ============================================================ */
+    const PRINTER_URL = 'http://localhost:8008/StarWebPRNT/SendMessage';
+
+    /* ============================================================
+       SDK 存在チェック
+       ============================================================ */
+    const sdkStatus   = document.getElementById('sdk-status');
+    const printStatus = document.getElementById('print-status');
+    const btnPrint    = document.getElementById('btn-print');
+
+    window.addEventListener('DOMContentLoaded', () => {
+      if (typeof StarWebPrintBuilder === 'undefined' || typeof StarWebPrintTrader === 'undefined') {
+        sdkStatus.textContent =
+          'SDK が読み込まれていません。\n' +
+          'StarWebPrintBuilder.js / StarWebPrintTrader.js を\n' +
+          'このフォルダ (webprnt-test/) に配置してください。';
+        sdkStatus.className = 'status-box error';
+        return;
+      }
+
+      sdkStatus.textContent = 'StarWebPrintBuilder.js / StarWebPrintTrader.js 読み込み OK';
+      sdkStatus.className   = 'status-box ok';
+      btnPrint.disabled     = false;
+    });
+
+    /* ============================================================
+       テスト印刷
+       ============================================================ */
+    function runTestPrint() {
+      btnPrint.disabled = true;
+      setStatus('送信中...', 'info');
+
+      let request = '';
+      const builder = new StarWebPrintBuilder();
+
+      // 初期化
+      request += builder.createInitializationElement();
+
+      // センタリング
+      request += builder.createAlignmentElement({ position: 'center' });
+
+      // タイトル（太字）
+      request += builder.createTextElement({ emphasis: true, width: 2, height: 2,
+        codepage: 'utf8', data: '@cosme FD EVENT\n' });
+      request += builder.createTextElement({ emphasis: false, width: 1, height: 1,
+        codepage: 'utf8', data: '--------------------------------\n' });
+
+      // 本文
+      request += builder.createTextElement({ codepage: 'utf8', data: 'WebPRNT テスト印刷\n' });
+      request += builder.createTextElement({ codepage: 'utf8', data: new Date().toLocaleString('ja-JP') + '\n' });
+      request += builder.createTextElement({ codepage: 'utf8', data: '--------------------------------\n' });
+      request += builder.createTextElement({ codepage: 'utf8', data: 'mC-Print3  Bluetooth OK\n' });
+
+      // フィード & カット
+      request += builder.createCutPaperElement({ feed: true });
+
+      // 送信
+      const trader = new StarWebPrintTrader({ url: PRINTER_URL });
+
+      trader.onReceive = function (response) {
+        btnPrint.disabled = false;
+
+        if (response.traderSuccess !== 'true') {
+          setStatus(
+            '印刷失敗\ntraderSuccess: ' + response.traderSuccess +
+            '\ntraderCode: ' + response.traderCode +
+            '\ntraderStatus: ' + response.traderStatus,
+            'error'
+          );
+          return;
+        }
+
+        setStatus('印刷完了！', 'ok');
+      };
+
+      trader.onError = function (response) {
+        btnPrint.disabled = false;
+        const msg = response ? response.responseText || String(response.status) : '不明';
+        setStatus(
+          '通信エラー: ' + msg + '\n\n' +
+          '確認事項:\n' +
+          '・Star WebPRNT Browser で開いているか\n' +
+          '・プリンタが Bluetooth ペアリング済みか\n' +
+          '・Star WebPRNT Browser でプリンタが選択されているか',
+          'error'
+        );
+      };
+
+      trader.onTimeout = function () {
+        btnPrint.disabled = false;
+        setStatus('タイムアウト: プリンタの応答がありません。\nBluetooth 接続を確認してください。', 'error');
+      };
+
+      trader.sendMessage({ request: request });
+    }
+
+    function setStatus(msg, type) {
+      printStatus.textContent = msg;
+      printStatus.className   = 'status-box ' + (type || '');
+    }
+  </script>
+
+</body>
+</html>
