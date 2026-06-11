@@ -628,22 +628,48 @@ function printByBrowser() {
   window.print();
 }
 
-/** Star WebPRNT Browser 経由で mC-Print3 に送信 */
+/** Star WebPRNT Browser 経由で mC-Print3 に送信
+ *  キャラ画像（モノクロ版）を canvas に描画してからコマンドを組み立てる */
 function printByWebPRNT() {
   const r = results[state.resultKey];
 
-  // Star WebPRNT Browser の新旧バージョンでポートが異なる
   const useNewApi = navigator.userAgent.indexOf('webPRNTSupportMessageHandler') !== -1;
   const printerUrl = useNewApi
     ? 'http://localhost:8001/StarWebPRNT/SendMessage'
     : 'http://localhost:8008/StarWebPRNT/SendMessage';
 
+  // キャラ画像をcanvasに描いてからコマンド送信
+  const img = new Image();
+
+  img.onload = function () {
+    const IMG_W = 200; // レシート上の印刷幅(dots)
+    const IMG_H = Math.round(img.naturalHeight * (IMG_W / img.naturalWidth));
+
+    const canvas = document.createElement('canvas');
+    canvas.width  = IMG_W;
+    canvas.height = IMG_H;
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, IMG_W, IMG_H);
+    ctx.drawImage(img, 0, 0, IMG_W, IMG_H);
+
+    _sendWebPRNTRequest(r, printerUrl, ctx, IMG_W, IMG_H);
+  };
+
+  img.onerror = function () {
+    // 画像ロード失敗時はイラストなしで印刷
+    _sendWebPRNTRequest(r, printerUrl, null, 0, 0);
+  };
+
+  img.src = r.imgPathMono;
+}
+
+/** コマンド組み立て & 送信 */
+function _sendWebPRNTRequest(r, printerUrl, ctx, imgW, imgH) {
   const builder = new StarWebPrintBuilder();
   let request = '';
 
   request += builder.createInitializationElement();
-
-  // ─── センタリング ───
   request += builder.createAlignmentElement({ position: 'center' });
 
   // イベント名（太字）
@@ -651,40 +677,39 @@ function printByWebPRNT() {
     data: eventConfig.name + '\n' });
   request += builder.createTextElement({ emphasis: false, codepage: 'utf8',
     data: '================================\n' });
-
-  // 診断結果タイトル
   request += builder.createTextElement({ codepage: 'utf8', data: '\n診断結果\n\n' });
+
+  // キャラクターイラスト（モノクロ）
+  if (ctx) {
+    request += builder.createBitImageElement({ context: ctx, x: 0, y: 0, width: imgW, height: imgH });
+    request += builder.createTextElement({ codepage: 'utf8', data: '\n' });
+  }
 
   // 結果名（2倍サイズ・太字）
   request += builder.createTextElement({ emphasis: true, width: 2, height: 2,
     codepage: 'utf8', data: r.name + '\n' });
-
-  // サブコピー
   request += builder.createTextElement({ emphasis: false, width: 1, height: 1,
     codepage: 'utf8', data: r.subCopy + '\n' });
 
   request += builder.createTextElement({ codepage: 'utf8',
     data: '--------------------------------\n' });
 
-  // ─── 左揃え（運勢） ───
+  // 運勢（左揃え）
   request += builder.createAlignmentElement({ position: 'left' });
   request += builder.createTextElement({ codepage: 'utf8', data: '仕事運  ' + r.luck.work  + '\n' });
   request += builder.createTextElement({ codepage: 'utf8', data: '恋愛運  ' + r.luck.love  + '\n' });
   request += builder.createTextElement({ codepage: 'utf8', data: '金　運  ' + r.luck.money + '\n' });
 
-  // ─── センタリング（ラッキーアイテム・メッセージ） ───
+  // ラッキーアイテム・メッセージ（センタリング）
   request += builder.createAlignmentElement({ position: 'center' });
   request += builder.createTextElement({ codepage: 'utf8',
     data: '--------------------------------\n' });
   request += builder.createTextElement({ codepage: 'utf8', data: '【ラッキーアイテム】\n' });
   request += builder.createTextElement({ emphasis: true, codepage: 'utf8', data: r.luckyItem + '\n' });
-
   request += builder.createTextElement({ emphasis: false, codepage: 'utf8',
     data: '--------------------------------\n' });
   request += builder.createTextElement({ codepage: 'utf8',
     data: 'すてきな日になりますように\n\n' });
-
-  // イベント日付
   request += builder.createTextElement({ codepage: 'utf8', data: eventConfig.date + '\n\n' });
 
   // カット
@@ -695,19 +720,11 @@ function printByWebPRNT() {
   trader.onReceive = function (response) {
     if (response.traderSuccess !== 'true') {
       console.warn('webPRNT: 印刷失敗', response);
-      printByBrowser(); // フォールバック
+      printByBrowser();
     }
   };
-
-  trader.onError = function (response) {
-    console.error('webPRNT: 通信エラー', response);
-    printByBrowser(); // フォールバック
-  };
-
-  trader.onTimeout = function () {
-    console.warn('webPRNT: タイムアウト');
-    printByBrowser(); // フォールバック
-  };
+  trader.onError   = function (response) { console.error('webPRNT: エラー', response); printByBrowser(); };
+  trader.onTimeout = function ()          { console.warn('webPRNT: タイムアウト');      printByBrowser(); };
 
   trader.sendMessage({ request });
 }
