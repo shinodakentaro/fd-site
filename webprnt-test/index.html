@@ -117,8 +117,13 @@
   <script>
     /* ============================================================
        設定
+       Star WebPRNT Browser の新バージョンは port 8001 (WebKit ハンドラー)、
+       旧バージョンは port 8008 (HTTP) を使用する。
        ============================================================ */
-    const PRINTER_URL = 'http://localhost:8008/StarWebPRNT/SendMessage';
+    const USE_NEW_API = navigator.userAgent.indexOf('webPRNTSupportMessageHandler') !== -1;
+    const PRINTER_URL = USE_NEW_API
+      ? 'http://localhost:8001/StarWebPRNT/SendMessage'
+      : 'http://localhost:8008/StarWebPRNT/SendMessage';
 
     /* ============================================================
        SDK 存在チェック
@@ -137,7 +142,10 @@
         return;
       }
 
-      sdkStatus.textContent = 'StarWebPrintBuilder.js / StarWebPrintTrader.js 読み込み OK';
+      sdkStatus.textContent =
+        'SDK 読み込み OK\n' +
+        'プリンター URL: ' + PRINTER_URL + '\n' +
+        'UA: ' + navigator.userAgent;
       sdkStatus.className   = 'status-box ok';
       btnPrint.disabled     = false;
     });
@@ -194,13 +202,15 @@
 
       trader.onError = function (response) {
         btnPrint.disabled = false;
-        const msg = response ? response.responseText || String(response.status) : '不明';
+        const status = response ? response.status : '?';
+        const text   = response ? (response.responseText || '(なし)') : '不明';
         setStatus(
-          '通信エラー: ' + msg + '\n\n' +
+          '通信エラー\nstatus: ' + status + '\nresponseText: ' + text + '\n\n' +
           '確認事項:\n' +
           '・Star WebPRNT Browser で開いているか\n' +
           '・プリンタが Bluetooth ペアリング済みか\n' +
-          '・Star WebPRNT Browser でプリンタが選択されているか',
+          '・Star WebPRNT Browser でプリンタが選択されているか\n' +
+          '・接続 URL: ' + PRINTER_URL,
           'error'
         );
       };
