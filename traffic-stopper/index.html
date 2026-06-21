@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>肌タイプ診断</title>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@500;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@500;700&family=Noto+Serif+JP:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -17,6 +17,28 @@
   <img src="../assets/bg/bg_2.svg" alt="" />
 </div>
 
+  <!-- ===== TOP ===== -->
+  <div id="screen-top" class="screen active">
+    <div class="top-title-area">
+      <p class="top-catch">あなたの肌キャラがわかる？</p>
+      <h1 class="top-main-title">今日の<br>盛れ肌<br>おみくじ</h1>
+    </div>
+    <div class="top-stage-wrap">
+      <div class="st-plat st-plat-center-l"></div>
+      <div class="st-plat st-plat-center-r"></div>
+      <div class="st-plat st-plat-right"></div>
+      <img class="top-chara st-c1" src="../assets/images/chara01.png" alt="">
+      <img class="top-chara st-c2" src="../assets/images/chara02.png" alt="">
+      <img class="top-chara st-c3" src="../assets/images/chara03.png" alt="">
+      <img class="top-chara st-c4" src="../assets/images/chara04.png" alt="">
+      <img class="top-chara st-c5" src="../assets/images/chara05.png" alt="">
+      <img class="top-chara st-c6" src="../assets/images/chara06.png" alt="">
+    </div>
+    <div class="top-start-wrap">
+      <button class="btn-top-start" onclick="startQuiz()">START！</button>
+    </div>
+  </div>
+
   <!-- ===== QUIZ ===== -->
   <div id="screen-quiz" class="screen">
     <div id="quiz-body"><!-- JS で生成 --></div>
@@ -26,7 +48,7 @@
   <div id="screen-scan" class="screen">
     <div class="scan-text-block">
       <p class="scan-text-main">最後に手を入れて<br>あなただけの結果を完成</p>
-      <p class="scan-text-sub">手を台の下に入れてください。<br>あなただけの診断をはじめます。</p>
+      <p class="scan-text-sub">手の甲を下のカメラにかざしたら<br>ボタン押してください。</p>
     </div>
     <div class="scan-hand-icon">
       <img src="../assets/images/hand.svg" alt="" />

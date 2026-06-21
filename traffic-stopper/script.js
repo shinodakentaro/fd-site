@@ -356,54 +356,32 @@ function renderQuestion(index) {
   }).join('');
 
   document.getElementById('quiz-body').innerHTML = `
-    <div class="quiz-content-wrapper">
-      <div class="quiz-header">
-        <div class="quiz-header-text">
-          <h1>今日のあなたは<br>どんなキャラクター？</h1>
-          <p>5つの質問と手の甲スキャンで<br>今日のキャラクターが決まる！</p>
-        </div>
-        <div class="icon-wrap">
-          <div class="icon-circle"></div>
-          <div class="icon-silhouette">
-            <svg viewBox="0 0 200 320" xmlns="http://www.w3.org/2000/svg" fill="#ab886a">
-              <circle cx="100" cy="48" r="40"/>
-              <path d="M70 88 Q60 110 50 160 Q40 200 45 260 L155 260 Q160 200 150 160 Q140 110 130 88 Z"/>
-              <path d="M68 100 Q40 130 28 180 Q24 195 35 198 Q46 200 52 185 Q62 145 78 118 Z"/>
-              <path d="M132 100 Q160 130 172 180 Q176 195 165 198 Q154 200 148 185 Q138 145 122 118 Z"/>
-              <path d="M70 255 Q62 290 58 340 Q56 355 70 356 Q84 357 86 342 Q88 310 92 278 Z"/>
-              <path d="M130 255 Q138 290 142 340 Q144 355 130 356 Q116 357 114 342 Q112 310 108 278 Z"/>
-            </svg>
-          </div>
-          <span class="icon-q">?</span>
-        </div>
+    <div class="quiz-inner">
+      <div class="quiz-q-backdrop">Q${q.id}</div>
+      <div class="quiz-top-section">
+        <p class="quiz-question-main">${q.text}</p>
+        <hr class="quiz-dashed-line">
       </div>
-
-      <div class="quiz-question-section">
-        <div class="question-label-row">
-          <span class="q-number">Q${q.id}</span>
-          <span class="q-text">${q.text}</span>
-        </div>
-        <div class="quiz-choices">
-          ${q.options.map((opt, i) => `
-            <div class="choice-card" onclick="answerQuestion(${index}, ${i})">
-              <span class="choice-letter">${opt.label}</span>
-              <div class="choice-text-wrap">
-                <div class="choice-text">
-                  <p>${opt.text.replace(/\n/g, '<br>')}</p>
-                </div>
-              </div>
-            </div>
-          `).join('')}
-        </div>
-        <div class="progress-dots">${dotsHTML}</div>
+      <div class="quiz-choices-v2">
+        ${q.options.map((opt, i) => `
+          <div class="cv2-card" onclick="answerQuestion(${index}, ${i})">
+            <div class="cv2-badge cv2-badge-${opt.label.toLowerCase()}">${opt.label}</div>
+            <p class="cv2-text cv2-text-${opt.label.toLowerCase()}">${opt.text.replace(/\n/g, '<br>')}</p>
+          </div>
+        `).join('')}
+      </div>
+      <div class="quiz-bottom-nav">
+        ${index > 0
+          ? `<button class="qnav-btn" onclick="renderQuestion(${index - 1})">← back</button>`
+          : `<span class="qnav-placeholder qnav-btn">← back</span>`}
+        <span class="qnav-btn qnav-placeholder">next →</span>
       </div>
     </div>
-    ${index > 0 ? `<button class="quiz-back-btn" onclick="renderQuestion(${index - 1})">← 戻る</button>` : ''}
   `;
 }
 
 function answerQuestion(qIndex, optIndex) {
-  const cards = document.querySelectorAll('.choice-card');
+  const cards = document.querySelectorAll('.cv2-card');
   if (cards[optIndex]) cards[optIndex].classList.add('selected');
 
   state.answers[qIndex] = optIndex;
@@ -526,15 +504,25 @@ function renderResult() {
     ? `<img class="result-chara-img" src="${r.imgPath}" alt="${r.name}">`
     : '';
 
-  // 運勢
+  // 運勢 (2×2グリッド)
   const luckTag = `
-    <div class="result-luck-card">
-      <div class="luck-grid">
-        <div class="luck-row"><span class="luck-label">仕事運</span><span class="luck-stars">${renderStars(r.luck.work)}</span></div>
-        <div class="luck-row"><span class="luck-label">恋愛運</span><span class="luck-stars">${renderStars(r.luck.love)}</span></div>
-        <div class="luck-row"><span class="luck-label">金　運</span><span class="luck-stars">${renderStars(r.luck.money)}</span></div>
+    <div class="result-luck-grid-2col">
+      <div class="luck2-item">
+        <span class="luck2-label">仕事運</span>
+        <span class="luck2-stars">${renderStars(r.luck.work)}</span>
       </div>
-      <p class="luck-item">ラッキーアイテム: <strong>${r.luckyItem}</strong></p>
+      <div class="luck2-item">
+        <span class="luck2-label">金運</span>
+        <span class="luck2-stars">${renderStars(r.luck.money)}</span>
+      </div>
+      <div class="luck2-item">
+        <span class="luck2-label">恋愛運</span>
+        <span class="luck2-stars">${renderStars(r.luck.love)}</span>
+      </div>
+      <div class="luck2-item">
+        <span class="luck2-label">ラッキーアイテム</span>
+        <span class="luck2-value">${r.luckyItem}</span>
+      </div>
     </div>
   `;
 
@@ -764,12 +752,15 @@ function _sendWebPRNTRequest(r, printerUrl, charaImg, productImg) {
    ======================================== */
 function goToTop() {
   document.querySelectorAll('#screen-result .btn-print').forEach(b => b.disabled = false);
-  startQuiz();
+  document.getElementById('bg2').classList.add('hidden');
+  document.body.classList.remove('result-mode');
+  showScreen('screen-top');
 }
 
 /* ========================================
    14. 初期化
    ======================================== */
 document.addEventListener('DOMContentLoaded', () => {
-  startQuiz();
+  document.getElementById('bg2').classList.add('hidden');
+  showScreen('screen-top');
 });
