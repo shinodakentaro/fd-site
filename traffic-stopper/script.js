@@ -70,6 +70,7 @@ const results = {
       money:   '★★★★☆',
     },
     luckyItem: 'ゴールドアクセサリー',
+    receiptDesc: 'GLOWタイプのファンデーションがおすすめ♡\n輝く肌で今日も最高の自分に！',
     messages: [
       '今日のあなたは誰よりも輝いています。自信を持って！',
       'その笑顔が最強のコスメ。ツヤ感で更に磨きをかけて。',
@@ -99,6 +100,7 @@ const results = {
       money:   '★★★☆☆',
     },
     luckyItem: 'パールアクセサリー',
+    receiptDesc: 'GLOWタイプのファンデーションがおすすめ♡\n透明感あふれる肌を手に入れて！',
     messages: [
       '透き通るような澄んだ肌が、あなたの魅力を引き立てます。',
       '光を集める透明感で、今日は誰より美しく輝いて。',
@@ -128,6 +130,7 @@ const results = {
       money:   '★★★★☆',
     },
     luckyItem: 'コーラルリップ',
+    receiptDesc: 'GLOWタイプのファンデーションがおすすめ♡\n幸せオーラをさらにアップ！',
     messages: [
       '幸せオーラが全開の今日は、素敵な出会いが待っているかも。',
       'あなたの笑顔が、周りの人を幸せにしています。',
@@ -157,6 +160,7 @@ const results = {
       money:   '★★★★☆',
     },
     luckyItem: 'ベージュ系アイシャドウ',
+    receiptDesc: 'SMOOTHタイプのファンデーションがおすすめ♡\nGLOWと比較して使ってみて！',
     messages: [
       '今日は最高にキマっています。その自信が最強のコスメ！',
       '完璧な仕上がりが、あなたのポテンシャルをさらに引き上げます。',
@@ -186,6 +190,7 @@ const results = {
       money:   '★★★★★',
     },
     luckyItem: 'ナチュラルピンクリップ',
+    receiptDesc: 'SMOOTHタイプのファンデーションがおすすめ♡\n素肌感を活かしたナチュラルな仕上がりに！',
     messages: [
       '素肌のような仕上がりが、あなたの自然な美しさを引き出します。',
       '「何もしてないのに綺麗」と言われる今日がやってきます。',
@@ -215,6 +220,7 @@ const results = {
       money:   '★★★★☆',
     },
     luckyItem: 'ネイビーorグレーの小物',
+    receiptDesc: 'SMOOTHタイプのファンデーションがおすすめ♡\nGLOWと比較して使ってみて！',
     messages: [
       '清潔感あふれる今日のあなたは、どんな場面でも信頼されます。',
       '凛とした佇まいが、あなたの強さを際立てています。',
@@ -549,6 +555,11 @@ function buildReceiptDOM() {
     : `<div class="rc-chara-placeholder">キャラクター入る</div>`;
 
   const html = `
+    <div class="rc-event-header">
+      <div class="rc-event-name">@cosme TOKYO<br>SHISEIDO POPUP EVENT</div>
+      <div class="rc-app-title">盛れ肌キャラ占い</div>
+    </div>
+
     <div class="rc-title-row">
       <div class="rc-title-line"></div>
       <span class="rc-title-text">診断結果</span>
@@ -560,7 +571,7 @@ function buildReceiptDOM() {
 
     <div class="rc-chara-area">${monoImg}</div>
 
-    <div class="rc-hr-dot"></div>
+    <hr class="rc-hr-dot">
 
     <div class="rc-luck-center">
       <div>仕事運　${r.luck.work}</div>
@@ -568,26 +579,28 @@ function buildReceiptDOM() {
       <div>金　運　${r.luck.money}</div>
     </div>
 
-    <div class="rc-hr-dot"></div>
+    <hr class="rc-hr-dot">
 
-    <div class="rc-lucky-center">
-      <div>【ラッキーアイテム】</div>
-      <div>${r.luckyItem}</div>
-    </div>
-
-    <div class="rc-hr-dot"></div>
-
-    <div class="rc-message">すてきな日になりますように♡</div>
-
-    <div class="rc-product-area">
-      <img class="rc-product-img" src="../assets/receipt/product.png" alt="商品イラスト">
-    </div>
-
-    <div class="rc-brand-row-wrap">
-      <div class="rc-brand-row">
-        <div class="rc-brand-name">SHISEIDO<br>ブランドサイト</div>
-        <div class="rc-qr-box">${eventConfig.product.qrPlaceholder}</div>
+    <div class="rc-lucky-section">
+      <div class="rc-lucky-label">【ラッキーアイテム】</div>
+      <div class="rc-product-row">
+        <div class="rc-product-info">
+          <div class="rc-product-name">${r.recommend}</div>
+          <div class="rc-product-desc">${(r.receiptDesc || '').replace(/\n/g, '<br>')}</div>
+        </div>
+        <img class="rc-product-thumb" src="../assets/receipt/product.png" alt="">
       </div>
+    </div>
+
+    <div class="rc-bottom-row">
+      <div class="rc-qr-box">${eventConfig.product.qrPlaceholder}</div>
+      <div class="rc-qr-box">${eventConfig.product.qrPlaceholder}</div>
+      <div class="rc-hashtag-box">#</div>
+    </div>
+
+    <div class="rc-footer">
+      <div class="rc-shiseido-logo">SHISEIDO</div>
+      <div class="rc-footer-sub">GINZA TOKYO</div>
     </div>
   `;
 
@@ -665,12 +678,23 @@ function _sendWebPRNTRequest(r, printerUrl, charaImg, productImg) {
   request += builder.createInitializationElement();
   request += builder.createAlignmentElement({ position: 'center' });
 
+  // イベントヘッダー
+  request += builder.createFeedElement({ line: 1 });
+  request += builder.createTextElement({ codepage: 'utf8', data: '@cosme TOKYO\n' });
+  request += builder.createTextElement({ codepage: 'utf8', data: 'SHISEIDO POPUP EVENT\n' });
+  request += builder.createTextElement({ emphasis: true, width: 2, height: 1,
+    codepage: 'utf8', data: '盛れ肌キャラ占い\n' });
+  request += builder.createTextElement({ emphasis: false, width: 1, height: 1,
+    codepage: 'utf8', data: '' });
+  request += builder.createFeedElement({ line: 1 });
+
   // 診断結果タイトル
-  request += builder.createFeedElement({ line: 2 });
-  request += builder.createTextElement({ codepage: 'utf8', data: '診断結果\n' });
   request += builder.createTextElement({ codepage: 'utf8',
     data: '================================\n' });
-  request += builder.createFeedElement({ line: 2 });
+  request += builder.createTextElement({ codepage: 'utf8', data: '　　　診断結果\n' });
+  request += builder.createTextElement({ codepage: 'utf8',
+    data: '================================\n' });
+  request += builder.createFeedElement({ line: 1 });
 
   // 結果名（2倍サイズ・太字）
   request += builder.createTextElement({ emphasis: true, width: 2, height: 2,
@@ -697,19 +721,19 @@ function _sendWebPRNTRequest(r, printerUrl, charaImg, productImg) {
   request += builder.createTextElement({ codepage: 'utf8', data: '金　運  ' + r.luck.money + '\n' });
   request += builder.createFeedElement({ line: 1 });
 
-  // ラッキーアイテム・メッセージ
+  // ラッキーアイテム
   request += builder.createTextElement({ codepage: 'utf8',
     data: '--------------------------------\n' });
   request += builder.createFeedElement({ line: 1 });
   request += builder.createTextElement({ codepage: 'utf8', data: '【ラッキーアイテム】\n' });
-  request += builder.createTextElement({ emphasis: true, codepage: 'utf8', data: r.luckyItem + '\n' });
   request += builder.createFeedElement({ line: 1 });
-  request += builder.createTextElement({ emphasis: false, codepage: 'utf8',
-    data: '--------------------------------\n' });
+  request += builder.createTextElement({ emphasis: true, codepage: 'utf8', data: r.recommend + '\n' });
+  request += builder.createFeedElement({ line: 1 });
+  if (r.receiptDesc) {
+    request += builder.createTextElement({ emphasis: false, codepage: 'utf8',
+      data: r.receiptDesc.replace(/\n/g, ' ') + '\n' });
+  }
   request += builder.createFeedElement({ line: 2 });
-  request += builder.createTextElement({ codepage: 'utf8',
-    data: 'すてきな日になりますように♡\n' });
-  request += builder.createFeedElement({ line: 3 });
 
   // 商品イラスト
   if (productImg) {
@@ -718,15 +742,23 @@ function _sendWebPRNTRequest(r, printerUrl, charaImg, productImg) {
     request += builder.createFeedElement({ line: 2 });
   }
 
-  // ブランドサイト + QRコード
+  // QRコード×2
   request += builder.createTextElement({ emphasis: false, codepage: 'utf8',
-    data: 'ブランドサイトはこちら\n' });
+    data: 'ブランドサイト / キャンペーン\n' });
   request += builder.createFeedElement({ line: 1 });
   request += builder.createQrCodeElement({
-    model: 'model2', level: 'level_m', cell: 7,
+    model: 'model2', level: 'level_m', cell: 6,
     data: eventConfig.product.url });
   request += builder.createFeedElement({ line: 2 });
 
+  // フッター
+  request += builder.createTextElement({ codepage: 'utf8',
+    data: '================================\n' });
+  request += builder.createTextElement({ emphasis: true, codepage: 'utf8',
+    data: 'SHISEIDO\n' });
+  request += builder.createTextElement({ emphasis: false, codepage: 'utf8',
+    data: 'GINZA TOKYO\n' });
+  request += builder.createFeedElement({ line: 1 });
   request += builder.createTextElement({ codepage: 'utf8', data: eventConfig.date + '\n' });
   request += builder.createFeedElement({ line: 2 });
 
