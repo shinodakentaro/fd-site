@@ -100,7 +100,7 @@ const results = {
     desc:      '光をまとうようなツヤ感で、どんな場所でも視線を集める存在に。あなたの魅力を最大限に引き出すGLOW仕上げが、今日の主役にしてくれます。',
     color1:    '#ffd700',
     color2:    '#ff85a1',
-    imgPath:     '../assets/images/chara01.png',
+    imgPath:     '../assets/images/character01_animation_3x.webp',
     imgPathMono: '../assets/images/chara01_mono.png',
     luck: {
       work:    '★★★★★',
@@ -560,39 +560,14 @@ function renderResult() {
 
   // ヘッダー
   document.getElementById('result-name').textContent    = r.name;
-  document.getElementById('result-tagline').textContent = r.subCopy;
+  document.getElementById('result-tagline').textContent = state.subMessage;
 
   // キャラ画像
   const imgTag = r.imgPath
     ? `<img class="result-chara-img" src="${r.imgPath}" alt="${r.name}">`
     : '';
 
-  // 運勢 (2×2グリッド)
-  const luckTag = `
-    <div class="result-luck-grid-2col">
-      <div class="luck2-item">
-        <span class="luck2-label">仕事運</span>
-        <span class="luck2-stars">${renderStars(r.luck.work)}</span>
-      </div>
-      <div class="luck2-item">
-        <span class="luck2-label">金運</span>
-        <span class="luck2-stars">${renderStars(r.luck.money)}</span>
-      </div>
-      <div class="luck2-item">
-        <span class="luck2-label">恋愛運</span>
-        <span class="luck2-stars">${renderStars(r.luck.love)}</span>
-      </div>
-      <div class="luck2-item">
-        <span class="luck2-label">ラッキーアイテム</span>
-        <span class="luck2-value">${r.luckyItem}</span>
-      </div>
-    </div>
-  `;
-
-  document.getElementById('result-body').innerHTML = `
-    ${imgTag}
-    ${luckTag}
-  `;
+  document.getElementById('result-body').innerHTML = imgTag;
 }
 
 /* ========================================
@@ -624,7 +599,8 @@ function buildReceiptDOM() {
     </div>
 
     <div class="rc-name">${r.name}</div>
-    <div class="rc-subcopy">${r.subCopy}</div>
+    <div class="rc-subcopy">${state.subMessage}</div>
+    <div class="rc-message">${state.message}</div>
 
     <div class="rc-chara-area">${monoImg}</div>
 
@@ -758,7 +734,10 @@ function _sendWebPRNTRequest(r, printerUrl, charaImg, productImg) {
     codepage: 'utf8', data: r.name + '\n' });
   request += builder.createFeedElement({ line: 1 });
   request += builder.createTextElement({ emphasis: false, width: 1, height: 1,
-    codepage: 'utf8', data: r.subCopy + '\n' });
+    codepage: 'utf8', data: state.subMessage + '\n' });
+  request += builder.createFeedElement({ line: 1 });
+  request += builder.createTextElement({ emphasis: false, width: 1, height: 1,
+    codepage: 'utf8', data: state.message + '\n' });
   request += builder.createFeedElement({ line: 2 });
 
   // キャラクターイラスト（サブコピーの下・大きく）

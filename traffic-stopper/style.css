@@ -874,6 +874,14 @@ body.result-mode .bg-full-layer {
   padding: 8px 40px 24px;
   display: flex; flex-direction: column; gap: 12px;
 }
+.result-print-hint {
+  text-align: center;
+  font-size: 28px;
+  font-weight: 500;
+  color: var(--brand);
+  line-height: 1.6;
+  letter-spacing: .04em;
+}
 .btn-print {
   background: linear-gradient(135deg, #c9a84c 0%, #b08930 100%);
   color: #fff;
