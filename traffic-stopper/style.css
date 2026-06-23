@@ -515,8 +515,7 @@ body.result-mode .bg-full-layer {
 .quiz-question-wrap {
   display: inline-block;
   border-bottom: 4px dashed #574537;
-  padding-bottom: 20px;
-  width: 100%;
+  padding-bottom: 10px;
 }
 
 .quiz-question-main {
