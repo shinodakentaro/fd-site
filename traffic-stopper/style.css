@@ -582,8 +582,8 @@ body.result-mode .bg-full-layer {
   line-height: 1.4;
   letter-spacing: 1.6px;
 }
-.cv2-text-a { color: #333333; }
-.cv2-text-b { color: #333333; }
+.cv2-text-a { color: #584636; }
+.cv2-text-b { color: #584636; }
 
 .cv2-card.selected {
   filter: brightness(.90);
