@@ -641,9 +641,14 @@ body.result-mode .bg-full-layer {
   font-size: 42px;
   line-height: 1.4;
 }
-.scan-text-sub {
+.scan-text-desc {
   color: var(--brand);
   font-size: 32px;
+  line-height: 1.7;
+}
+.scan-text-sub {
+  color: var(--brand);
+  font-size: 28px;
   line-height: 1.5;
 }
 
@@ -696,15 +701,15 @@ body.result-mode .bg-full-layer {
   transform: translateX(-50%);
   width: 300px;
   height: 300px;
-  background: rgba(255,255,255,.8);
-  border-radius: 50%;
+  background: url('../assets/images/btn_circle 1.png') center / cover no-repeat;
+  border-radius: 0;
   border: none;
-  box-shadow: 0 4px 8px rgba(0,0,0,.15);
+  box-shadow: none;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  font-family: inherit;
+  font-family: 'M PLUS Rounded 1c', sans-serif;
   font-size: 42px;
   font-weight: 500;
   color: var(--brand);
@@ -712,7 +717,7 @@ body.result-mode .bg-full-layer {
   opacity: 0;
   animation: shindan-enter .7s cubic-bezier(.34, 1.56, .64, 1) 5.6s forwards;
 }
-.btn-shindan:active { opacity: 1; }
+.btn-shindan:active { filter: brightness(.93); }
 
 /* ========================================
    RESULT
@@ -776,7 +781,7 @@ body.result-mode .bg-full-layer {
 /* キャラクター画像 */
 .result-chara-img {
   display: block;
-  width: 300px; height: 300px;
+  width: 450px; height: 450px;
   object-fit: contain;
   margin: 0 auto;
   opacity: 0;
@@ -883,12 +888,15 @@ body.result-mode .bg-full-layer {
   letter-spacing: .04em;
 }
 .btn-print {
-  background: linear-gradient(135deg, #c9a84c 0%, #b08930 100%);
-  color: #fff;
+  background: url('../assets/images/結果ボタン.png') center / 100% 100% no-repeat;
+  color: #574537;
   font-size: 32px; font-weight: 500;
-  padding: 28px 40px; border-radius: var(--radius-lg);
+  padding: 28px 40px;
+  border-radius: 0;
   letter-spacing: .06em;
-  box-shadow: 0 6px 24px rgba(176,137,48,.38);
+  box-shadow: none;
+  width: 100%;
+  aspect-ratio: 630 / 130;
 }
 .btn-restart {
   background: transparent;
