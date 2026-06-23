@@ -215,20 +215,28 @@ body.result-mode .bg-full-layer {
 }
 .btn-top-start {
   width: 100%;
-  height: 147px;
-  background: rgba(255,255,255,.92);
+  height: 130px;
+  background: #ffffff;
   color: #574537;
   font-size: 42px;
   font-weight: 500;
   font-family: 'M PLUS 1 Code', monospace;
-  border-radius: 74px;
-  box-shadow: 0 4px 24px rgba(0,0,0,.12);
+  border-radius: 65px;
   letter-spacing: 2.1px;
   border: none;
   cursor: pointer;
-  transition: opacity .15s, transform .12s;
+  position: relative;
+  box-shadow:
+    0 10px 0 #c5bbb3,
+    0 14px 28px rgba(0,0,0,.10);
+  transition: transform .1s, box-shadow .1s;
 }
-.btn-top-start:active { opacity: .82; transform: scale(.97); }
+.btn-top-start:active {
+  transform: translateY(7px);
+  box-shadow:
+    0 3px 0 #c5bbb3,
+    0 5px 12px rgba(0,0,0,.08);
+}
 
 /* ========================================
    QUIZ
