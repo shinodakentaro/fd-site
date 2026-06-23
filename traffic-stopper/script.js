@@ -265,18 +265,18 @@ const questions = [
   },
   {
     id: 4,
-    text: '気分転換の方法は？',
+    text: '休日の過ごし方はどっち？',
     options: [
-      { label: 'A', icon: '💬', text: '友達と話して\n気持ちを発散' },
-      { label: 'B', icon: '🌙', text: 'ひとりで\n静かに過ごす' },
+      { label: 'A', icon: '💬', text: 'カフェやショッピングなど外出派' },
+      { label: 'B', icon: '🌙', text: '家で映画や動画を楽しむおうち派' },
     ],
   },
   {
     id: 5,
-    text: '今の自分に近いのは？',
+    text: 'あなたが目指したい肌はどっち？',
     options: [
-      { label: 'A', icon: '☀️', text: '明るく\nポジティブ' },
-      { label: 'B', icon: '🍃', text: '落ち着いて\nマイペース' },
+      { label: 'A', icon: '☀️', text: 'つやっとうるおい美肌' },
+      { label: 'B', icon: '🍃', text: '肌ノイズのないなめらか美肌' },
     ],
   },
 ];
