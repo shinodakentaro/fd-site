@@ -241,10 +241,10 @@ const results = {
 const questions = [
   {
     id: 1,
-    text: '朝の理想の過ごし方は？',
+    text: '魔法が使えるならどっち？',
     options: [
-      { label: 'A', icon: '🌅', text: 'ゆっくり\n自分のペースで準備する' },
-      { label: 'B', icon: '😴', text: 'ギリギリまで\n寝ていたい' },
+      { label: 'A', icon: '🌅', text: '人の心を読む' },
+      { label: 'B', icon: '😴', text: '瞬間移動' },
     ],
   },
   {
