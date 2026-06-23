@@ -571,8 +571,8 @@ body.result-mode .bg-full-layer {
   flex-shrink: 0;
   padding-bottom: 2px;
 }
-.cv2-badge-a { background: #0c60c3; }
-.cv2-badge-b { background: #ff5577; }
+.cv2-badge-a { background: #333333; }
+.cv2-badge-b { background: #333333; }
 
 .cv2-text {
   font-family: 'M PLUS Rounded 1c', sans-serif;
@@ -582,8 +582,8 @@ body.result-mode .bg-full-layer {
   line-height: 1.4;
   letter-spacing: 1.6px;
 }
-.cv2-text-a { color: #0c60c3; }
-.cv2-text-b { color: #ff5577; }
+.cv2-text-a { color: #333333; }
+.cv2-text-b { color: #333333; }
 
 .cv2-card.selected {
   filter: brightness(.90);
