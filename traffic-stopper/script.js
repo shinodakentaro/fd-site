@@ -249,10 +249,10 @@ const questions = [
   },
   {
     id: 2,
-    text: '休日の過ごし方といえば？',
+    text: 'テンションの上がる音はどっち？',
     options: [
-      { label: 'A', icon: '🌿', text: '外に出て\nアクティブに動く' },
-      { label: 'B', icon: '🛋️', text: '家でのんびり\nリラックス' },
+      { label: 'A', icon: '🌿', text: 'アップテンポな曲' },
+      { label: 'B', icon: '🛋️', text: 'チルな曲' },
     ],
   },
   {
