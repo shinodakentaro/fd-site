@@ -232,13 +232,12 @@ body.result-mode .bg-full-layer {
   filter: brightness(.97);
 }
 .btn-top-start.is-pressed {
-  background: linear-gradient(180deg, #e8a87c 65%, #d4946a 100%);
-  color: #fff;
-  box-shadow:
-    inset 0 -16px 24px rgba(150,70,30,0.20),
-    inset 0 4px 8px rgba(255,200,150,0.50),
-    0 3px 10px rgba(0,0,0,.07);
-  transition: background 0.15s, color 0.15s;
+  animation: btn-press-fade 0.75s ease forwards;
+}
+@keyframes btn-press-fade {
+  0%   { background: linear-gradient(180deg, #ffffff 65%, #f0ebe7 100%); opacity: 1; }
+  25%  { background: linear-gradient(180deg, #e8a87c 65%, #d4946a 100%); opacity: 1; }
+  100% { background: linear-gradient(180deg, #e8a87c 65%, #d4946a 100%); opacity: 0; }
 }
 
 /* ===== TOP PAGE 遷移アニメーション ===== */
