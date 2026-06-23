@@ -341,13 +341,28 @@ function showScreen(id) {
    8. クイズ
    ======================================== */
 function startQuiz() {
-  document.getElementById('bg2').classList.remove('hidden');
-  document.body.classList.remove('result-mode');
-  state.answers   = [];
-  state.resultKey = null;
-  state.message   = '';
-  renderQuestion(0);
-  showScreen('screen-quiz');
+  const btn       = document.querySelector('#screen-top .btn-top-start');
+  const titleArea = document.querySelector('#screen-top .top-title-area');
+  const stageWrap = document.querySelector('#screen-top .top-stage-wrap');
+
+  // ボタン色変更・タイトルフェード・台座+キャラスライド
+  btn.classList.add('is-pressed');
+  titleArea.classList.add('anim-fade-out');
+  stageWrap.classList.add('anim-slide-left');
+
+  setTimeout(() => {
+    document.getElementById('bg2').classList.remove('hidden');
+    document.body.classList.remove('result-mode');
+    state.answers   = [];
+    state.resultKey = null;
+    state.message   = '';
+    renderQuestion(0);
+    showScreen('screen-quiz');
+    // TOPに戻ったときのためリセット
+    btn.classList.remove('is-pressed');
+    titleArea.classList.remove('anim-fade-out');
+    stageWrap.classList.remove('anim-slide-left');
+  }, 750);
 }
 
 function renderQuestion(index) {
