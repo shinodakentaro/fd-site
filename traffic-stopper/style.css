@@ -150,20 +150,10 @@ body.result-mode .bg-full-layer {
   text-align: center;
   padding-top: 68px;
 }
-.top-catch {
-  font-size: 24px;
-  font-weight: 500;
-  color: var(--brand);
-  letter-spacing: .12em;
-  margin-bottom: 10px;
-}
-.top-main-title {
-  font-family: 'Noto Serif JP', 'Hiragino Mincho ProN', 'Yu Mincho', serif;
-  font-size: 100px;
-  font-weight: 500;
-  color: #4a2c10;
-  line-height: 1.22;
-  letter-spacing: .06em;
+.top-title-img {
+  width: 100%;
+  max-width: 600px;
+  height: auto;
 }
 
 /* Stage */
