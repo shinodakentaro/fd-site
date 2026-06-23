@@ -170,8 +170,8 @@ body.result-mode .bg-full-layer {
 .stage-bg-img {
   position: absolute;
   top: 268px;
-  left: 0;
-  width: 820px;
+  left: -160px;
+  width: 1140px;
   height: auto;
   z-index: 1;
 }
