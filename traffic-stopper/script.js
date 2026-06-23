@@ -257,10 +257,10 @@ const questions = [
   },
   {
     id: 3,
-    text: 'スキンケアのポイントは？',
+    text: '朝の過ごし方はどっち？',
     options: [
-      { label: 'A', icon: '💧', text: '保湿をしっかり\nうるおいキープ' },
-      { label: 'B', icon: '⚡', text: '時短で\nシンプルケア' },
+      { label: 'A', icon: '💧', text: 'ゆっくり準備' },
+      { label: 'B', icon: '⚡', text: 'ギリギリまで寝る' },
     ],
   },
   {
