@@ -542,12 +542,8 @@ body.result-mode .bg-full-layer {
 .cv2-card {
   width: 320px;
   height: 320px;
-  background: linear-gradient(180deg, #ffffff 60%, #f0ebe7 100%);
+  background: url('../assets/images/bottun.png') center / cover no-repeat;
   border-radius: 28px;
-  box-shadow:
-    inset 0 -14px 22px rgba(160,125,105,0.18),
-    inset 0 3px 6px rgba(255,255,255,0.90),
-    0 3px 10px rgba(0,0,0,.07);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -555,14 +551,10 @@ body.result-mode .bg-full-layer {
   gap: 20px;
   padding: 36px 28px 30px;
   cursor: pointer;
-  transition: box-shadow .12s, filter .12s;
+  transition: filter .12s;
 }
 .cv2-card:active {
-  box-shadow:
-    inset 0 -6px 12px rgba(160,125,105,0.14),
-    inset 0 6px 14px rgba(0,0,0,0.06),
-    0 1px 4px rgba(0,0,0,.05);
-  filter: brightness(.97);
+  filter: brightness(.93);
 }
 
 .cv2-badge {
@@ -594,12 +586,7 @@ body.result-mode .bg-full-layer {
 .cv2-text-b { color: #ff5577; }
 
 .cv2-card.selected {
-  box-shadow:
-    inset 0 -6px 12px rgba(160,125,105,0.14),
-    inset 0 6px 14px rgba(0,0,0,0.06),
-    0 1px 4px rgba(0,0,0,.05);
-  filter: brightness(.97);
-  background: linear-gradient(180deg, #f5f0ec 60%, #ede5e0 100%);
+  filter: brightness(.90);
 }
 
 /* Bottom nav */
