@@ -9,38 +9,76 @@
    後からExcelの32パターン表をここに反映する。
    ======================================== */
 const resultMap = {
-  'AAAAA': 'bakamote_glow',
-  'AAAAB': 'bakamote_glow',
+  'AAAAA': 'toumei_glow',
+  'AAAAB': 'seiketsu_smooth',
   'AAABA': 'toumei_glow',
-  'AAABB': 'toumei_glow',
+  'AAABB': 'motokara_smooth',
   'AABAA': 'tafuku_glow',
-  'AABAB': 'tafuku_glow',
+  'AABAB': 'seiketsu_smooth',
   'AABBA': 'tafuku_glow',
-  'AABBB': 'motokara_smooth',
-  'ABAAA': 'bakamote_glow',
-  'ABAAB': 'bakamote_glow',
+  'AABBB': 'moreka_smooth',
+  'ABAAA': 'toumei_glow',
+  'ABAAB': 'seiketsu_smooth',
   'ABABA': 'toumei_glow',
-  'ABABB': 'tafuku_glow',
-  'ABBAA': 'moreka_smooth',
-  'ABBAB': 'moreka_smooth',
-  'ABBBA': 'motokara_smooth',
-  'ABBBB': 'seiketsu_smooth',
-  'BAAAA': 'tafuku_glow',
-  'BAAAB': 'tafuku_glow',
-  'BAABA': 'toumei_glow',
-  'BAABB': 'motokara_smooth',
-  'BABAA': 'moreka_smooth',
+  'ABABB': 'motokara_smooth',
+  'ABBAA': 'tafuku_glow',
+  'ABBAB': 'seiketsu_smooth',
+  'ABBBA': 'toumei_glow',
+  'ABBBB': 'motokara_smooth',
+  'BAAAA': 'bakamote_glow',
+  'BAAAB': 'seiketsu_smooth',
+  'BAABA': 'tafuku_glow',
+  'BAABB': 'moreka_smooth',
+  'BABAA': 'bakamote_glow',
   'BABAB': 'moreka_smooth',
-  'BABBA': 'motokara_smooth',
-  'BABBB': 'seiketsu_smooth',
-  'BBAAA': 'moreka_smooth',
-  'BBAAB': 'moreka_smooth',
-  'BBABA': 'motokara_smooth',
-  'BBABB': 'seiketsu_smooth',
-  'BBBAA': 'motokara_smooth',
-  'BBBAB': 'seiketsu_smooth',
-  'BBBBA': 'seiketsu_smooth',
-  'BBBBB': 'seiketsu_smooth',
+  'BABBA': 'bakamote_glow',
+  'BABBB': 'moreka_smooth',
+  'BBAAA': 'tafuku_glow',
+  'BBAAB': 'seiketsu_smooth',
+  'BBABA': 'toumei_glow',
+  'BBABB': 'motokara_smooth',
+  'BBBAA': 'bakamote_glow',
+  'BBBAB': 'moreka_smooth',
+  'BBBBA': 'bakamote_glow',
+  'BBBBB': 'motokara_smooth',
+};
+
+/* ========================================
+   1b. パターン別メッセージ
+   ======================================== */
+const messageMap = {
+  'AAAAA': { sub: 'あなたらしいが輝く日',         msg: 'あなたらしい輝きを楽しんで♡' },
+  'AAAAB': { sub: '「なんか素敵」が止まらない日',   msg: 'ハッピーがたくさん舞い込みますように♡' },
+  'AAABA': { sub: 'あなたらしいが輝く日',         msg: 'あなたの笑顔が輝きますように♡' },
+  'AAABB': { sub: 'ナチュラルなのに目を引く日',     msg: '素敵の連鎖が続きますように♡' },
+  'AABAA': { sub: 'その笑顔がいつも以上に輝く日',   msg: '素敵な日になりますように♡' },
+  'AABAB': { sub: '「なんか素敵」が止まらない日',   msg: '今日はあなたが主役♡' },
+  'AABBA': { sub: 'その笑顔がいつも以上に輝く日',   msg: 'あなたは思っているよりずっと素敵♡' },
+  'AABBB': { sub: '加工アプリいらずの日',         msg: 'あなたには、あなたにしかない良さがある♡' },
+  'ABAAA': { sub: 'あなたらしいが輝く日',         msg: '今日という日を思いっきり楽しんでね♡' },
+  'ABAAB': { sub: '「なんか素敵」が止まらない日',   msg: 'あなたらしく輝ける一日を♡' },
+  'ABABA': { sub: 'あなたらしいが輝く日',         msg: 'たくさんの幸せが訪れますように♡' },
+  'ABABB': { sub: 'ナチュラルなのに目を引く日',     msg: '何気ない瞬間まで特別になりますように♡' },
+  'ABBAA': { sub: 'その笑顔がいつも以上に輝く日',   msg: 'あなたが笑顔でいられますように♡' },
+  'ABBAB': { sub: '「なんか素敵」が止まらない日',   msg: 'たくさん笑えますように♡' },
+  'ABBBA': { sub: 'あなたらしいが輝く日',         msg: 'なんだか今日はいつも以上にリラックスして過ごせそう♡' },
+  'ABBBB': { sub: 'ナチュラルなのに目を引く日',     msg: '心がふわっと軽くなりますように♡' },
+  'BAAAA': { sub: '今日は何故か視線を集める日',    msg: 'ときめく一日になりますように♡' },
+  'BAAAB': { sub: '「なんか素敵」が止まらない日',   msg: '今日もとびきり輝いてね♡' },
+  'BAABA': { sub: 'その笑顔がいつも以上に輝く日',   msg: '今日もキラキラ笑顔で♡' },
+  'BAABB': { sub: '加工アプリいらずの日',         msg: 'ハッピーをまとって過ごそう♡' },
+  'BABAA': { sub: '今日は何故か視線を集める日',    msg: 'きっと素敵なことが待っているよ♡' },
+  'BABAB': { sub: '加工アプリいらずの日',         msg: 'そのままのあなたが一番素敵♡' },
+  'BABBA': { sub: '今日は何故か視線を集める日',    msg: '自分がもっと好きになる♡' },
+  'BABBB': { sub: '加工アプリいらずの日',         msg: '笑顔が一番のアクセサリー♡' },
+  'BBAAA': { sub: 'その笑顔がいつも以上に輝く日',   msg: '心がほっとする一日になりますように♡' },
+  'BBAAB': { sub: '「なんか素敵」が止まらない日',   msg: 'きらめく瞬間に出会えますように♡' },
+  'BBABA': { sub: 'あなたらしいが輝く日',         msg: '今日はどんな幸せを見つける？♡' },
+  'BBABB': { sub: 'ナチュラルなのに目を引く日',     msg: '心躍る瞬間に出会えますように♡' },
+  'BBBAA': { sub: '今日は何故か視線を集める日',    msg: '今日もイケてる♡' },
+  'BBBAB': { sub: '加工アプリいらずの日',         msg: 'あなたの魅力がもっと輝きますように♡' },
+  'BBBBA': { sub: '今日は何故か視線を集める日',    msg: '今日のあなたは一段と素敵♡' },
+  'BBBBB': { sub: 'ナチュラルなのに目を引く日',     msg: 'ときめきを忘れずに♡' },
 };
 
 /* ========================================
@@ -176,7 +214,7 @@ const results = {
   motokara_smooth: {
     key:       'motokara_smooth',
     category:  'SMOOTH',
-    name:      '元から美肌SMOOTH',
+    name:      'ひとめぼれSMOOTH',
     subCopy:   'すっぴん以上の、ナチュラル美肌',
     recommend: 'SMOOTHシリーズ ナチュラルファンデーション',
     desc:      '素肌感を残しながらキレイに整えたような、ナチュラルビューティーが光ります。「そのまま？」と言われる無敵の素肌仕上がりを実現。',
@@ -206,7 +244,7 @@ const results = {
   seiketsu_smooth: {
     key:       'seiketsu_smooth',
     category:  'SMOOTH',
-    name:      '清潔感無双SMOOTH',
+    name:      '清楚感SMOOTH',
     subCopy:   'クリーンで凛とした、完璧な印象',
     recommend: 'SMOOTHシリーズ マットファンデーション',
     desc:      'テカりゼロのマット肌で、どんな場面でも清潔感あふれる印象を作れます。時間が経っても崩れにくく、凛とした美しさが続きます。',
@@ -299,9 +337,10 @@ const eventConfig = {
    5. 状態管理
    ======================================== */
 const state = {
-  answers:   [],   // 各問の回答インデックス (0=A / 1=B)
-  resultKey: null, // 確定した結果ID
-  message:   '',   // ランダム選択されたメッセージ
+  answers:    [],   // 各問の回答インデックス (0=A / 1=B)
+  resultKey:  null, // 確定した結果ID
+  subMessage: '',   // パターン別サブメッセージ
+  message:    '',   // パターン別メッセージ
 };
 
 /* ========================================
@@ -503,12 +542,14 @@ function launchConfetti() {
    回答キー → resultMap → results
    ======================================== */
 function calcResult() {
-  const key       = toAnswerKey(state.answers);
-  const resultId  = resultMap[key] || 'tafuku_glow'; // フォールバック
-  const r         = results[resultId];
+  const key      = toAnswerKey(state.answers);
+  const resultId = resultMap[key] || 'tafuku_glow';
+  const r        = results[resultId];
+  const m        = messageMap[key] || { sub: r.subCopy, msg: pickRandom(r.messages) };
 
-  state.resultKey = resultId;
-  state.message   = pickRandom(r.messages);
+  state.resultKey   = resultId;
+  state.subMessage  = m.sub;
+  state.message     = m.msg;
 }
 
 /* ========================================
