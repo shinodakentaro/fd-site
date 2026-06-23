@@ -166,41 +166,15 @@ body.result-mode .bg-full-layer {
   z-index: 2;
 }
 
-/* Platforms */
-.st-plat {
+/* Platform image */
+.stage-bg-img {
   position: absolute;
-  background: linear-gradient(to bottom, #f5a86a 0%, #cf6830 100%);
-  border-radius: 16px;
-  box-shadow: 0 8px 0 rgba(0,0,0,.14), 0 16px 32px rgba(0,0,0,.1);
+  bottom: 0;
+  left: 0;
+  width: 820px;
+  height: auto;
   z-index: 1;
 }
-.st-plat::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: radial-gradient(ellipse at center, #ffd898 0%, #f5a870 50%, #e8984a 100%);
-  border-radius: 50%;
-  z-index: 2;
-}
-.st-plat-center-l {
-  left: 118px; bottom: 0;
-  width: 200px; height: 258px;
-}
-.st-plat-center-l::before { width: 222px; height: 56px; }
-
-.st-plat-center-r {
-  left: 373px; bottom: 0;
-  width: 252px; height: 312px;
-}
-.st-plat-center-r::before { width: 274px; height: 68px; }
-
-.st-plat-right {
-  right: 18px; bottom: 0;
-  width: 164px; height: 144px;
-}
-.st-plat-right::before { width: 180px; height: 45px; }
 
 /* Characters */
 .top-chara {
