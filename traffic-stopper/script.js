@@ -380,8 +380,9 @@ function renderQuestion(index) {
     <div class="quiz-inner">
       <div class="quiz-q-backdrop">Q${q.id}</div>
       <div class="quiz-top-section">
-        <p class="quiz-question-main">${q.text}</p>
-        <hr class="quiz-dashed-line">
+        <div class="quiz-question-wrap">
+          <p class="quiz-question-main">${q.text}</p>
+        </div>
       </div>
       <div class="quiz-choices-v2">
         ${q.options.map((opt, i) => `

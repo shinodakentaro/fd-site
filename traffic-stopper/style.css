@@ -489,124 +489,143 @@ body.result-mode .bg-full-layer {
 
 .quiz-q-backdrop {
   position: absolute;
-  top: 120px;
-  left: -10px;
-  font-size: 300px;
-  font-weight: 700;
-  color: rgba(245,168,106,.20);
+  top: 240px;
+  left: 0;
+  width: 820px;
+  height: 250px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 200px;
+  font-weight: 500;
+  font-family: 'Noto Sans JP', sans-serif;
+  color: rgba(255,255,255,0.40);
   line-height: 1;
-  letter-spacing: -16px;
   pointer-events: none;
   user-select: none;
-  font-family: 'Noto Serif JP', serif;
 }
 
 .quiz-top-section {
   position: relative;
   z-index: 2;
-  padding: 200px 60px 0;
+  padding: 290px 60px 0;
+  text-align: center;
 }
+
+.quiz-question-wrap {
+  display: inline-block;
+  border-bottom: 4px dashed #574537;
+  padding-bottom: 20px;
+  width: 100%;
+}
+
 .quiz-question-main {
+  font-family: 'M PLUS Rounded 1c', sans-serif;
   font-size: 48px;
-  font-weight: 700;
-  color: var(--brand);
+  font-weight: 500;
+  color: #574537;
   line-height: 1.4;
-  letter-spacing: .04em;
-  margin-bottom: 28px;
-}
-.quiz-dashed-line {
-  border: none;
-  border-top: 3px dashed rgba(171,136,106,.45);
-  margin: 0;
+  letter-spacing: 1.44px;
 }
 
 .quiz-choices-v2 {
-  position: relative;
+  position: absolute;
+  top: 563px;
+  left: 0;
+  right: 0;
   z-index: 2;
   display: flex;
-  gap: 48px;
+  gap: 60px;
   justify-content: center;
   align-items: center;
-  padding: 72px 52px 0;
 }
 
 .cv2-card {
-  width: 314px;
-  height: 314px;
-  background: #ffffff;
+  width: 320px;
+  height: 320px;
+  background: linear-gradient(180deg, #ffffff 60%, #f0ebe7 100%);
   border-radius: 28px;
   box-shadow:
-    0 10px 0 rgba(150,120,100,.28),
-    0 16px 40px rgba(0,0,0,.08);
+    inset 0 -14px 22px rgba(160,125,105,0.18),
+    inset 0 3px 6px rgba(255,255,255,0.90),
+    0 3px 10px rgba(0,0,0,.07);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 24px;
-  padding: 36px 28px 52px;
+  gap: 20px;
+  padding: 36px 28px 30px;
   cursor: pointer;
-  transition: transform .12s, box-shadow .12s;
+  transition: box-shadow .12s, filter .12s;
 }
 .cv2-card:active {
-  transform: translateY(8px);
-  box-shadow: 0 2px 0 rgba(150,120,100,.28), 0 6px 20px rgba(0,0,0,.08);
+  box-shadow:
+    inset 0 -6px 12px rgba(160,125,105,0.14),
+    inset 0 6px 14px rgba(0,0,0,0.06),
+    0 1px 4px rgba(0,0,0,.05);
+  filter: brightness(.97);
 }
 
 .cv2-badge {
-  width: 52px;
-  height: 52px;
-  border-radius: 12px;
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 28px;
-  font-weight: 700;
+  font-family: 'M PLUS Rounded 1c', sans-serif;
+  font-size: 40px;
+  font-weight: 500;
   color: #fff;
   flex-shrink: 0;
+  padding-bottom: 2px;
 }
-.cv2-badge-a { background: #3b7dd8; }
-.cv2-badge-b { background: #e8527a; }
+.cv2-badge-a { background: #0c60c3; }
+.cv2-badge-b { background: #ff5577; }
 
 .cv2-text {
+  font-family: 'M PLUS Rounded 1c', sans-serif;
   font-size: 32px;
   font-weight: 500;
   text-align: center;
-  line-height: 1.5;
-  letter-spacing: .04em;
+  line-height: 1.4;
+  letter-spacing: 1.6px;
 }
-.cv2-text-a { color: #3b7dd8; }
-.cv2-text-b { color: #e8527a; }
+.cv2-text-a { color: #0c60c3; }
+.cv2-text-b { color: #ff5577; }
 
 .cv2-card.selected {
-  transform: translateY(6px);
-  box-shadow: 0 4px 0 rgba(150,120,100,.28), 0 8px 24px rgba(0,0,0,.08);
-  background: #f8f4f0;
+  box-shadow:
+    inset 0 -6px 12px rgba(160,125,105,0.14),
+    inset 0 6px 14px rgba(0,0,0,0.06),
+    0 1px 4px rgba(0,0,0,.05);
+  filter: brightness(.97);
+  background: linear-gradient(180deg, #f5f0ec 60%, #ede5e0 100%);
 }
 
 /* Bottom nav */
 .quiz-bottom-nav {
   position: absolute;
-  bottom: 60px;
-  left: 60px;
-  right: 60px;
+  top: 1092px;
+  left: 0;
+  right: 0;
+  padding: 0 60px;
   z-index: 2;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 .qnav-btn {
-  font-size: 30px;
+  font-size: 24px;
   font-weight: 500;
-  color: var(--brand);
-  letter-spacing: .06em;
-  opacity: .55;
+  font-family: 'Noto Sans JP', sans-serif;
+  color: #000000;
   background: none;
   border: none;
-  font-family: inherit;
   cursor: pointer;
   padding: 8px 4px;
 }
-.qnav-btn:active { opacity: 1; }
+.qnav-btn:active { opacity: .6; }
 .qnav-placeholder { opacity: 0; pointer-events: none; }
 
 /* ========================================
