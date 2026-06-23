@@ -298,22 +298,22 @@ const questions = [
     text: '朝の過ごし方はどっち？',
     options: [
       { label: 'A', icon: '💧', text: 'ゆっくり準備' },
-      { label: 'B', icon: '⚡', text: 'ギリギリまで寝る' },
+      { label: 'B', icon: '⚡', text: 'ギリギリまで\n寝る' },
     ],
   },
   {
     id: 4,
     text: '休日の過ごし方はどっち？',
     options: [
-      { label: 'A', icon: '💬', text: 'カフェやショッピングなど外出派' },
-      { label: 'B', icon: '🌙', text: '家で映画や動画を楽しむおうち派' },
+      { label: 'A', icon: '💬', text: 'カフェや\nショッピング\nなど外出派' },
+      { label: 'B', icon: '🌙', text: '家で映画や\n動画を楽しむ\nおうち派' },
     ],
   },
   {
     id: 5,
     text: 'あなたが目指したい肌はどっち？',
     options: [
-      { label: 'A', icon: '☀️', text: 'つやっとうるおい美肌' },
+      { label: 'A', icon: '☀️', text: 'つやっと\nうるおい美肌' },
       { label: 'B', icon: '🍃', text: '肌ノイズのないなめらか美肌' },
     ],
   },
@@ -323,13 +323,23 @@ const questions = [
    4. イベント設定
    ======================================== */
 const eventConfig = {
-  name:    '@cosme FD EVENT',
-  date:    '2026.6.XX',
+  name: '@cosme FD EVENT',
+  date: '2026.6.XX',
+  products: {
+    GLOW: {
+      brand: 'SHISEIDO',
+      name:  'REVITALESSENCE SKIN GLOW\nFoundation',
+      desc:  '圧巻のつや肌。満たされる一日。\n素肌からうつくしい仕上がり。\n美容液レベルの肌体験',
+    },
+    SMOOTH: {
+      brand: 'SHISEIDO',
+      name:  'REVITALESSENCE SKIN MATTE\nFoundation',
+      desc:  '肌ノイズゼロの、なめらか美肌。\n素肌感を残した美しい仕上がり。\n美容液レベルの肌体験',
+    },
+  },
   product: {
-    name:           'FOUNDATION',
-    lineup:         'GLOW / SMOOTH',
-    url:            'https://www.cosme.net/',  // 差し替え用
-    qrPlaceholder:  '[QR]',                    // 実運用時は QR コード画像に差し替え
+    url:           'https://www.cosme.net/',  // 差し替え用
+    qrPlaceholder: '[QR]',
   },
 };
 
@@ -341,6 +351,7 @@ const state = {
   resultKey:  null, // 確定した結果ID
   subMessage: '',   // パターン別サブメッセージ
   message:    '',   // パターン別メッセージ
+  luck: { work: '', love: '', money: '' }, // ランダム運勢
 };
 
 /* ========================================
@@ -355,6 +366,12 @@ function toAnswerKey(answers) {
 /** messages 配列からランダムに1つ選ぶ */
 function pickRandom(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
+}
+
+/** 1〜5のランダムな星文字列を生成（min〜5の範囲） */
+function randomStars(min = 2) {
+  const n = Math.floor(Math.random() * (5 - min + 1)) + min;
+  return '★'.repeat(n) + '☆'.repeat(5 - n);
 }
 
 /** ★文字列を視覚的に表示するHTML */
@@ -390,7 +407,6 @@ function startQuiz() {
   stageWrap.classList.add('anim-slide-left');
 
   setTimeout(() => {
-    document.getElementById('bg2').classList.remove('hidden');
     document.body.classList.remove('result-mode');
     state.answers   = [];
     state.resultKey = null;
@@ -460,7 +476,6 @@ function answerQuestion(qIndex, optIndex) {
    9. スキャン演出
    ======================================== */
 function startScan() {
-  document.getElementById('bg2').classList.add('hidden');
   showScreen('screen-scan');
 }
 
@@ -550,6 +565,7 @@ function calcResult() {
   state.resultKey   = resultId;
   state.subMessage  = m.sub;
   state.message     = m.msg;
+  state.luck        = { work: randomStars(2), love: randomStars(2), money: randomStars(2) };
 }
 
 /* ========================================
@@ -586,55 +602,81 @@ function buildReceiptDOM() {
     ? `<img class="rc-chara-img" src="${r.imgPathMono}" alt="${r.name}">`
     : `<div class="rc-chara-placeholder">キャラクター入る</div>`;
 
+  const productImg = r.category === 'GLOW'
+    ? '../assets/receipt/レシートglow.png'
+    : '../assets/receipt/レシートsmooth.png';
+
+  const qrLeftImg = r.category === 'GLOW'
+    ? '../assets/receipt/@cosme_glow.png'
+    : '../assets/receipt/@cosme_smooth.png';
+
+  const qrRightImg = r.category === 'GLOW'
+    ? '../assets/receipt/qr_x_glow.png'
+    : '../assets/receipt/qr_x_smooth.png';
+
+  const prod = eventConfig.products[r.category];
+
   const html = `
-    <div class="rc-event-header">
-      <div class="rc-event-name">@cosme TOKYO<br>SHISEIDO POPUP EVENT</div>
-      <div class="rc-app-title">盛れ肌キャラ占い</div>
-    </div>
+    <div class="rc-event-header">@cosme TOKYO　SHISEIDO POPUP EVENT</div>
 
-    <div class="rc-title-row">
-      <div class="rc-title-line"></div>
-      <span class="rc-title-text">診断結果</span>
-      <div class="rc-title-line"></div>
-    </div>
+    <div class="rc-main-title">肌運命を導く<br>素肌美キャラ占い</div>
 
+    <hr class="rc-hr-dot">
+
+    <div class="rc-result-label">診　断　結　果</div>
     <div class="rc-name">${r.name}</div>
     <div class="rc-subcopy">${state.subMessage}</div>
-    <div class="rc-message">${state.message}</div>
 
     <div class="rc-chara-area">${monoImg}</div>
 
     <hr class="rc-hr-dot">
 
-    <div class="rc-luck-center">
-      <div>仕事運　${r.luck.work}</div>
-      <div>恋愛運　${r.luck.love}</div>
-      <div>金　運　${r.luck.money}</div>
+    <div class="rc-luck-table">
+      <div class="rc-luck-row">
+        <span class="rc-luck-label">仕事運</span>
+        <span class="rc-luck-stars">${state.luck.work}</span>
+      </div>
+      <div class="rc-luck-row">
+        <span class="rc-luck-label">恋愛運</span>
+        <span class="rc-luck-stars">${state.luck.love}</span>
+      </div>
+      <div class="rc-luck-row">
+        <span class="rc-luck-label">金　運</span>
+        <span class="rc-luck-stars">${state.luck.money}</span>
+      </div>
     </div>
 
     <hr class="rc-hr-dot">
 
-    <div class="rc-lucky-section">
-      <div class="rc-lucky-label">【ラッキーアイテム】</div>
-      <div class="rc-product-row">
-        <div class="rc-product-info">
-          <div class="rc-product-name">${r.recommend}</div>
-          <div class="rc-product-desc">${(r.receiptDesc || '').replace(/\n/g, '<br>')}</div>
-        </div>
-        <img class="rc-product-thumb" src="../assets/receipt/product.png" alt="">
+    <div class="rc-recommend-intro">あなたにおすすめなのは・・・</div>
+
+    <div class="rc-product-row">
+      <img class="rc-product-thumb" src="${productImg}" alt="">
+      <div class="rc-product-info">
+        <div class="rc-product-brand">${prod.brand}</div>
+        <div class="rc-product-name">${prod.name.replace(/\n/g, '<br>')}</div>
+        <div class="rc-product-desc">${prod.desc.replace(/\n/g, '<br>')}</div>
       </div>
     </div>
 
-    <div class="rc-bottom-row">
-      <div class="rc-qr-box">${eventConfig.product.qrPlaceholder}</div>
-      <div class="rc-qr-box">${eventConfig.product.qrPlaceholder}</div>
-      <div class="rc-hashtag-box">#</div>
+    <div class="rc-qr-section">
+      <div class="rc-qr-col">
+        <div class="rc-qr-label">アイテムをゲットしたい方はこちら！</div>
+        <img class="rc-qr-img" src="${qrLeftImg}" alt="QR">
+      </div>
+      <div class="rc-qr-col">
+        <div class="rc-qr-label">診断結果をシェアしてね！</div>
+        <img class="rc-qr-img" src="${qrRightImg}" alt="QR X">
+        <div class="rc-hashtags"># SHISEIDO<br># 2つのファンデ美容液体験<br># アットコスメトーキョー<br># ${r.recommend}</div>
+      </div>
     </div>
 
-    <div class="rc-footer">
-      <div class="rc-shiseido-logo">SHISEIDO</div>
-      <div class="rc-footer-sub">GINZA TOKYO</div>
-    </div>
+    <hr class="rc-hr-solid">
+
+    <div class="rc-message-footer">${state.message}</div>
+
+    <div class="rc-shiseido-logo">SHISEIDO</div>
+    <div class="rc-footer-sub">GINZA TOKYO</div>
   `;
 
   document.getElementById('receipt-content').innerHTML      = html;
@@ -752,9 +794,9 @@ function _sendWebPRNTRequest(r, printerUrl, charaImg, productImg) {
   request += builder.createFeedElement({ line: 1 });
 
   // 運勢（センタリング）
-  request += builder.createTextElement({ codepage: 'utf8', data: '仕事運  ' + r.luck.work  + '\n' });
-  request += builder.createTextElement({ codepage: 'utf8', data: '恋愛運  ' + r.luck.love  + '\n' });
-  request += builder.createTextElement({ codepage: 'utf8', data: '金　運  ' + r.luck.money + '\n' });
+  request += builder.createTextElement({ codepage: 'utf8', data: '仕事運  ' + state.luck.work  + '\n' });
+  request += builder.createTextElement({ codepage: 'utf8', data: '恋愛運  ' + state.luck.love  + '\n' });
+  request += builder.createTextElement({ codepage: 'utf8', data: '金　運  ' + state.luck.money + '\n' });
   request += builder.createFeedElement({ line: 1 });
 
   // ラッキーアイテム
@@ -820,7 +862,6 @@ function _sendWebPRNTRequest(r, printerUrl, charaImg, productImg) {
    ======================================== */
 function goToTop() {
   document.querySelectorAll('#screen-result .btn-print').forEach(b => b.disabled = false);
-  document.getElementById('bg2').classList.add('hidden');
   document.body.classList.remove('result-mode');
   showScreen('screen-top');
 }
@@ -829,6 +870,5 @@ function goToTop() {
    14. 初期化
    ======================================== */
 document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('bg2').classList.add('hidden');
   showScreen('screen-top');
 });
