@@ -678,6 +678,8 @@ function buildReceiptDOM() {
 
     <div class="rc-shiseido-logo">SHISEIDO</div>
     <div class="rc-footer-sub">GINZA TOKYO</div>
+
+    <div class="rc-sub-message">${state.subMessage}</div>
   `;
 
   document.getElementById('receipt-content').innerHTML      = html;

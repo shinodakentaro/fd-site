@@ -1191,7 +1191,13 @@ body.result-mode .bg-full-layer {
   color: #555;
   text-align: center;
   margin-top: 1px;
-  padding-bottom: 8px;
+}
+.rc-sub-message {
+  font-size: 11px;
+  text-align: center;
+  color: #444;
+  padding: 8px 0 8px;
+  line-height: 1.6;
 }
 
 /* ========================================
