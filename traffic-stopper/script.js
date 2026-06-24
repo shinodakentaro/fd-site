@@ -397,6 +397,7 @@ function showScreen(id) {
    8. クイズ
    ======================================== */
 function startQuiz() {
+  stopSparkles();
   const btn       = document.querySelector('#screen-top .btn-top-start');
   const titleArea = document.querySelector('#screen-top .top-title-area');
   const stageWrap = document.querySelector('#screen-top .top-stage-wrap');
@@ -864,6 +865,61 @@ function goToTop() {
   document.querySelectorAll('#screen-result .btn-print').forEach(b => b.disabled = false);
   document.body.classList.remove('result-mode');
   showScreen('screen-top');
+  startSparkles();
+}
+
+/* ========================================
+   13.5 きらきらエフェクト
+   ======================================== */
+let _sparkleTimer = null;
+
+function createSparkle() {
+  const container = document.getElementById('sparkle-container');
+  if (!container) return;
+
+  const size   = Math.random() * 22 + 10;          // 10〜32px
+  const x      = Math.random() * 800;
+  const y      = Math.random() * 1100;
+  const dur    = (Math.random() * 0.6 + 0.7).toFixed(2); // 0.7〜1.3s
+  const colors = ['#ffffff', '#ffe08a', '#ffd04a', '#fff4c2'];
+  const color  = colors[Math.floor(Math.random() * colors.length)];
+
+  const el = document.createElement('div');
+  el.className = 'sparkle';
+  el.style.cssText = `left:${x}px;top:${y}px;width:${size}px;height:${size}px;--dur:${dur}s;`;
+
+  // 4点星形SVG
+  el.innerHTML = `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}">
+    <path d="M50,0 C52,38 62,48 100,50 C62,52 52,62 50,100 C48,62 38,52 0,50 C38,48 48,38 50,0Z" fill="${color}" opacity="0.9"/>
+  </svg>`;
+
+  container.appendChild(el);
+  el.addEventListener('animationend', () => el.remove(), { once: true });
+}
+
+function startSparkles() {
+  stopSparkles();
+  // 最初に数個まとめて出現
+  for (let i = 0; i < 5; i++) {
+    setTimeout(createSparkle, i * 120);
+  }
+  // その後ランダム間隔で断続的に生成
+  function scheduleNext() {
+    const interval = Math.random() * 500 + 250; // 250〜750ms
+    _sparkleTimer = setTimeout(() => {
+      const count = Math.random() < 0.3 ? 2 : 1; // 30%の確率で2個同時
+      for (let i = 0; i < count; i++) createSparkle();
+      scheduleNext();
+    }, interval);
+  }
+  scheduleNext();
+}
+
+function stopSparkles() {
+  clearTimeout(_sparkleTimer);
+  _sparkleTimer = null;
+  const container = document.getElementById('sparkle-container');
+  if (container) container.innerHTML = '';
 }
 
 /* ========================================
@@ -871,4 +927,5 @@ function goToTop() {
    ======================================== */
 document.addEventListener('DOMContentLoaded', () => {
   showScreen('screen-top');
+  startSparkles();
 });
