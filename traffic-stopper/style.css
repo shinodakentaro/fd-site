@@ -1005,8 +1005,11 @@ body.result-mode .bg-full-layer {
 
 /* ── 診断結果ラベル ── */
 .rc-result-label {
+  display: block;
+  width: 100%;
   font-size: 11px;
   letter-spacing: .22em;
+  text-indent: .22em; /* letter-spacingの末尾ズレを補正 */
   text-align: center;
   color: #444;
   margin: 6px 0 4px;
