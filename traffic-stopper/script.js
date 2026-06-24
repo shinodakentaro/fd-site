@@ -759,7 +759,9 @@ function _sendWebPRNTRequest(r, printerUrl, charaImg, productImg) {
   request += builder.createTextElement({ codepage: 'utf8', data: '@cosme TOKYO\n' });
   request += builder.createTextElement({ codepage: 'utf8', data: 'SHISEIDO POPUP EVENT\n' });
   request += builder.createTextElement({ emphasis: true, width: 2, height: 1,
-    codepage: 'utf8', data: '盛れ肌キャラ占い\n' });
+    codepage: 'utf8', data: '肌運命を導く\n' });
+  request += builder.createTextElement({ emphasis: true, width: 2, height: 1,
+    codepage: 'utf8', data: '素肌美キャラ占い\n' });
   request += builder.createTextElement({ emphasis: false, width: 1, height: 1,
     codepage: 'utf8', data: '' });
   request += builder.createFeedElement({ line: 1 });
