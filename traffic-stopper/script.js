@@ -683,10 +683,7 @@ function buildReceiptDOM() {
 
     <div class="rc-message-footer">${state.message}</div>
 
-    <div class="rc-shiseido-logo">SHISEIDO</div>
-    <div class="rc-footer-sub">GINZA TOKYO</div>
-
-    <div class="rc-sub-message">${state.subMessage}</div>
+    <img class="rc-logo-img" src="../assets/receipt/SHISEIDOGINZATOKYO.webp" alt="SHISEIDO GINZA TOKYO">
   `;
 
   document.getElementById('receipt-content').innerHTML      = html;
