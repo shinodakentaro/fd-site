@@ -899,15 +899,15 @@ function createSparkle() {
 
 function startSparkles() {
   stopSparkles();
-  // 最初に数個まとめて出現
-  for (let i = 0; i < 5; i++) {
-    setTimeout(createSparkle, i * 120);
+  // 最初にまとめて出現
+  for (let i = 0; i < 10; i++) {
+    setTimeout(createSparkle, i * 80);
   }
   // その後ランダム間隔で断続的に生成
   function scheduleNext() {
-    const interval = Math.random() * 500 + 250; // 250〜750ms
+    const interval = Math.random() * 200 + 100; // 100〜300ms
     _sparkleTimer = setTimeout(() => {
-      const count = Math.random() < 0.3 ? 2 : 1; // 30%の確率で2個同時
+      const count = Math.random() < 0.4 ? 3 : 2; // 40%の確率で3個、それ以外2個
       for (let i = 0; i < count; i++) createSparkle();
       scheduleNext();
     }, interval);
