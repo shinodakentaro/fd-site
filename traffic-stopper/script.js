@@ -328,13 +328,13 @@ const eventConfig = {
   products: {
     GLOW: {
       brand: 'SHISEIDO',
-      name:  'REVITALESSENCE SKIN GLOW\nFoundation',
-      desc:  '圧巻のつや肌。満たされる一日。\n素肌からうつくしい仕上がり。\n美容液レベルの肌体験',
+      name:  'エッセンス スキングロウ\nファンデーション',
+      desc:  'エッセンス圧巻のつや肌。満たされる一日。\n素肌からうつくしい仕上がり。\n美容液レベルの肌体験',
     },
     SMOOTH: {
       brand: 'SHISEIDO',
-      name:  'REVITALESSENCE SKIN MATTE\nFoundation',
-      desc:  '肌ノイズゼロの、なめらか美肌。\n素肌感を残した美しい仕上がり。\n美容液レベルの肌体験',
+      name:  'エッセンス スキンスムース\nファンデーション',
+      desc:  'なめらかに、理想の素肌美へ。\n使うたびノイズレスな仕上がり。\n新体験のファンデ美容液',
     },
   },
   product: {
@@ -604,8 +604,8 @@ function buildReceiptDOM() {
     : `<div class="rc-chara-placeholder">キャラクター入る</div>`;
 
   const productImg = r.category === 'GLOW'
-    ? '../assets/receipt/レシートglow.png'
-    : '../assets/receipt/レシートsmooth.png';
+    ? '../assets/receipt/glow_product.png'
+    : '../assets/receipt/smooth_product.png';
 
   const qrLeftImg = r.category === 'GLOW'
     ? '../assets/receipt/@cosme_glow.png'
