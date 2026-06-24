@@ -626,7 +626,7 @@ function buildReceiptDOM() {
 
     <div class="rc-result-label">診　断　結　果</div>
     <div class="rc-name">${r.name}</div>
-    <div class="rc-subcopy">${state.subMessage}</div>
+    <div class="rc-subcopy">${r.subCopy}</div>
 
     <div class="rc-chara-area">${monoImg}</div>
 
