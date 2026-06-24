@@ -615,6 +615,10 @@ function buildReceiptDOM() {
     ? '../assets/receipt/qr_x_glow.png'
     : '../assets/receipt/qr_x_smooth.png';
 
+  const xHashtags = r.category === 'GLOW'
+    ? `#SHISEIDO<br>#２つのファンデ美容液体験<br>#アットコスメトーキョー<br>#エッセンススキングロウファンデーション　７月１日（水）～７月７日（火）<br>原宿 @cosmeTOKYOで<br>POPUPイベント実施中！<br><br>[POPUPでの写真・感想を入れて投稿してね！]`
+    : `#SHISEIDO<br>#２つのファンデ美容液体験<br>#アットコスメトーキョー　#エッセンススキンスムースファンデーション<br><br>７月１日（水）～７月７日（火）<br>原宿 @cosmeTOKYOで<br>POPUPイベント実施中！<br><br>[POPUPでの写真・感想を入れて投稿してね！]`;
+
   const prod = eventConfig.products[r.category];
 
   const html = `
@@ -669,12 +673,10 @@ function buildReceiptDOM() {
 
     <hr class="rc-hr-dot">
 
-    <div class="rc-qr-section">
-      <div class="rc-qr-col">
-        <div class="rc-qr-label">診断結果をシェアしてね！</div>
-        <img class="rc-qr-img" src="${qrRightImg}" alt="QR X">
-        <div class="rc-hashtags"># SHISEIDO<br># 2つのファンデ美容液体験<br># アットコスメトーキョー<br># ${r.recommend}</div>
-      </div>
+    <div class="rc-x-qr-section">
+      <div class="rc-qr-label">診断結果をシェアしてね！</div>
+      <img class="rc-qr-img" src="${qrRightImg}" alt="QR X">
+      <div class="rc-hashtags">${xHashtags}</div>
     </div>
 
     <hr class="rc-hr-solid">
