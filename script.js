@@ -230,12 +230,21 @@ function init() {
     // URLパラメータあり → そのタイプで投票画面を開始
     state.resultType = typeParam;
     renderVoteScreen(typeParam);
+    showScreen('screen-vote');
   } else {
-    // URLパラメータなし → デモ用タイプ選択バナーを表示してデフォルトタイプを描画
-    renderDemoSelector();
-    state.resultType = 'mood';   // デフォルト表示タイプ
-    renderVoteScreen('mood');
+    // URLパラメータなし → トップ画面を表示
+    showScreen('screen-top');
   }
+}
+
+/* ========================================
+   5b. 診断スタート（トップ画面から）
+   ======================================== */
+function startDiagnosis() {
+  renderDemoSelector();
+  state.resultType = 'mood';
+  renderVoteScreen('mood');
+  showScreen('screen-vote');
 }
 
 /* ========================================
