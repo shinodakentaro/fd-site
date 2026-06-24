@@ -660,11 +660,16 @@ function buildReceiptDOM() {
       </div>
     </div>
 
+    <hr class="rc-hr-dot">
+
+    <div class="rc-cosme-qr-section">
+      <div class="rc-qr-label">アイテムをゲットしたい方はこちら！</div>
+      <img class="rc-qr-img" src="${qrLeftImg}" alt="QR @cosme">
+    </div>
+
+    <hr class="rc-hr-dot">
+
     <div class="rc-qr-section">
-      <div class="rc-qr-col">
-        <div class="rc-qr-label">アイテムをゲットしたい方はこちら！</div>
-        <img class="rc-qr-img" src="${qrLeftImg}" alt="QR">
-      </div>
       <div class="rc-qr-col">
         <div class="rc-qr-label">診断結果をシェアしてね！</div>
         <img class="rc-qr-img" src="${qrRightImg}" alt="QR X">
