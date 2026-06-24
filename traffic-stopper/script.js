@@ -804,11 +804,11 @@ function _sendWebPRNTRequest(r, printerUrl, charaImg, productImg) {
   request += builder.createTextElement({ codepage: 'utf8', data: '金　運  ' + state.luck.money + '\n' });
   request += builder.createFeedElement({ line: 1 });
 
-  // ラッキーアイテム
+  // おすすめ商品
   request += builder.createTextElement({ codepage: 'utf8',
     data: '--------------------------------\n' });
   request += builder.createFeedElement({ line: 1 });
-  request += builder.createTextElement({ codepage: 'utf8', data: '【ラッキーアイテム】\n' });
+  request += builder.createTextElement({ codepage: 'utf8', data: 'あなたにおすすめなのは・・・\n' });
   request += builder.createFeedElement({ line: 1 });
   request += builder.createTextElement({ emphasis: true, codepage: 'utf8', data: r.recommend + '\n' });
   request += builder.createFeedElement({ line: 1 });
