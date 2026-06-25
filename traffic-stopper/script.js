@@ -744,17 +744,30 @@ function printByWebPRNT() {
     ? 'http://localhost:8001/StarWebPRNT/SendMessage'
     : 'http://localhost:8008/StarWebPRNT/SendMessage';
 
+  const productImgPath = r.category === 'GLOW'
+    ? '../assets/receipt/glow_product.png'
+    : '../assets/receipt/smooth_product.png';
+  const cosmeQrPath = r.category === 'GLOW'
+    ? '../assets/receipt/@cosme_glow.png'
+    : '../assets/receipt/@cosme_smooth.png';
+  const xQrPath = r.category === 'GLOW'
+    ? '../assets/receipt/qr_x_glow.png'
+    : '../assets/receipt/qr_x_smooth.png';
+
   Promise.all([
     _loadImageCanvas(r.imgPathMono, 500),
-    _loadImageCanvas('../assets/receipt/product.png', 400),
+    _loadImageCanvas(productImgPath, 400),
+    _loadImageCanvas(cosmeQrPath, 300),
+    _loadImageCanvas(xQrPath, 300),
   ]).then(function (images) {
-    _sendWebPRNTRequest(r, printerUrl, images[0], images[1]);
+    _sendWebPRNTRequest(r, printerUrl, images[0], images[1], images[2], images[3]);
   });
 }
 
 /** コマンド組み立て & 送信 */
-function _sendWebPRNTRequest(r, printerUrl, charaImg, productImg) {
+function _sendWebPRNTRequest(r, printerUrl, charaImg, productImg, cosmeQrImg, xQrImg) {
   const builder = new StarWebPrintBuilder();
+  const prod = eventConfig.products[r.category];
   let request = '';
 
   request += builder.createInitializationElement();
@@ -786,12 +799,9 @@ function _sendWebPRNTRequest(r, printerUrl, charaImg, productImg) {
   request += builder.createFeedElement({ line: 1 });
   request += builder.createTextElement({ emphasis: false, width: 1, height: 1,
     codepage: 'utf8', data: state.subMessage + '\n' });
-  request += builder.createFeedElement({ line: 1 });
-  request += builder.createTextElement({ emphasis: false, width: 1, height: 1,
-    codepage: 'utf8', data: state.message + '\n' });
   request += builder.createFeedElement({ line: 2 });
 
-  // キャラクターイラスト（サブコピーの下・大きく）
+  // キャラクターイラスト
   if (charaImg) {
     request += builder.createBitImageElement({
       context: charaImg.ctx, x: 0, y: 0, width: charaImg.w, height: charaImg.h });
@@ -814,12 +824,13 @@ function _sendWebPRNTRequest(r, printerUrl, charaImg, productImg) {
   request += builder.createFeedElement({ line: 1 });
   request += builder.createTextElement({ codepage: 'utf8', data: 'あなたにおすすめなのは・・・\n' });
   request += builder.createFeedElement({ line: 1 });
-  request += builder.createTextElement({ emphasis: true, codepage: 'utf8', data: r.recommend + '\n' });
+  request += builder.createTextElement({ emphasis: true, codepage: 'utf8',
+    data: prod.brand + '\n' });
+  request += builder.createTextElement({ emphasis: true, codepage: 'utf8',
+    data: prod.name.replace(/\n/g, '') + '\n' });
   request += builder.createFeedElement({ line: 1 });
-  if (r.receiptDesc) {
-    request += builder.createTextElement({ emphasis: false, codepage: 'utf8',
-      data: r.receiptDesc.replace(/\n/g, ' ') + '\n' });
-  }
+  request += builder.createTextElement({ emphasis: false, codepage: 'utf8',
+    data: prod.desc.replace(/\n/g, ' ') + '\n' });
   request += builder.createFeedElement({ line: 2 });
 
   // 商品イラスト
@@ -829,18 +840,42 @@ function _sendWebPRNTRequest(r, printerUrl, charaImg, productImg) {
     request += builder.createFeedElement({ line: 2 });
   }
 
-  // QRコード×2
-  request += builder.createTextElement({ emphasis: false, codepage: 'utf8',
-    data: 'ブランドサイト / キャンペーン\n' });
+  // @cosme QRセクション
+  request += builder.createTextElement({ codepage: 'utf8',
+    data: '--------------------------------\n' });
   request += builder.createFeedElement({ line: 1 });
-  request += builder.createQrCodeElement({
-    model: 'model2', level: 'level_m', cell: 6,
-    data: eventConfig.product.url });
-  request += builder.createFeedElement({ line: 2 });
+  request += builder.createTextElement({ codepage: 'utf8',
+    data: 'アイテムをゲットしたい方はこちら！\n' });
+  request += builder.createFeedElement({ line: 1 });
+  if (cosmeQrImg) {
+    request += builder.createBitImageElement({
+      context: cosmeQrImg.ctx, x: 0, y: 0, width: cosmeQrImg.w, height: cosmeQrImg.h });
+    request += builder.createFeedElement({ line: 2 });
+  }
+
+  // X QRセクション（ハッシュタグ付き）
+  request += builder.createTextElement({ codepage: 'utf8',
+    data: '--------------------------------\n' });
+  request += builder.createFeedElement({ line: 1 });
+  request += builder.createTextElement({ codepage: 'utf8',
+    data: '診断結果をシェアしてね！\n' });
+  request += builder.createFeedElement({ line: 1 });
+  if (xQrImg) {
+    request += builder.createBitImageElement({
+      context: xQrImg.ctx, x: 0, y: 0, width: xQrImg.w, height: xQrImg.h });
+    request += builder.createFeedElement({ line: 1 });
+  }
+  const xHashtags = r.category === 'GLOW'
+    ? '#SHISEIDO\n#２つのファンデ美容液体験\n#アットコスメトーキョー\n#エッセンススキングロウファンデーション\n７月１日（水）～７月７日（火）\n原宿 @cosmeTOKYOで\nPOPUPイベント実施中！\n[POPUPでの写真・感想を入れて投稿してね！]\n'
+    : '#SHISEIDO\n#２つのファンデ美容液体験\n#アットコスメトーキョー\n#エッセンススキンスムースファンデーション\n７月１日（水）～７月７日（火）\n原宿 @cosmeTOKYOで\nPOPUPイベント実施中！\n[POPUPでの写真・感想を入れて投稿してね！]\n';
+  request += builder.createTextElement({ codepage: 'utf8', data: xHashtags });
+  request += builder.createFeedElement({ line: 1 });
 
   // フッター
   request += builder.createTextElement({ codepage: 'utf8',
     data: '================================\n' });
+  request += builder.createTextElement({ codepage: 'utf8', data: state.message + '\n' });
+  request += builder.createFeedElement({ line: 1 });
   request += builder.createTextElement({ emphasis: true, codepage: 'utf8',
     data: 'SHISEIDO\n' });
   request += builder.createTextElement({ emphasis: false, codepage: 'utf8',
