@@ -972,3 +972,16 @@ document.addEventListener('DOMContentLoaded', () => {
   showScreen('screen-top');
   startSparkles();
 });
+
+/* ========================================
+   DEV: レシートプレビュー直行（本番では非表示）
+   ======================================== */
+function devJumpToReceipt(resultKey) {
+  const r = results[resultKey];
+  state.resultKey  = resultKey;
+  state.subMessage = r.subCopy;
+  state.message    = pickRandom(r.messages);
+  state.luck       = { work: randomStars(2), love: randomStars(2), money: randomStars(2) };
+  buildReceiptDOM();
+  showScreen('screen-receipt');
+}
