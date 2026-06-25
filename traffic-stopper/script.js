@@ -756,25 +756,112 @@ function printByWebPRNT() {
 
   Promise.all([
     _loadImageCanvas(r.imgPathMono, 500),
-    _loadImageCanvas(productImgPath, 400),
+    _loadImageCanvas(productImgPath, 200),
     _loadImageCanvas(cosmeQrPath, 300),
     _loadImageCanvas(xQrPath, 300),
   ]).then(function (images) {
-    _sendWebPRNTRequest(r, printerUrl, images[0], images[1], images[2], images[3]);
+    const productRowCanvas = _buildProductRowCanvas(r, images[1]);
+    _sendWebPRNTRequest(r, printerUrl, images[0], productRowCanvas, images[2], images[3]);
   });
 }
 
+/**
+ * 商品セクション合成キャンバス（左: 商品画像 / 右: ブランド名・商品名・説明）
+ * サーマルプリンタはCSS非対応のためキャンバスで合成してビットイメージ印刷する。
+ */
+function _buildProductRowCanvas(r, productImgData) {
+  const prod   = eventConfig.products[r.category];
+  const totalW = 560;
+  const imgW   = 180;
+  const gap    = 14;
+  const textX  = imgW + gap;
+  const textW  = totalW - textX - 4;
+
+  const brandSize = 22;
+  const nameSize  = 24;
+  const descSize  = 18;
+
+  function wrapText(ctx, text, maxW) {
+    const result = [];
+    for (const para of text.split('\n')) {
+      let line = '';
+      for (const ch of para) {
+        if (ctx.measureText(line + ch).width > maxW && line) {
+          result.push(line);
+          line = ch;
+        } else {
+          line += ch;
+        }
+      }
+      if (line) result.push(line);
+    }
+    return result;
+  }
+
+  const tmpCanvas = document.createElement('canvas');
+  tmpCanvas.width = totalW; tmpCanvas.height = 10;
+  const tmpCtx = tmpCanvas.getContext('2d');
+
+  tmpCtx.font = descSize + 'px "Noto Sans JP", sans-serif';
+  const descLines = wrapText(tmpCtx, prod.desc, textW);
+
+  const nameLines = prod.name.split('\n');
+  const textH = brandSize * 1.4
+              + nameLines.length * nameSize * 1.4
+              + 6
+              + descLines.length * descSize * 1.5;
+
+  const imgH = productImgData
+    ? Math.round(productImgData.h * (imgW / productImgData.w))
+    : 0;
+  const totalH = Math.max(imgH, Math.ceil(textH)) + 12;
+
+  const canvas = document.createElement('canvas');
+  canvas.width  = totalW;
+  canvas.height = totalH;
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#fff';
+  ctx.fillRect(0, 0, totalW, totalH);
+
+  if (productImgData) {
+    const dh = Math.round(productImgData.h * (imgW / productImgData.w));
+    ctx.drawImage(productImgData.ctx.canvas, 0, 6, imgW, dh);
+  }
+
+  ctx.textBaseline = 'top';
+  let y = 6;
+
+  ctx.fillStyle = '#111';
+  ctx.font = 'bold ' + brandSize + 'px "Noto Sans JP", sans-serif';
+  ctx.fillText(prod.brand, textX, y);
+  y += brandSize * 1.4;
+
+  ctx.font = 'bold ' + nameSize + 'px "Noto Sans JP", sans-serif';
+  for (const line of nameLines) {
+    ctx.fillText(line, textX, y);
+    y += nameSize * 1.4;
+  }
+  y += 6;
+
+  ctx.fillStyle = '#444';
+  ctx.font = descSize + 'px "Noto Sans JP", sans-serif';
+  for (const line of descLines) {
+    ctx.fillText(line, textX, y);
+    y += descSize * 1.5;
+  }
+
+  return { ctx, w: totalW, h: totalH };
+}
+
 /** コマンド組み立て & 送信 */
-function _sendWebPRNTRequest(r, printerUrl, charaImg, productImg, cosmeQrImg, xQrImg) {
+function _sendWebPRNTRequest(r, printerUrl, charaImg, productRowImg, cosmeQrImg, xQrImg) {
   const builder = new StarWebPrintBuilder();
-  const prod = eventConfig.products[r.category];
   let request = '';
 
   request += builder.createInitializationElement();
   request += builder.createAlignmentElement({ position: 'center' });
 
   // イベントヘッダー
-  request += builder.createFeedElement({ line: 1 });
   request += builder.createTextElement({ codepage: 'utf8', data: '@cosme TOKYO\n' });
   request += builder.createTextElement({ codepage: 'utf8', data: 'SHISEIDO POPUP EVENT\n' });
   request += builder.createTextElement({ emphasis: true, width: 2, height: 1,
@@ -783,7 +870,6 @@ function _sendWebPRNTRequest(r, printerUrl, charaImg, productImg, cosmeQrImg, xQ
     codepage: 'utf8', data: '素肌美キャラ占い\n' });
   request += builder.createTextElement({ emphasis: false, width: 1, height: 1,
     codepage: 'utf8', data: '' });
-  request += builder.createFeedElement({ line: 1 });
 
   // 診断結果タイトル
   request += builder.createTextElement({ codepage: 'utf8',
@@ -791,75 +877,56 @@ function _sendWebPRNTRequest(r, printerUrl, charaImg, productImg, cosmeQrImg, xQ
   request += builder.createTextElement({ codepage: 'utf8', data: '　　　診断結果\n' });
   request += builder.createTextElement({ codepage: 'utf8',
     data: '================================\n' });
-  request += builder.createFeedElement({ line: 1 });
 
   // 結果名（2倍サイズ・太字）
   request += builder.createTextElement({ emphasis: true, width: 2, height: 2,
     codepage: 'utf8', data: r.name + '\n' });
-  request += builder.createFeedElement({ line: 1 });
   request += builder.createTextElement({ emphasis: false, width: 1, height: 1,
     codepage: 'utf8', data: state.subMessage + '\n' });
-  request += builder.createFeedElement({ line: 2 });
+  request += builder.createFeedElement({ line: 1 });
 
   // キャラクターイラスト
   if (charaImg) {
     request += builder.createBitImageElement({
       context: charaImg.ctx, x: 0, y: 0, width: charaImg.w, height: charaImg.h });
-    request += builder.createFeedElement({ line: 2 });
+    request += builder.createFeedElement({ line: 1 });
   }
 
   request += builder.createTextElement({ codepage: 'utf8',
     data: '--------------------------------\n' });
-  request += builder.createFeedElement({ line: 1 });
 
-  // 運勢（センタリング）
+  // 運勢
   request += builder.createTextElement({ codepage: 'utf8', data: '仕事運  ' + state.luck.work  + '\n' });
   request += builder.createTextElement({ codepage: 'utf8', data: '恋愛運  ' + state.luck.love  + '\n' });
   request += builder.createTextElement({ codepage: 'utf8', data: '金　運  ' + state.luck.money + '\n' });
-  request += builder.createFeedElement({ line: 1 });
 
-  // おすすめ商品
+  // おすすめ商品（合成キャンバス）
   request += builder.createTextElement({ codepage: 'utf8',
     data: '--------------------------------\n' });
-  request += builder.createFeedElement({ line: 1 });
   request += builder.createTextElement({ codepage: 'utf8', data: 'あなたにおすすめなのは・・・\n' });
   request += builder.createFeedElement({ line: 1 });
-  request += builder.createTextElement({ emphasis: true, codepage: 'utf8',
-    data: prod.brand + '\n' });
-  request += builder.createTextElement({ emphasis: true, codepage: 'utf8',
-    data: prod.name.replace(/\n/g, '') + '\n' });
-  request += builder.createFeedElement({ line: 1 });
-  request += builder.createTextElement({ emphasis: false, codepage: 'utf8',
-    data: prod.desc.replace(/\n/g, ' ') + '\n' });
-  request += builder.createFeedElement({ line: 2 });
-
-  // 商品イラスト
-  if (productImg) {
+  if (productRowImg) {
     request += builder.createBitImageElement({
-      context: productImg.ctx, x: 0, y: 0, width: productImg.w, height: productImg.h });
-    request += builder.createFeedElement({ line: 2 });
+      context: productRowImg.ctx, x: 0, y: 0, width: productRowImg.w, height: productRowImg.h });
+    request += builder.createFeedElement({ line: 1 });
   }
 
   // @cosme QRセクション
   request += builder.createTextElement({ codepage: 'utf8',
     data: '--------------------------------\n' });
-  request += builder.createFeedElement({ line: 1 });
   request += builder.createTextElement({ codepage: 'utf8',
     data: 'アイテムをゲットしたい方はこちら！\n' });
-  request += builder.createFeedElement({ line: 1 });
   if (cosmeQrImg) {
     request += builder.createBitImageElement({
       context: cosmeQrImg.ctx, x: 0, y: 0, width: cosmeQrImg.w, height: cosmeQrImg.h });
-    request += builder.createFeedElement({ line: 2 });
+    request += builder.createFeedElement({ line: 1 });
   }
 
   // X QRセクション（ハッシュタグ付き）
   request += builder.createTextElement({ codepage: 'utf8',
     data: '--------------------------------\n' });
-  request += builder.createFeedElement({ line: 1 });
   request += builder.createTextElement({ codepage: 'utf8',
     data: '診断結果をシェアしてね！\n' });
-  request += builder.createFeedElement({ line: 1 });
   if (xQrImg) {
     request += builder.createBitImageElement({
       context: xQrImg.ctx, x: 0, y: 0, width: xQrImg.w, height: xQrImg.h });
@@ -869,13 +936,11 @@ function _sendWebPRNTRequest(r, printerUrl, charaImg, productImg, cosmeQrImg, xQ
     ? '#SHISEIDO\n#２つのファンデ美容液体験\n#アットコスメトーキョー\n#エッセンススキングロウファンデーション\n７月１日（水）～７月７日（火）\n原宿 @cosmeTOKYOで\nPOPUPイベント実施中！\n[POPUPでの写真・感想を入れて投稿してね！]\n'
     : '#SHISEIDO\n#２つのファンデ美容液体験\n#アットコスメトーキョー\n#エッセンススキンスムースファンデーション\n７月１日（水）～７月７日（火）\n原宿 @cosmeTOKYOで\nPOPUPイベント実施中！\n[POPUPでの写真・感想を入れて投稿してね！]\n';
   request += builder.createTextElement({ codepage: 'utf8', data: xHashtags });
-  request += builder.createFeedElement({ line: 1 });
 
   // フッター
   request += builder.createTextElement({ codepage: 'utf8',
     data: '================================\n' });
   request += builder.createTextElement({ codepage: 'utf8', data: state.message + '\n' });
-  request += builder.createFeedElement({ line: 1 });
   request += builder.createTextElement({ emphasis: true, codepage: 'utf8',
     data: 'SHISEIDO\n' });
   request += builder.createTextElement({ emphasis: false, codepage: 'utf8',
