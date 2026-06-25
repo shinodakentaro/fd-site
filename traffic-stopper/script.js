@@ -734,6 +734,34 @@ function _loadImageCanvas(src, targetWidth) {
   });
 }
 
+/** キャンバス画像の上下白余白を除去して返す */
+function _trimCanvasVertical(imgData) {
+  if (!imgData) return null;
+  const { ctx, w, h } = imgData;
+  const pixels = ctx.getImageData(0, 0, w, h).data;
+  let top = 0, bottom = h - 1;
+  outer: for (let y = 0; y < h; y++) {
+    for (let x = 0; x < w; x++) {
+      const i = (y * w + x) * 4;
+      if (pixels[i] < 250 || pixels[i + 1] < 250 || pixels[i + 2] < 250) { top = y; break outer; }
+    }
+  }
+  outer: for (let y = h - 1; y >= 0; y--) {
+    for (let x = 0; x < w; x++) {
+      const i = (y * w + x) * 4;
+      if (pixels[i] < 250 || pixels[i + 1] < 250 || pixels[i + 2] < 250) { bottom = y; break outer; }
+    }
+  }
+  const croppedH = bottom - top + 1;
+  const canvas = document.createElement('canvas');
+  canvas.width = w; canvas.height = croppedH;
+  const newCtx = canvas.getContext('2d');
+  newCtx.fillStyle = '#fff';
+  newCtx.fillRect(0, 0, w, croppedH);
+  newCtx.drawImage(ctx.canvas, 0, top, w, croppedH, 0, 0, w, croppedH);
+  return { ctx: newCtx, w, h: croppedH };
+}
+
 /** Star WebPRNT Browser 経由で mC-Print3 に送信
  *  キャラ画像・商品イラストを並行ロードしてからコマンドを組み立てる */
 function printByWebPRNT() {
@@ -760,8 +788,9 @@ function printByWebPRNT() {
     _loadImageCanvas(cosmeQrPath, 300),
     _loadImageCanvas(xQrPath, 300),
   ]).then(function (images) {
+    const charaImg       = _trimCanvasVertical(images[0]);
     const productRowCanvas = _buildProductRowCanvas(r, images[1]);
-    _sendWebPRNTRequest(r, printerUrl, images[0], productRowCanvas, images[2], images[3]);
+    _sendWebPRNTRequest(r, printerUrl, charaImg, productRowCanvas, images[2], images[3]);
   });
 }
 
@@ -883,13 +912,11 @@ function _sendWebPRNTRequest(r, printerUrl, charaImg, productRowImg, cosmeQrImg,
     codepage: 'utf8', data: r.name + '\n' });
   request += builder.createTextElement({ emphasis: false, width: 1, height: 1,
     codepage: 'utf8', data: state.subMessage + '\n' });
-  request += builder.createFeedElement({ line: 1 });
 
-  // キャラクターイラスト
+  // キャラクターイラスト（上下余白トリム済み）
   if (charaImg) {
     request += builder.createBitImageElement({
       context: charaImg.ctx, x: 0, y: 0, width: charaImg.w, height: charaImg.h });
-    request += builder.createFeedElement({ line: 1 });
   }
 
   request += builder.createTextElement({ codepage: 'utf8',
