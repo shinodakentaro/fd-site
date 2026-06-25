@@ -4,73 +4,35 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>GLOW vs SMOOTH BATTLE</title>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@500;700;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
 <!-- 背景レイヤー -->
-<div class="bg-full-layer">
-  <img src="../assets/bg/bg_full.png" alt="" />
-</div>
-<div class="bg-2-layer">
-  <img src="../assets/bg/bg_2.svg" alt="" />
-</div>
+<div class="bg-display-layer"></div>
 
-<!-- Canvas パーティクル -->
-<canvas id="particle-canvas"></canvas>
+<!-- GLOW: キャラ＋吹き出し -->
+<img src="../assets/images/G_character1.png" class="sg-chara sg-chara-glow" alt="" />
+<img src="../assets/images/G_comment1.png" class="sg-comment sg-comment-glow" alt="" />
 
-<!-- ===== 全幅ヘッダー ===== -->
-<div class="sg-header">
-  <h1 class="sg-title">みんなはどっち派？</h1>
-  <p class="sg-subtitle">会場のみんなが選んだ お気に入りの仕上がりを リアルタイム集計中</p>
+<!-- GLOW 票数 -->
+<div class="sg-vote sg-vote-glow">
+  <span id="glow-num">0</span><span class="sg-unit">票</span>
 </div>
 
-<div class="sg-root">
-
-  <!-- ===== GLOW ZONE (左) ===== -->
-  <div class="sg-zone sg-zone-glow">
-    <p class="sg-team-label">GLOW チーム</p>
-    <div class="sg-count-block">
-      <span class="sg-count-type">ツヤ派</span>
-      <div class="sg-count-row">
-        <span class="sg-count-num" id="glow-num">0</span>
-        <span class="sg-count-unit">票</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- ===== CENTER ===== -->
-  <div class="sg-center">
-    <div class="sg-vs">VS</div>
-    <div class="sg-bar-wrap">
-      <div class="sg-bar-glow"   id="bar-glow"   style="width:50%"></div>
-      <div class="sg-bar-smooth" id="bar-smooth" style="width:50%"></div>
-    </div>
-    <div class="sg-pct-row">
-      <span class="sg-pct sg-pct-glow"   id="pct-glow">50%</span>
-      <span class="sg-pct sg-pct-smooth" id="pct-smooth">50%</span>
-    </div>
-  </div>
-
-  <!-- ===== SMOOTH ZONE (右) ===== -->
-  <div class="sg-zone sg-zone-smooth">
-    <p class="sg-team-label">SMOOTH チーム</p>
-    <div class="sg-count-block">
-      <span class="sg-count-type">なめらか派</span>
-      <div class="sg-count-row">
-        <span class="sg-count-num" id="smooth-num">0</span>
-        <span class="sg-count-unit">票</span>
-      </div>
-    </div>
-  </div>
-
+<!-- 投票総数（中央の白い円内） -->
+<div class="sg-total">
+  <span id="total-num">0</span><span class="sg-unit-sm">票</span>
 </div>
 
-<!-- ===== 下部バー ===== -->
-<div class="sg-bottom">
-  <p class="sg-lead" id="sg-lead">現在は <span id="sg-lead-name">ツヤ派</span> がリード中！</p>
-  <p class="sg-cta">あなたの一票で結果が変わるかも？</p>
+<!-- SMOOTH: キャラ＋吹き出し -->
+<img src="../assets/images/S_comment1.png" class="sg-comment sg-comment-smooth" alt="" />
+<img src="../assets/images/S_character1.png" class="sg-chara sg-chara-smooth" alt="" />
+
+<!-- SMOOTH 票数 -->
+<div class="sg-vote sg-vote-smooth">
+  <span id="smooth-num">0</span><span class="sg-unit">票</span>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>

@@ -10,272 +10,159 @@ body {
   width: 100vw;
   height: 100vh;
   overflow: hidden;
-  background: #fff;
   position: relative;
 }
 
-/* ── bg_full アニメーション背景 ── */
-.bg-full-layer {
-  position: fixed;
-  width: 172.8vw;
-  height: 172.8vh;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  pointer-events: none;
-  z-index: 0;
-  animation: floatBg 48s ease-in-out infinite;
-}
-.bg-full-layer img {
-  width: 100%; height: 100%;
-  object-fit: contain;
-}
-
-@keyframes floatBg {
-  0%   { transform: translate(-50%, -50%)  scale(1)    rotate(0deg); }
-  12%  { transform: translate(-47%, -53%)  scale(1.03) rotate(2deg); }
-  25%  { transform: translate(-52%, -48%)  scale(0.98) rotate(-1deg); }
-  37%  { transform: translate(-48%, -52%)  scale(1.02) rotate(3deg); }
-  50%  { transform: translate(-53%, -47%)  scale(0.97) rotate(-2deg); }
-  62%  { transform: translate(-49%, -51%)  scale(1.03) rotate(1.5deg); }
-  75%  { transform: translate(-51%, -53%)  scale(0.98) rotate(-1.5deg); }
-  87%  { transform: translate(-48%, -49%)  scale(1.02) rotate(2.5deg); }
-  100% { transform: translate(-50%, -50%)  scale(1)    rotate(0deg); }
-}
-
-/* ── bg_2 ── */
-.bg-2-layer {
-  position: fixed;
-  width: 3016px;
-  height: 3016px;
-  top: -800px;
-  left: -1400px;
-  pointer-events: none;
-  z-index: 0;
-}
-.bg-2-layer img { width: 100%; height: 100%; }
-
-/* ── Canvas ── */
-#particle-canvas {
+/* ── display_bg 背景 ── */
+.bg-display-layer {
   position: fixed;
   inset: 0;
+  background: url('../assets/bg/display_bg.png') center center / cover no-repeat;
   pointer-events: none;
-  z-index: 1;
+  z-index: 0;
 }
 
-/* ── 全幅ヘッダー ── */
-.sg-header {
-  position: relative;
+/* ── キャラクター ── */
+.sg-chara {
+  position: fixed;
+  pointer-events: none;
   z-index: 2;
-  width: 100vw;
-  height: 160px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  padding: 120px 60px 0;
+  transition: opacity 0.5s ease;
+}
+.sg-chara-glow {
+  left: 1.5%;
+  top: 55%;
+  width: 12%;
+}
+.sg-chara-smooth {
+  left: 83%;
+  top: 55%;
+  width: 15%;
 }
 
-/* ── ルートレイアウト ── */
-.sg-root {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  align-items: stretch;
-  width: 100vw;
-  height: calc(100vh - 160px - 140px);
+/* ── 吹き出し ── */
+.sg-comment {
+  position: fixed;
+  pointer-events: none;
+  z-index: 3;
+  transition: opacity 0.5s ease;
+  animation: bubble-float 2s ease-in-out infinite;
+}
+.sg-comment-glow {
+  left: 13%;
+  top: 43%;
+  width: 18%;
+}
+.sg-comment-smooth {
+  left: 70%;
+  top: 43%;
+  width: 19%;
+  animation-delay: -1s;
+}
+@keyframes bubble-float {
+  0%, 100% { transform: translateY(0)    rotate(-1.5deg); }
+  25%       { transform: translateY(-10px) rotate(1.5deg);  }
+  75%       { transform: translateY(-5px)  rotate(-0.5deg); }
 }
 
-/* ========================================
-   ゾーン（左右）
-   ======================================== */
-.sg-zone {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 40px;
-  gap: 20px;
-}
-
-.sg-team-label {
-  font-size: 36px;
-  font-weight: 500;
-  color: #ab886a;
-  letter-spacing: 2px;
-  opacity: 0.7;
-}
-
-.sg-count-block {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-}
-
-.sg-count-type {
-  font-size: 44px;
-  font-weight: 500;
-  color: #ab886a;
-  letter-spacing: 2.2px;
-}
-
-.sg-count-row {
+/* ── GLOW / SMOOTH 票数 ── */
+.sg-vote {
+  position: fixed;
+  z-index: 4;
   display: flex;
   align-items: baseline;
-  gap: 8px;
+  gap: 0.12em;
 }
-
-.sg-count-num {
-  font-size: 120px;
-  font-weight: 500;
-  color: #ab886a;
+.sg-vote span:first-child {
+  font-size: 10vw;
+  font-weight: 900;
   line-height: 1;
-  letter-spacing: -2px;
+  letter-spacing: -0.03em;
+}
+.sg-unit {
+  font-size: 2.5vw;
+  font-weight: 700;
+}
+.sg-vote-glow {
+  left: 17%;
+  top: 73%;
+  color: #d42b2b;
+  border-bottom: 4px solid #d42b2b;
+  padding-bottom: 8px;
+}
+.sg-vote-glow .sg-unit {
+  color: #1a1a1a;
+}
+.sg-vote-smooth {
+  left: 79%;
+  top: 73%;
+  color: #1a1a1a;
+  border-bottom: 4px solid #1a1a1a;
+  padding-bottom: 8px;
 }
 
-@keyframes count-pop {
-  0%   { transform: scale(1.15); }
-  100% { transform: scale(1); }
-}
-
-.sg-count-unit {
-  font-size: 40px;
-  font-weight: 500;
-  color: #ab886a;
-  opacity: 0.7;
-}
-
-
-/* ========================================
-   中央
-   ======================================== */
-.sg-center {
-  width: 340px;
-  flex-shrink: 0;
+/* ── 投票総数（中央円内） ── */
+.sg-total {
+  position: fixed;
+  z-index: 4;
+  left: 50%;
+  top: 80%;
+  transform: translateX(-50%);
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 20px;
-  padding: 20px 0;
-}
-
-.sg-title {
-  font-size: 60px;
-  font-weight: 500;
-  color: #ab886a;
-  letter-spacing: 3px;
-  text-align: center;
+  align-items: baseline;
+  gap: 0.12em;
+  color: #d42b2b;
   white-space: nowrap;
+}
+.sg-total span:first-child {
+  font-size: 6vw;
+  font-weight: 900;
   line-height: 1;
+  letter-spacing: -0.03em;
 }
-.sg-subtitle {
-  font-size: 20px;
-  font-weight: 500;
-  color: #ab886a;
-  letter-spacing: 1px;
-  text-align: center;
-  opacity: 0.7;
+.sg-unit-sm {
+  font-size: 1.8vw;
+  font-weight: 700;
+  color: #1a1a1a;
 }
 
-.sg-vs {
-  font-size: 80px;
-  font-weight: 500;
-  color: #ab886a;
-  letter-spacing: 4px;
-  line-height: 1;
-  opacity: 0.4;
-}
-
-/* バーグラフ */
-.sg-bar-wrap {
-  width: 280px;
-  height: 16px;
-  border-radius: 8px;
-  overflow: hidden;
-  display: flex;
-  background: rgba(171, 136, 106, 0.15);
-}
-
-.sg-bar-glow,
-.sg-bar-smooth {
-  height: 100%;
-  transition: width 0.8s cubic-bezier(.4,0,.2,1);
-}
-.sg-bar-glow   { background: #ab886a; }
-.sg-bar-smooth { background: rgba(171, 136, 106, 0.4); }
-
-/* パーセント */
-.sg-pct-row {
-  width: 280px;
-  display: flex;
-  justify-content: space-between;
-}
-.sg-pct {
-  font-size: 24px;
-  font-weight: 500;
-  color: #ab886a;
-  letter-spacing: 1px;
-  opacity: 0.7;
-}
-
-/* ========================================
-   下部バー
-   ======================================== */
-.sg-bottom {
+/* ── 紙吹雪 ── */
+.confetti {
   position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100vw;
-  height: 140px;
-  z-index: 3;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  background: rgba(255, 255, 255, 0.55);
-  backdrop-filter: blur(12px);
-  border-top: 1px solid rgba(171, 136, 106, 0.2);
-}
-
-.sg-lead {
-  font-size: 40px;
-  font-weight: 500;
-  color: #ab886a;
-  letter-spacing: 2px;
-}
-
-@keyframes lead-pulse {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0.5; }
-}
-.sg-lead.updated {
-  animation: lead-pulse 1s ease-in-out;
-}
-
-.sg-cta {
-  font-size: 26px;
-  font-weight: 500;
-  color: #ab886a;
-  letter-spacing: 1.3px;
-  opacity: 0.6;
-}
-
-/* ========================================
-   投票バースト演出
-   ======================================== */
-.vote-burst {
-  position: fixed;
-  border-radius: 50%;
+  top: -16px;
   pointer-events: none;
   z-index: 10;
-  animation: burst-fly 0.8s ease-out forwards;
 }
-@keyframes burst-fly {
-  0%   { opacity: 1; transform: translate(0, 0) scale(1); }
-  100% { opacity: 0; transform: translate(var(--tx), var(--ty)) scale(0); }
+@keyframes confetti-fall {
+  0%   { transform: translateY(0) translateX(0) rotate(0deg); opacity: 1; }
+  85%  { opacity: 1; }
+  100% { transform: translateY(110vh) translateX(var(--drift)) rotate(calc(var(--rot) * 4)); opacity: 0; }
+}
+
+/* ── ハート・星パーティクル ── */
+.particle {
+  position: fixed;
+  pointer-events: none;
+  z-index: 11;
+  font-size: var(--size);
+  line-height: 1;
+  animation: particle-burst var(--dur) ease-out var(--delay) forwards;
+  opacity: 0;
+}
+@keyframes particle-burst {
+  0%   { transform: translate(0, 0) scale(0.4) rotate(0deg); opacity: 1; }
+  60%  { opacity: 1; }
+  100% { transform: translate(var(--tx), var(--ty)) scale(1) rotate(var(--rot)); opacity: 0; }
+}
+
+/* ── 数字バウンス＋光彩 ── */
+@keyframes count-pop-glow {
+  0%   { transform: scale(1.22); text-shadow: 0 0 40px rgba(212,43,43,.9), 0 0 80px rgba(212,43,43,.5); }
+  60%  { transform: scale(0.96); text-shadow: 0 0 20px rgba(212,43,43,.4); }
+  100% { transform: scale(1);    text-shadow: none; }
+}
+@keyframes count-pop-dark {
+  0%   { transform: scale(1.22); text-shadow: 0 0 40px rgba(26,26,26,.7), 0 0 80px rgba(26,26,26,.3); }
+  60%  { transform: scale(0.96); text-shadow: 0 0 20px rgba(26,26,26,.2); }
+  100% { transform: scale(1);    text-shadow: none; }
 }

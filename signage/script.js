@@ -2,181 +2,124 @@
    GLOW vs SMOOTH サイネージ
    ======================================== */
 
-let monData     = { glow: 0, smooth: 0, updatedAt: 0 };
-let isFirstLoad = true;
+let prevData   = null;
+let charaIndex = 0;
+const CHARA_COUNT = 3;
 
-/* ----------------------------------------
-   初期化
-   ---------------------------------------- */
+function cycleAssets() {
+  charaIndex = (charaIndex + 1) % CHARA_COUNT;
+  const idx = charaIndex + 1;
+
+  const els = [
+    document.querySelector('.sg-chara-glow'),
+    document.querySelector('.sg-comment-glow'),
+    document.querySelector('.sg-comment-smooth'),
+    document.querySelector('.sg-chara-smooth'),
+  ];
+
+  els.forEach(el => { if (el) el.style.opacity = '0'; });
+
+  setTimeout(() => {
+    const [gChara, gComment, sComment, sChara] = els;
+    if (gChara)   gChara.src   = `../assets/images/G_character${idx}.png`;
+    if (gComment) gComment.src = `../assets/images/G_comment${idx}.png`;
+    if (sComment) sComment.src = `../assets/images/S_comment${idx}.png`;
+    if (sChara)   sChara.src   = `../assets/images/S_character${idx}.png`;
+    els.forEach(el => { if (el) el.style.opacity = '1'; });
+  }, 500);
+}
+
 function init() {
-  initCanvas();
+  setInterval(cycleAssets, 30000);
 
   VoteStore.subscribe(data => {
-    if (isFirstLoad) {
-      // 初回: アニメーションなしで表示
-      monData     = data;
-      isFirstLoad = false;
-      updateDisplay(false);
-    } else {
-      // 以降: 差分を見てバースト演出
-      const type =
-        data.glow   > (monData.glow   || 0) ? 'glow'   :
-        data.smooth > (monData.smooth || 0) ? 'smooth' : null;
-      monData = data;
-      if (type) {
-        spawnVoteBurst(type);
-        setTimeout(() => updateDisplay(true), 600);
-      } else {
-        updateDisplay(false);
-      }
+    const { glow = 0, smooth = 0 } = data;
+    const fmt = n => n.toLocaleString('ja-JP');
+
+    if (prevData !== null) {
+      if (glow   > prevData.glow)   { spawnConfetti('glow');   spawnParticles('glow'); }
+      if (smooth > prevData.smooth) { spawnConfetti('smooth'); spawnParticles('smooth'); }
     }
+    prevData = { glow, smooth };
+
+    updateNum('glow-num',   fmt(glow),         'count-pop-glow');
+    updateNum('smooth-num', fmt(smooth),        'count-pop-glow');
+    updateNum('total-num',  fmt(glow + smooth), 'count-pop-glow');
   });
-
 }
 
-/* ----------------------------------------
-   表示更新
-   ---------------------------------------- */
-function updateDisplay(animated) {
-  const { glow = 0, smooth = 0 } = monData;
-  const total     = glow + smooth;
-  const glowPct   = total > 0 ? Math.round((glow   / total) * 100) : 50;
-  const smoothPct = 100 - glowPct;
-
-  const fmt = n => n.toLocaleString('ja-JP');
-
-  const animNum = (id, val) => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    if (animated && el.textContent !== fmt(val)) {
-      el.style.animation = 'none';
-      void el.offsetHeight;
-      el.style.animation = 'count-pop .4s ease-out';
-    }
-    el.textContent = fmt(val);
-  };
-
-  animNum('glow-num',   glow);
-  animNum('smooth-num', smooth);
-
-  document.getElementById('pct-glow').textContent      = glowPct   + '%';
-  document.getElementById('pct-smooth').textContent    = smoothPct + '%';
-  document.getElementById('bar-glow').style.width      = glowPct   + '%';
-  document.getElementById('bar-smooth').style.width    = smoothPct + '%';
-
-  updateLead(glow, smooth, animated);
+function updateNum(id, val, anim) {
+  const el = document.getElementById(id);
+  if (!el || el.textContent === val) return;
+  el.style.animation = 'none';
+  void el.offsetHeight;
+  el.style.animation = `${anim} .5s ease-out`;
+  el.textContent = val;
 }
 
-/* ----------------------------------------
-   リード表示更新
-   ---------------------------------------- */
-function updateLead(glow, smooth, animated) {
-  const leadEl = document.getElementById('sg-lead');
-  if (!leadEl) return;
+function spawnConfetti(type) {
+  const isGlow = type === 'glow';
+  const colors = ['#d42b2b', '#e05555', '#ff9999', '#ffcccc', '#ffffff', '#ffaaaa'];
+  const xMin = isGlow ? 0 : 50;
+  const xMax = isGlow ? 50 : 100;
 
-  leadEl.style.visibility = 'visible';
+  for (let i = 0; i < 55; i++) {
+    const el    = document.createElement('div');
+    el.className = 'confetti';
+    const w     = 6 + Math.random() * 10;
+    const h     = Math.random() > 0.5 ? w * 0.4 : w;
+    const x     = xMin + Math.random() * (xMax - xMin);
+    const delay = Math.random() * 0.6;
+    const dur   = 2.2 + Math.random() * 1.4;
+    const drift = (Math.random() - 0.5) * 180;
+    const rot   = Math.random() * 360;
 
-  if (glow === smooth) {
-    leadEl.textContent = '現在同点！';
-    return;
-  }
-
-  // 同点時に span が削除されている場合があるので、ここで再取得する
-  const name       = glow > smooth ? 'ツヤ派' : 'なめらか派';
-  const leadNameEl = document.getElementById('sg-lead-name');
-  if (!leadNameEl || leadNameEl.textContent !== name) {
-    leadEl.innerHTML = `現在は <span id="sg-lead-name">${name}</span> がリード中！`;
-    if (animated) {
-      leadEl.classList.remove('updated');
-      void leadEl.offsetHeight;
-      leadEl.classList.add('updated');
-    }
-  }
-}
-
-/* ----------------------------------------
-   新規投票バースト演出
-   ---------------------------------------- */
-function spawnVoteBurst(type) {
-  const colors = ['#ab886a', '#f5e0c8', '#e8c9a8', '#ffffff', '#d4a87a', '#f9c8d4'];
-  const cx = window.innerWidth  / 2;
-  const cy = window.innerHeight / 2;
-  const tx = type === 'glow' ? -window.innerWidth * .28 : window.innerWidth * .28;
-
-  for (let i = 0; i < 30; i++) {
-    const p    = document.createElement('div');
-    p.className = 'vote-burst';
-    const size = 5 + Math.random() * 14;
-    p.style.cssText = `
-      left: ${cx + (Math.random() - .5) * 120}px;
-      top:  ${cy + (Math.random() - .5) * 120}px;
-      width: ${size}px; height: ${size}px;
-      background: ${colors[i % colors.length]};
-      --tx: ${tx + (Math.random() - .5) * 100}px;
-      --ty: ${(Math.random() - .5) * 200}px;
-      animation-delay: ${Math.random() * .3}s;
-      animation-duration: ${.6 + Math.random() * .5}s;
+    el.style.cssText = `
+      left: ${x}vw;
+      width: ${w}px;
+      height: ${h}px;
+      background: ${colors[Math.floor(Math.random() * colors.length)]};
+      border-radius: ${h === w ? '50%' : '2px'};
+      animation: confetti-fall ${dur}s ease-in ${delay}s forwards;
+      --drift: ${drift}px;
+      --rot: ${rot}deg;
     `;
-    document.body.appendChild(p);
-    setTimeout(() => p.remove(), 1200);
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), (delay + dur + 0.2) * 1000);
   }
 }
 
-/* ----------------------------------------
-   Canvas パーティクル（常時演出）
-   ---------------------------------------- */
-function initCanvas() {
-  const canvas = document.getElementById('particle-canvas');
-  const ctx    = canvas.getContext('2d');
+function spawnParticles(type) {
+  const symbols = ['❤', '❤', '★', '★', '✦', '✧', '💕', '✨'];
+  const isGlow  = type === 'glow';
+  // 発生源: 票数の数字あたり
+  const originX = isGlow ? window.innerWidth * 0.25 : window.innerWidth * 0.82;
+  const originY = window.innerHeight * 0.78;
 
-  function resize() {
-    canvas.width  = window.innerWidth;
-    canvas.height = window.innerHeight;
+  for (let i = 0; i < 20; i++) {
+    const el     = document.createElement('span');
+    el.className = 'particle';
+    const angle  = (Math.random() * 220 - 110) * (Math.PI / 180); // 上方向に広がる扇形
+    const dist   = 120 + Math.random() * 260;
+    const size   = 20 + Math.random() * 28;
+    const dur    = 0.8 + Math.random() * 0.7;
+    const delay  = Math.random() * 0.35;
+
+    el.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+    el.style.cssText = `
+      left: ${originX + (Math.random() - 0.5) * 60}px;
+      top:  ${originY + (Math.random() - 0.5) * 40}px;
+      --size: ${size}px;
+      --tx: ${Math.sin(angle) * dist}px;
+      --ty: ${-Math.abs(Math.cos(angle)) * dist}px;
+      --rot: ${(Math.random() - 0.5) * 60}deg;
+      --dur: ${dur}s;
+      --delay: ${delay}s;
+      color: ${['#d42b2b','#ff6b6b','#ff9999','#ffffff'][Math.floor(Math.random() * 4)]};
+    `;
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), (delay + dur + 0.1) * 1000);
   }
-  resize();
-  window.addEventListener('resize', resize);
-
-  const particles = [];
-  for (let i = 0; i < 80; i++) particles.push(makeParticle(true));
-
-  function makeParticle(random) {
-    return {
-      x:     random ? Math.random() * canvas.width : Math.random() * canvas.width,
-      y:     random ? Math.random() * canvas.height : canvas.height + 20,
-      vx:    (Math.random() - .5) * .4,
-      vy:    -.4 - Math.random() * .6,
-      size:  1.5 + Math.random() * 3,
-      alpha: .1 + Math.random() * .35,
-      life:  Math.random(),
-      decay: .0015 + Math.random() * .002,
-    };
-  }
-
-  function loop() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    particles.forEach((p, i) => {
-      p.x += p.vx; p.y += p.vy; p.life -= p.decay;
-      if (p.life <= 0 || p.y < -20) { particles[i] = makeParticle(false); return; }
-
-      ctx.save();
-      ctx.globalAlpha = p.alpha * p.life;
-      ctx.fillStyle   = '#d4a87a';
-      ctx.shadowColor = '#ab886a';
-      ctx.shadowBlur  = 4;
-      ctx.beginPath();
-      ctx.moveTo(p.x, p.y - p.size * 2);
-      ctx.lineTo(p.x, p.y + p.size * 2);
-      ctx.moveTo(p.x - p.size * 2, p.y);
-      ctx.lineTo(p.x + p.size * 2, p.y);
-      ctx.strokeStyle = '#d4a87a';
-      ctx.lineWidth   = p.size * .6;
-      ctx.stroke();
-      ctx.restore();
-    });
-    requestAnimationFrame(loop);
-  }
-  loop();
 }
-
 
 document.addEventListener('DOMContentLoaded', init);
