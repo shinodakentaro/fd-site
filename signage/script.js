@@ -11,8 +11,8 @@ const glowCharaTop = ['45%', '45%', '45%'];
 
 // 吹き出しごとの個別サイズ（width）
 // index=0:comment1, 1:comment2, 2:comment3
-const glowCommentWidths   = ['15%', '18%', '24%'];  // G1丸大文字→小, G2雲型, G3横長→大
-const smoothCommentWidths = ['19%', '22%', '18%'];  // S1基準, S2横長, S3丸型
+const glowCommentWidths   = ['15%', '18%', '19%'];  // G1丸大文字→小, G2雲型, G3横長→大
+const smoothCommentWidths = ['19%', '18%', '18%'];  // S1基準, S2横長, S3丸型
 
 function applyCommentWidths(i) {
   const gComment = document.querySelector('.sg-comment-glow');
