@@ -802,9 +802,10 @@ function printByWebPRNT() {
 function _buildProductRowCanvas(r, productImgData) {
   const prod   = eventConfig.products[r.category];
   const totalW = 560;
+  const leftPad = 40;
   const imgW   = 80;
   const gap    = 14;
-  const textX  = imgW + gap;
+  const textX  = leftPad + imgW + gap;
   const textW  = totalW - textX - 4;
 
   const brandSize = 22;
@@ -855,7 +856,7 @@ function _buildProductRowCanvas(r, productImgData) {
 
   if (productImgData) {
     const dh = Math.round(productImgData.h * (imgW / productImgData.w));
-    ctx.drawImage(productImgData.ctx.canvas, 0, 6, imgW, dh);
+    ctx.drawImage(productImgData.ctx.canvas, leftPad, 6, imgW, dh);
   }
 
   ctx.textBaseline = 'top';
