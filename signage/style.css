@@ -26,7 +26,7 @@ body {
 .sg-chara {
   position: fixed;
   pointer-events: none;
-  z-index: 2;
+  z-index: 3;
   transition: opacity 0.5s ease;
 }
 .sg-chara-glow {
@@ -44,7 +44,7 @@ body {
 .sg-comment {
   position: fixed;
   pointer-events: none;
-  z-index: 3;
+  z-index: 2;
   transition: opacity 0.5s ease;
   animation: bubble-float 2s ease-in-out infinite;
 }
