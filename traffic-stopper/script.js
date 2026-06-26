@@ -773,8 +773,8 @@ function printByWebPRNT() {
     : 'http://localhost:8008/StarWebPRNT/SendMessage';
 
   const productImgPath = r.category === 'GLOW'
-    ? '../assets/receipt/glow_product.png'
-    : '../assets/receipt/smooth_product.png';
+    ? '../assets/receipt/レシートglow.png'
+    : '../assets/receipt/レシートsmooth.png';
   const cosmeQrPath = r.category === 'GLOW'
     ? '../assets/receipt/@cosme_glow.png'
     : '../assets/receipt/@cosme_smooth.png';
@@ -942,7 +942,7 @@ function _sendWebPRNTRequest(r, printerUrl, charaImg, productRowImg, cosmeQrImg,
   request += builder.createTextElement({ codepage: 'utf8',
     data: '--------------------------------\n' });
   request += builder.createTextElement({ codepage: 'utf8',
-    data: 'アイテムをゲットしたい方はこちら！\n' });
+    data: '商品詳細はこちら！\n' });
   if (cosmeQrImg) {
     request += builder.createBitImageElement({
       context: cosmeQrImg.ctx, x: 0, y: 0, width: cosmeQrImg.w, height: cosmeQrImg.h });
@@ -960,8 +960,8 @@ function _sendWebPRNTRequest(r, printerUrl, charaImg, productRowImg, cosmeQrImg,
     request += builder.createFeedElement({ line: 1 });
   }
   const xHashtags = r.category === 'GLOW'
-    ? '#SHISEIDO\n#２つのファンデ美容液体験\n#アットコスメトーキョー\n#エッセンススキングロウファンデーション\n７月１日（水）～７月７日（火）\n原宿 @cosmeTOKYOで\nPOPUPイベント実施中！\n[POPUPでの写真・感想を入れて投稿してね！]\n'
-    : '#SHISEIDO\n#２つのファンデ美容液体験\n#アットコスメトーキョー\n#エッセンススキンスムースファンデーション\n７月１日（水）～７月７日（火）\n原宿 @cosmeTOKYOで\nPOPUPイベント実施中！\n[POPUPでの写真・感想を入れて投稿してね！]\n';
+    ? '#SHISEIDO\n#２つのファンデ美容液体験\n#アットコスメトーキョー\n#エッセンススキングロウファンデーション\n'
+    : '#SHISEIDO\n#２つのファンデ美容液体験\n#アットコスメトーキョー\n#エッセンススキンスムースファンデーション\n';
   request += builder.createTextElement({ codepage: 'utf8', data: xHashtags });
 
   // フッター
