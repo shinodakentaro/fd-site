@@ -9,6 +9,10 @@ const CHARA_COUNT = 3;
 // キャラごとの個別位置オフセット（top） index=0:chara1, 1:chara2, 2:chara3
 const glowCharaTop = ['45%', '45%', '45%'];
 
+// SMOOTHキャラの表示順（コメントindexに対してどのS_characterを表示するか）
+// index0(毛穴・テカり)→S_character3(セルフィー), index1(肌ノイズ)→S_character2, index2(ノイズレス)→S_character1(マント)
+const smoothCharaOrder = [3, 2, 1];
+
 // 吹き出しごとの個別サイズ（width）
 // index=0:comment1, 1:comment2, 2:comment3
 const glowCommentWidths   = ['15%', '16%', '19%'];  // G1丸大文字→小, G2雲型, G3横長→大
@@ -39,7 +43,7 @@ function cycleAssets() {
     if (gChara)   { gChara.src = `../assets/images/G_character${idx}.png`; gChara.style.top = glowCharaTop[charaIndex]; }
     if (gComment) gComment.src = `../assets/images/G_comment${idx}.png`;
     if (sComment) sComment.src = `../assets/images/S_comment${idx}.png`;
-    if (sChara)   sChara.src   = `../assets/images/S_character${idx}.png`;
+    if (sChara)   sChara.src   = `../assets/images/S_character${smoothCharaOrder[charaIndex]}.png`;
     applyCommentWidths(charaIndex);
     els.forEach(el => { if (el) el.style.opacity = '1'; });
   }, 500);
