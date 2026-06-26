@@ -783,7 +783,7 @@ function printByWebPRNT() {
     : '../assets/receipt/qr_x_smooth.png';
 
   Promise.all([
-    _loadImageCanvas(r.imgPathMono, 500),
+    _loadImageCanvas(r.imgPathMono, 375),
     _loadImageCanvas(productImgPath, 200),
     _loadImageCanvas(cosmeQrPath, 300),
     _loadImageCanvas(xQrPath, 300),
