@@ -18,7 +18,7 @@ function castVote(type) {
 }
 
 function showDoneScreen(type) {
-  const label = type === 'glow' ? 'GLOW派！' : 'SMOOTH派！';
+  const label = type === 'glow' ? 'GLOW' : 'SMOOTH';
   document.getElementById('done-title').textContent = label;
 
   document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
