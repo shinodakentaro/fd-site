@@ -784,7 +784,7 @@ function printByWebPRNT() {
 
   Promise.all([
     _loadImageCanvas(r.imgPathMono, 375),
-    _loadImageCanvas(productImgPath, 200),
+    _loadImageCanvas(productImgPath, 120),
     _loadImageCanvas(cosmeQrPath, 300),
     _loadImageCanvas(xQrPath, 300),
     _loadImageCanvas('../assets/receipt/SHISEIDOGINZATOKYO.webp', 400),
@@ -802,7 +802,7 @@ function printByWebPRNT() {
 function _buildProductRowCanvas(r, productImgData) {
   const prod   = eventConfig.products[r.category];
   const totalW = 560;
-  const imgW   = 180;
+  const imgW   = 120;
   const gap    = 14;
   const textX  = imgW + gap;
   const textW  = totalW - textX - 4;
