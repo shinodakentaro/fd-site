@@ -1182,10 +1182,10 @@ body.result-mode .bg-full-layer {
 /* ── メッセージ（フッター上） ── */
 .rc-message-footer {
   text-align: center;
-  font-size: 16px;
+  font-size: 20px;
   color: #333;
   letter-spacing: .14em;
-  padding: 3px 0 4px;
+  padding: 12px 0 4px;
 }
 
 /* ── フッター ── */

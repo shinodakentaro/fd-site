@@ -985,7 +985,10 @@ function _sendWebPRNTRequest(r, printerUrl, charaImg, productRowImg, cosmeQrImg,
   // フッター
   request += builder.createTextElement({ codepage: 'utf8',
     data: '================================\n' });
-  request += builder.createTextElement({ codepage: 'utf8', data: state.message + '\n' });
+  request += builder.createFeedElement({ line: 1 });
+  const msgCanvas = _buildTextCanvas([state.message], 30, false);
+  request += builder.createBitImageElement({
+    context: msgCanvas.ctx, x: 0, y: 0, width: msgCanvas.w, height: msgCanvas.h });
   request += builder.createFeedElement({ line: 1 });
   if (logoImg) {
     request += builder.createBitImageElement({
