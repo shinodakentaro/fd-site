@@ -859,7 +859,7 @@ function _buildProductRowCanvas(r, productImgData) {
   }
 
   ctx.textBaseline = 'top';
-  let y = 6;
+  let y = 30;
 
   ctx.fillStyle = '#111';
   ctx.font = 'bold ' + brandSize + 'px "Noto Sans JP", sans-serif';
