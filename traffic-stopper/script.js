@@ -883,6 +883,25 @@ function _buildProductRowCanvas(r, productImgData) {
   return { ctx, w: totalW, h: totalH };
 }
 
+/** テキストをキャンバスにレンダリングしてビットマップ用データを返す */
+function _buildTextCanvas(lines, fontSize, bold, align) {
+  const w = 560;
+  const lineH = Math.ceil(fontSize * 1.5);
+  const h = lines.length * lineH + 8;
+  const canvas = document.createElement('canvas');
+  canvas.width = w; canvas.height = h;
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#fff';
+  ctx.fillRect(0, 0, w, h);
+  ctx.fillStyle = '#111';
+  ctx.textBaseline = 'top';
+  ctx.textAlign = align || 'center';
+  ctx.font = (bold ? 'bold ' : '') + fontSize + 'px "Noto Sans JP", sans-serif';
+  const x = align === 'left' ? 4 : w / 2;
+  lines.forEach((line, i) => { ctx.fillText(line, x, 4 + i * lineH); });
+  return { ctx, w, h };
+}
+
 /** コマンド組み立て & 送信 */
 function _sendWebPRNTRequest(r, printerUrl, charaImg, productRowImg, cosmeQrImg, xQrImg, logoImg) {
   const builder = new StarWebPrintBuilder();
@@ -894,12 +913,9 @@ function _sendWebPRNTRequest(r, printerUrl, charaImg, productRowImg, cosmeQrImg,
   // イベントヘッダー
   request += builder.createTextElement({ codepage: 'utf8', data: '@cosme TOKYO\n' });
   request += builder.createTextElement({ codepage: 'utf8', data: 'SHISEIDO POPUP EVENT\n' });
-  request += builder.createTextElement({ emphasis: true, width: 2, height: 1,
-    codepage: 'utf8', data: '肌運命を導く\n' });
-  request += builder.createTextElement({ emphasis: true, width: 2, height: 1,
-    codepage: 'utf8', data: '素肌美キャラ占い\n' });
-  request += builder.createTextElement({ emphasis: false, width: 1, height: 1,
-    codepage: 'utf8', data: '' });
+  const titleCanvas = _buildTextCanvas(['肌運命を導く', '素肌美キャラ占い'], 44, true);
+  request += builder.createBitImageElement({
+    context: titleCanvas.ctx, x: 0, y: 0, width: titleCanvas.w, height: titleCanvas.h });
 
   // 診断結果タイトル
   request += builder.createTextElement({ codepage: 'utf8',
