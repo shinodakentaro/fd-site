@@ -6,6 +6,9 @@ let prevData   = null;
 let charaIndex = 0;
 const CHARA_COUNT = 3;
 
+// キャラごとの個別位置オフセット（top） index=0:chara1, 1:chara2, 2:chara3
+const glowCharaTop = ['45%', '45%', '45%'];
+
 function cycleAssets() {
   charaIndex = (charaIndex + 1) % CHARA_COUNT;
   const idx = charaIndex + 1;
@@ -21,7 +24,7 @@ function cycleAssets() {
 
   setTimeout(() => {
     const [gChara, gComment, sComment, sChara] = els;
-    if (gChara)   gChara.src   = `../assets/images/G_character${idx}.png`;
+    if (gChara)   { gChara.src = `../assets/images/G_character${idx}.png`; gChara.style.top = glowCharaTop[charaIndex]; }
     if (gComment) gComment.src = `../assets/images/G_comment${idx}.png`;
     if (sComment) sComment.src = `../assets/images/S_comment${idx}.png`;
     if (sChara)   sChara.src   = `../assets/images/S_character${idx}.png`;

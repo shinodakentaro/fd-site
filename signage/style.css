@@ -30,13 +30,13 @@ body {
   transition: opacity 0.5s ease;
 }
 .sg-chara-glow {
-  left: 1.5%;
-  top: 55%;
-  width: 12%;
+  left: -2%;
+  top: 45%;
+  width: 18%;
 }
 .sg-chara-smooth {
   left: 83%;
-  top: 55%;
+  top: 52%;
   width: 15%;
 }
 
@@ -84,7 +84,7 @@ body {
   font-weight: 700;
 }
 .sg-vote-glow {
-  left: 17%;
+  left: 13%;
   top: 73%;
   color: #d42b2b;
   border-bottom: 4px solid #d42b2b;
@@ -94,7 +94,7 @@ body {
   color: #1a1a1a;
 }
 .sg-vote-smooth {
-  left: 79%;
+  left: 72%;
   top: 73%;
   color: #1a1a1a;
   border-bottom: 4px solid #1a1a1a;

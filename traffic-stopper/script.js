@@ -100,7 +100,7 @@ const results = {
     desc:      '光をまとうようなツヤ感で、どんな場所でも視線を集める存在に。あなたの魅力を最大限に引き出すGLOW仕上げが、今日の主役にしてくれます。',
     color1:    '#ffd700',
     color2:    '#ff85a1',
-    imgPath:     '../assets/images/character01_animation_3x.webp',
+    imgPath:     '../assets/images/chara01.png',
     imgPathMono: '../assets/images/chara01_mono.png',
     luck: {
       work:    '★★★★★',

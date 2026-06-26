@@ -4,45 +4,24 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>GLOW or SMOOTH 投票</title>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@500&family=Noto+Serif+JP:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-<!-- 背景レイヤー（全画面共通） -->
-<div class="bg-full-layer">
-  <img src="../assets/bg/bg_full.png" alt="" />
-</div>
-<div class="bg-2-layer" id="bg2">
-  <img src="../assets/bg/bg_2.svg" alt="" />
-</div>
-
 <!-- ===== 投票画面 ===== -->
 <div id="screen-vote" class="screen active">
   <div class="v-header">
-    <h1 class="v-title">あなたはどっち派？</h1>
-    <p class="v-sub">試して気に入った仕上がりに投票してください</p>
+    <h1 class="v-title">どちらが<br>あなたの推しファンデ？</h1>
   </div>
   <div class="v-btns" id="v-btns">
     <button class="v-btn v-btn-glow" onclick="castVote('glow')">
-      <div class="v-btn-label-wrap">
-        <span class="v-btn-label">GLOW チーム</span>
-      </div>
-      <div class="v-chara-row">
-        <img class="v-chara" src="../assets/images/chara01.png" alt="">
-        <img class="v-chara" src="../assets/images/chara02.png" alt="">
-        <img class="v-chara" src="../assets/images/chara03.png" alt="">
-      </div>
+      <div class="v-btn-badge v-btn-badge-glow">GLOW</div>
+      <p class="v-btn-type">シアーグロウ<br>タイプ</p>
     </button>
     <button class="v-btn v-btn-smooth" onclick="castVote('smooth')">
-      <div class="v-btn-label-wrap">
-        <span class="v-btn-label">SMOOTH チーム</span>
-      </div>
-      <div class="v-chara-row">
-        <img class="v-chara" src="../assets/images/chara04.png" alt="">
-        <img class="v-chara" src="../assets/images/chara05.png" alt="">
-        <img class="v-chara" src="../assets/images/chara06.png" alt="">
-      </div>
+      <div class="v-btn-badge v-btn-badge-smooth">SMOOTH</div>
+      <p class="v-btn-type">ノイズレススムース<br>タイプ</p>
     </button>
   </div>
 </div>

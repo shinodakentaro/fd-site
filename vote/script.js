@@ -21,9 +21,6 @@ function showDoneScreen(type) {
   const label = type === 'glow' ? 'GLOW派！' : 'SMOOTH派！';
   document.getElementById('done-title').textContent = label;
 
-  // bg_2 を非表示
-  document.getElementById('bg2').classList.add('hidden');
-
   document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
   document.getElementById('screen-done').classList.add('active');
 
@@ -46,7 +43,6 @@ function startAutoReset() {
 function resetVote() {
   if (resetTimer) { clearInterval(resetTimer); resetTimer = null; }
   hasVoted = false;
-  document.getElementById('bg2').classList.remove('hidden');
   document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
   document.getElementById('screen-vote').classList.add('active');
   document.querySelectorAll('.v-btn').forEach(btn => btn.disabled = false);

@@ -179,12 +179,12 @@ body.result-mode .bg-full-layer {
   object-fit: contain;
   display: block;
 }
-.st-c1 { top:  58px; left:  17px; width: 230px; transform: rotate(-7deg); }
-.st-c2 { top: 169px; left: 221px; width: 215px; }
-.st-c3 { top: 129px; left: 430px; width: 171px; }
-.st-c4 { top: 411px; left: 445px; width: 185px; }
-.st-c5 { top: 336px; left:  66px; width: 199px; }
-.st-c6 { top: 219px; left: 590px; width: 233px; }
+.st-c1 { top: 70px; left: -5px; width: 248px; }
+.st-c2 { top: 170px; left: 190px; width: 243px; }
+.st-c3 { top: 175px; left: 400px; width: 205px; }
+.st-c4 { top: 385px; left: 420px; width: 265px; }
+.st-c5 { top: 336px; left:  66px; width: 239px; }
+.st-c6 { top: 219px; left: 560px; width: 233px; }
 
 /* START button */
 .top-start-wrap {
