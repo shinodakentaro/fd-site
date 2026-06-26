@@ -604,8 +604,8 @@ function buildReceiptDOM() {
     : `<div class="rc-chara-placeholder">キャラクター入る</div>`;
 
   const productImg = r.category === 'GLOW'
-    ? '../assets/receipt/glow_product.png'
-    : '../assets/receipt/smooth_product.png';
+    ? '../assets/receipt/レシートglow.png'
+    : '../assets/receipt/レシートsmooth.png';
 
   const qrLeftImg = r.category === 'GLOW'
     ? '../assets/receipt/@cosme_glow.png'
@@ -616,8 +616,8 @@ function buildReceiptDOM() {
     : '../assets/receipt/qr_x_smooth.png';
 
   const xHashtags = r.category === 'GLOW'
-    ? `#SHISEIDO<br>#２つのファンデ美容液体験<br>#アットコスメトーキョー<br>#エッセンススキングロウファンデーション　７月１日（水）～７月７日（火）<br>原宿 @cosmeTOKYOで<br>POPUPイベント実施中！<br><br>[POPUPでの写真・感想を入れて投稿してね！]`
-    : `#SHISEIDO<br>#２つのファンデ美容液体験<br>#アットコスメトーキョー　#エッセンススキンスムースファンデーション<br><br>７月１日（水）～７月７日（火）<br>原宿 @cosmeTOKYOで<br>POPUPイベント実施中！<br><br>[POPUPでの写真・感想を入れて投稿してね！]`;
+    ? `#SHISEIDO<br>#２つのファンデ美容液体験<br>#アットコスメトーキョー<br>#エッセンススキングロウファンデーション`
+    : `#SHISEIDO<br>#２つのファンデ美容液体験<br>#アットコスメトーキョー　#エッセンススキンスムースファンデーション`;
 
   const prod = eventConfig.products[r.category];
 
@@ -667,7 +667,7 @@ function buildReceiptDOM() {
     <hr class="rc-hr-dot">
 
     <div class="rc-cosme-qr-section">
-      <div class="rc-qr-label">アイテムをゲットしたい方はこちら！</div>
+      <div class="rc-qr-label">商品詳細はこちら！</div>
       <img class="rc-qr-img" src="${qrLeftImg}" alt="QR @cosme">
     </div>
 
