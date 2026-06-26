@@ -190,8 +190,8 @@ const results = {
     desc:      'カバー力と仕上がりの美しさを両立。毛穴・シミ・色ムラをしっかりカバーしながら、やりすぎ感のないスムース仕上がりで"盛れ確定"の肌を演出します。',
     color1:    '#a8c8d8',
     color2:    '#c8b89a',
-    imgPath:     '../assets/images/chara04.png',
-    imgPathMono: '../assets/images/chara04_mono.png',
+    imgPath:     '../assets/images/chara06.png',
+    imgPathMono: '../assets/images/chara06_mono.png',
     luck: {
       work:    '★★★★★',
       love:    '★★★★☆',
@@ -250,8 +250,8 @@ const results = {
     desc:      'テカりゼロのマット肌で、どんな場面でも清潔感あふれる印象を作れます。時間が経っても崩れにくく、凛とした美しさが続きます。',
     color1:    '#5a7a8f',
     color2:    '#a8c8d8',
-    imgPath:     '../assets/images/chara06.png',
-    imgPathMono: '../assets/images/chara06_mono.png',
+    imgPath:     '../assets/images/chara04.png',
+    imgPathMono: '../assets/images/chara04_mono.png',
     luck: {
       work:    '★★★★★',
       love:    '★★★☆☆',
