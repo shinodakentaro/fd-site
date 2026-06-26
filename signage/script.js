@@ -9,6 +9,18 @@ const CHARA_COUNT = 3;
 // キャラごとの個別位置オフセット（top） index=0:chara1, 1:chara2, 2:chara3
 const glowCharaTop = ['45%', '45%', '45%'];
 
+// 吹き出しごとの個別サイズ（width）
+// index=0:comment1, 1:comment2, 2:comment3
+const glowCommentWidths   = ['15%', '18%', '24%'];  // G1丸大文字→小, G2雲型, G3横長→大
+const smoothCommentWidths = ['19%', '22%', '18%'];  // S1基準, S2横長, S3丸型
+
+function applyCommentWidths(i) {
+  const gComment = document.querySelector('.sg-comment-glow');
+  const sComment = document.querySelector('.sg-comment-smooth');
+  if (gComment) gComment.style.width = glowCommentWidths[i];
+  if (sComment) sComment.style.width = smoothCommentWidths[i];
+}
+
 function cycleAssets() {
   charaIndex = (charaIndex + 1) % CHARA_COUNT;
   const idx = charaIndex + 1;
@@ -28,11 +40,13 @@ function cycleAssets() {
     if (gComment) gComment.src = `../assets/images/G_comment${idx}.png`;
     if (sComment) sComment.src = `../assets/images/S_comment${idx}.png`;
     if (sChara)   sChara.src   = `../assets/images/S_character${idx}.png`;
+    applyCommentWidths(charaIndex);
     els.forEach(el => { if (el) el.style.opacity = '1'; });
   }, 500);
 }
 
 function init() {
+  applyCommentWidths(0);
   setInterval(cycleAssets, 30000);
 
   VoteStore.subscribe(data => {
