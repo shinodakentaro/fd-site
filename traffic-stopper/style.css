@@ -905,6 +905,11 @@ body.result-mode .bg-full-layer {
   margin: 0 auto;
   display: block;
 }
+.btn-print:disabled {
+  opacity: 0.4;
+  filter: grayscale(60%);
+  cursor: not-allowed;
+}
 .btn-restart {
   background: transparent;
   color: var(--text-light);
