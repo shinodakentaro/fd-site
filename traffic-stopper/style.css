@@ -982,6 +982,7 @@ body.result-mode .bg-full-layer {
 
 /* ── メインタイトル ── */
 .rc-main-title {
+  font-family: 'Noto Sans JP', sans-serif;
   font-size: 22px;
   font-weight: 700;
   text-align: center;
