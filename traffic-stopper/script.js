@@ -787,10 +787,11 @@ function printByWebPRNT() {
     _loadImageCanvas(productImgPath, 200),
     _loadImageCanvas(cosmeQrPath, 300),
     _loadImageCanvas(xQrPath, 300),
+    _loadImageCanvas('../assets/receipt/SHISEIDOGINZATOKYO.webp', 400),
   ]).then(function (images) {
     const charaImg       = _trimCanvasVertical(images[0]);
     const productRowCanvas = _buildProductRowCanvas(r, images[1]);
-    _sendWebPRNTRequest(r, printerUrl, charaImg, productRowCanvas, images[2], images[3]);
+    _sendWebPRNTRequest(r, printerUrl, charaImg, productRowCanvas, images[2], images[3], images[4]);
   });
 }
 
@@ -883,7 +884,7 @@ function _buildProductRowCanvas(r, productImgData) {
 }
 
 /** コマンド組み立て & 送信 */
-function _sendWebPRNTRequest(r, printerUrl, charaImg, productRowImg, cosmeQrImg, xQrImg) {
+function _sendWebPRNTRequest(r, printerUrl, charaImg, productRowImg, cosmeQrImg, xQrImg, logoImg) {
   const builder = new StarWebPrintBuilder();
   let request = '';
 
@@ -968,12 +969,11 @@ function _sendWebPRNTRequest(r, printerUrl, charaImg, productRowImg, cosmeQrImg,
   request += builder.createTextElement({ codepage: 'utf8',
     data: '================================\n' });
   request += builder.createTextElement({ codepage: 'utf8', data: state.message + '\n' });
-  request += builder.createTextElement({ emphasis: true, codepage: 'utf8',
-    data: 'SHISEIDO\n' });
-  request += builder.createTextElement({ emphasis: false, codepage: 'utf8',
-    data: 'GINZA TOKYO\n' });
   request += builder.createFeedElement({ line: 1 });
-  request += builder.createTextElement({ codepage: 'utf8', data: eventConfig.date + '\n' });
+  if (logoImg) {
+    request += builder.createBitImageElement({
+      context: logoImg.ctx, x: 0, y: 0, width: logoImg.w, height: logoImg.h });
+  }
   request += builder.createFeedElement({ line: 2 });
 
   // カット
