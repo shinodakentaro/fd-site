@@ -81,8 +81,8 @@ function updateNum(id, val, anim) {
 function spawnConfetti(type) {
   const isGlow = type === 'glow';
   const colors = ['#d42b2b', '#e05555', '#ff9999', '#ffcccc', '#ffffff', '#ffaaaa'];
-  const xMin = isGlow ? 0 : 50;
-  const xMax = isGlow ? 50 : 100;
+  const xMin = isGlow ? 50 : 0;
+  const xMax = isGlow ? 100 : 50;
 
   for (let i = 0; i < 55; i++) {
     const el    = document.createElement('div');
@@ -114,7 +114,7 @@ function spawnParticles(type) {
   const symbols = ['❤', '❤', '★', '★', '✦', '✧', '💕', '✨'];
   const isGlow  = type === 'glow';
   // 発生源: 票数の数字あたり
-  const originX = isGlow ? window.innerWidth * 0.25 : window.innerWidth * 0.82;
+  const originX = isGlow ? window.innerWidth * 0.82 : window.innerWidth * 0.25;
   const originY = window.innerHeight * 0.78;
 
   for (let i = 0; i < 20; i++) {

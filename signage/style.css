@@ -30,12 +30,12 @@ body {
   transition: opacity 0.5s ease;
 }
 .sg-chara-glow {
-  left: -2%;
+  left: 83%;
   top: 45%;
   width: 18%;
 }
 .sg-chara-smooth {
-  left: 83%;
+  left: -2%;
   top: 52%;
   width: 15%;
 }
@@ -49,15 +49,15 @@ body {
   animation: bubble-float 2s ease-in-out infinite;
 }
 .sg-comment-glow {
-  left: 13%;
-  top: 43%;
-  width: 18%;
-}
-.sg-comment-smooth {
   left: 70%;
   top: 43%;
-  width: 19%;
+  width: 18%;
   animation-delay: -1s;
+}
+.sg-comment-smooth {
+  left: 13%;
+  top: 43%;
+  width: 19%;
 }
 @keyframes bubble-float {
   0%, 100% { transform: translateY(0)    rotate(-1.5deg); }
@@ -84,7 +84,7 @@ body {
   font-weight: 700;
 }
 .sg-vote-glow {
-  left: 13%;
+  left: 72%;
   top: 73%;
   color: #d42b2b;
   border-bottom: 4px solid #d42b2b;
@@ -94,7 +94,7 @@ body {
   color: #1a1a1a;
 }
 .sg-vote-smooth {
-  left: 72%;
+  left: 13%;
   top: 73%;
   color: #1a1a1a;
   border-bottom: 4px solid #1a1a1a;
