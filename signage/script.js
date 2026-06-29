@@ -10,7 +10,7 @@ let charaIndex = 0;
 const CHARA_COUNT = 3;
 
 // キャラごとの個別位置オフセット（top） index=0:chara1, 1:chara2, 2:chara3
-const glowCharaTop = ['160px', '160px', '160px'];
+const glowCharaTop = ['320px', '320px', '320px'];
 
 // SMOOTHキャラの表示順（コメントindexに対してどのS_characterを表示するか）
 const smoothCharaOrder = [3, 2, 1];
