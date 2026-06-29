@@ -950,11 +950,9 @@ function _sendWebPRNTRequest(r, printerUrl, charaImg, productRowImg, cosmeQrImg,
   request += builder.createTextElement({ codepage: 'utf8',
     data: '--------------------------------\n' });
   request += builder.createTextElement({ codepage: 'utf8', data: 'あなたにおすすめなのは・・・\n' });
-  request += builder.createFeedElement({ line: 1 });
   if (productRowImg) {
     request += builder.createBitImageElement({
       context: productRowImg.ctx, x: 0, y: 0, width: productRowImg.w, height: productRowImg.h });
-    request += builder.createFeedElement({ line: 1 });
   }
 
   // @cosme QRセクション
@@ -965,7 +963,6 @@ function _sendWebPRNTRequest(r, printerUrl, charaImg, productRowImg, cosmeQrImg,
   if (cosmeQrImg) {
     request += builder.createBitImageElement({
       context: cosmeQrImg.ctx, x: 0, y: 0, width: cosmeQrImg.w, height: cosmeQrImg.h });
-    request += builder.createFeedElement({ line: 1 });
   }
 
   // X QRセクション（ハッシュタグ付き）
@@ -976,7 +973,6 @@ function _sendWebPRNTRequest(r, printerUrl, charaImg, productRowImg, cosmeQrImg,
   if (xQrImg) {
     request += builder.createBitImageElement({
       context: xQrImg.ctx, x: 0, y: 0, width: xQrImg.w, height: xQrImg.h });
-    request += builder.createFeedElement({ line: 1 });
   }
   const xHashtags = r.category === 'GLOW'
     ? '#SHISEIDO\n#２つのファンデ美容液体験\n#アットコスメトーキョー\n#エッセンススキングロウファンデーション\n'
@@ -986,11 +982,9 @@ function _sendWebPRNTRequest(r, printerUrl, charaImg, productRowImg, cosmeQrImg,
   // フッター
   request += builder.createTextElement({ codepage: 'utf8',
     data: '================================\n' });
-  request += builder.createFeedElement({ line: 1 });
   const msgCanvas = _buildTextCanvas([state.message], 30, false);
   request += builder.createBitImageElement({
     context: msgCanvas.ctx, x: 0, y: 0, width: msgCanvas.w, height: msgCanvas.h });
-  request += builder.createFeedElement({ line: 1 });
   if (logoImg) {
     request += builder.createBitImageElement({
       context: logoImg.ctx, x: 0, y: 0, width: logoImg.w, height: logoImg.h });
