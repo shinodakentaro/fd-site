@@ -732,11 +732,11 @@ body.result-mode .bg-full-layer {
 }
 
 .result-header {
-  padding: 48px 40px 0;
+  padding: 24px 40px 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 52px;
+  gap: 24px;
 }
 
 .result-title-wrap {
@@ -759,17 +759,17 @@ body.result-mode .bg-full-layer {
   text-align: center;
 }
 .result-name {
-  font-size: 80px;
+  font-size: 64px;
   font-weight: 500;
   color: #584636;
-  line-height: 1.5;
+  line-height: 1.2;
   white-space: nowrap;
 }
 .result-tagline {
-  font-size: 42px;
+  font-size: 30px;
   font-weight: 500;
   color: #584636;
-  line-height: 1.5;
+  line-height: 1.3;
   letter-spacing: 2.1px;
 }
 
@@ -786,7 +786,7 @@ body.result-mode .bg-full-layer {
 /* キャラクター画像 */
 .result-chara-img {
   display: block;
-  width: 450px; height: 450px;
+  width: 360px; height: 360px;
   object-fit: contain;
   margin: 0 auto;
   opacity: 0;
@@ -886,10 +886,10 @@ body.result-mode .bg-full-layer {
 }
 .result-print-hint {
   text-align: center;
-  font-size: 28px;
+  font-size: 22px;
   font-weight: 500;
   color: #584636;
-  line-height: 1.6;
+  line-height: 1.5;
   letter-spacing: .04em;
 }
 .btn-print {
@@ -914,7 +914,7 @@ body.result-mode .bg-full-layer {
   background: transparent;
   color: var(--text-light);
   font-size: 18px; font-weight: 500;
-  padding: 16px 40px; border-radius: var(--radius-lg);
+  padding: 10px 40px; border-radius: var(--radius-lg);
   border: 2px solid rgba(171,136,106,.3);
   letter-spacing: .05em;
   width: 80%;
