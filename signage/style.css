@@ -59,7 +59,7 @@ body {
   animation-delay: -1s;
 }
 .sg-comment-smooth {
-  left: 5%;
+  left: 12%;
   top: 40%;
 }
 @keyframes bubble-float {
