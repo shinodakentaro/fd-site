@@ -329,7 +329,7 @@ const eventConfig = {
     GLOW: {
       brand: 'SHISEIDO',
       name:  'エッセンス スキングロウ\nファンデーション',
-      desc:  'エッセンス圧巻のつや肌。満たされる一日。\n素肌からうつくしい仕上がり。\n美容液レベルの肌体験',
+      desc:  '圧巻のつや肌。満たされる一日。\n素肌からうつくしい仕上がり。\n美容液レベルの肌体験',
     },
     SMOOTH: {
       brand: 'SHISEIDO',
