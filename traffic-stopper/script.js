@@ -885,7 +885,7 @@ function _buildProductRowCanvas(r, productImgData) {
 }
 
 /** テキストをキャンバスにレンダリングしてビットマップ用データを返す */
-function _buildTextCanvas(lines, fontSize, bold, align) {
+function _buildTextCanvas(lines, fontSize, bold, align, fontFamily) {
   const w = 560;
   const lineH = Math.ceil(fontSize * 1.5);
   const h = lines.length * lineH + 8;
@@ -897,7 +897,7 @@ function _buildTextCanvas(lines, fontSize, bold, align) {
   ctx.fillStyle = '#111';
   ctx.textBaseline = 'top';
   ctx.textAlign = align || 'center';
-  ctx.font = (bold ? 'bold ' : '') + fontSize + 'px "Noto Sans JP", sans-serif';
+  ctx.font = (bold ? 'bold ' : '') + fontSize + 'px ' + (fontFamily || '"Noto Sans JP", sans-serif');
   const x = align === 'left' ? 4 : w / 2;
   lines.forEach((line, i) => { ctx.fillText(line, x, 4 + i * lineH); });
   return { ctx, w, h };
@@ -921,13 +921,14 @@ function _sendWebPRNTRequest(r, printerUrl, charaImg, productRowImg, cosmeQrImg,
   // 診断結果タイトル
   request += builder.createTextElement({ codepage: 'utf8',
     data: '================================\n' });
-  request += builder.createTextElement({ codepage: 'utf8', data: '　　　診断結果\n' });
+  request += builder.createTextElement({ codepage: 'utf8', data: '診断結果\n' });
   request += builder.createTextElement({ codepage: 'utf8',
     data: '================================\n' });
 
-  // 結果名（2倍サイズ・太字）
-  request += builder.createTextElement({ emphasis: true, width: 2, height: 2,
-    codepage: 'utf8', data: r.name + '\n' });
+  // 結果名（Noto Serif JP・ビットマップ）
+  const resultNameCanvas = _buildTextCanvas([r.name], 52, true, 'center', '"Noto Serif JP", serif');
+  request += builder.createBitImageElement({
+    context: resultNameCanvas.ctx, x: 0, y: 0, width: resultNameCanvas.w, height: resultNameCanvas.h });
   request += builder.createTextElement({ emphasis: false, width: 1, height: 1,
     codepage: 'utf8', data: state.subMessage + '\n' });
 
