@@ -60,9 +60,28 @@ function cycleAssets() {
   }, 500);
 }
 
+function preloadImages() {
+  const srcs = [
+    '../assets/images/G_character1.png',
+    '../assets/images/G_character2.png',
+    '../assets/images/G_character3.png',
+    '../assets/images/S_character1.png',
+    '../assets/images/S_character2.png',
+    '../assets/images/S_character3.png',
+    '../assets/images/G_comment1.png',
+    '../assets/images/G_comment2.png',
+    '../assets/images/G_comment3.png',
+    '../assets/images/S_comment1.png',
+    '../assets/images/S_comment2.png',
+    '../assets/images/S_comment3.png',
+  ];
+  srcs.forEach(src => { new Image().src = src; });
+}
+
 function init() {
   scaleToFit();
   window.addEventListener('resize', scaleToFit);
+  preloadImages();
 
   applyCommentWidths(0);
   setInterval(cycleAssets, 30000);
