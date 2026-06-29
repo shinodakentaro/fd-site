@@ -1023,7 +1023,7 @@ body.result-mode .bg-full-layer {
 
 /* ── キャラクター名 ── */
 .rc-name {
-  font-family: "Noto Serif JP", serif;
+  font-family: "Noto Sans JP", sans-serif;
   font-size: 20px;
   font-weight: 700;
   letter-spacing: .06em;

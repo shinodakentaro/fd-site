@@ -926,7 +926,7 @@ function _sendWebPRNTRequest(r, printerUrl, charaImg, productRowImg, cosmeQrImg,
     data: '================================\n' });
 
   // 結果名（Noto Serif JP・ビットマップ）
-  const resultNameCanvas = _buildTextCanvas([r.name], 52, true, 'center', '"Noto Serif JP", serif');
+  const resultNameCanvas = _buildTextCanvas([r.name], 52, true, 'center', '"Noto Sans JP", sans-serif');
   request += builder.createBitImageElement({
     context: resultNameCanvas.ctx, x: 0, y: 0, width: resultNameCanvas.w, height: resultNameCanvas.h });
   request += builder.createTextElement({ emphasis: false, width: 1, height: 1,
