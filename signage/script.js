@@ -10,14 +10,14 @@ let charaIndex = 0;
 const CHARA_COUNT = 3;
 
 // キャラごとの個別位置オフセット（top） index=0:chara1, 1:chara2, 2:chara3
-const glowCharaTop = ['320px', '320px', '320px'];
+const glowCharaTop = ['30%', '30%', '30%'];
 
 // SMOOTHキャラの表示順（コメントindexに対してどのS_characterを表示するか）
 const smoothCharaOrder = [3, 2, 1];
 
-// 吹き出しごとの個別サイズ（width）— 1920px基準
-const glowCommentWidths   = ['288px', '307px', '365px'];  // G1丸大文字, G2雲型, G3横長
-const smoothCommentWidths = ['365px', '346px', '346px'];  // S1基準, S2横長, S3丸型
+// 吹き出しごとの個別サイズ（width）— 1920px基準の%
+const glowCommentWidths   = ['15%', '16%', '19%'];  // G1丸大文字, G2雲型, G3横長
+const smoothCommentWidths = ['19%', '18%', '18%'];  // S1基準, S2横長, S3丸型
 
 /* ── 1920×1080 固定キャンバスをビューポートに合わせてスケール ── */
 function scaleToFit() {

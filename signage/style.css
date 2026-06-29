@@ -35,14 +35,14 @@ body {
   transition: opacity 0.5s ease;
 }
 .sg-chara-glow {
-  left: 1520px;
-  top: 320px;
-  width: 400px;
+  left: 79%;
+  top: 30%;
+  width: 21%;
 }
 .sg-chara-smooth {
-  left: 0px;
-  top: 320px;
-  width: 380px;
+  left: 0%;
+  top: 30%;
+  width: 20%;
 }
 
 /* ── 吹き出し ── */
@@ -54,13 +54,13 @@ body {
   animation: bubble-float 2s ease-in-out infinite;
 }
 .sg-comment-glow {
-  left: 1120px;
-  top: 300px;
+  left: 58%;
+  top: 28%;
   animation-delay: -1s;
 }
 .sg-comment-smooth {
-  left: 380px;
-  top: 300px;
+  left: 20%;
+  top: 28%;
 }
 @keyframes bubble-float {
   0%, 100% { transform: translateY(0)    rotate(-1.5deg); }
@@ -87,8 +87,8 @@ body {
   font-weight: 700;
 }
 .sg-vote-glow {
-  left: 1310px;
-  top: 790px;
+  left: 68%;
+  top: 73%;
   color: #d42b2b;
   border-bottom: 5px solid #d42b2b;
   padding-bottom: 10px;
@@ -97,8 +97,8 @@ body {
   color: #1a1a1a;
 }
 .sg-vote-smooth {
-  left: 80px;
-  top: 790px;
+  left: 4%;
+  top: 73%;
   color: #1a1a1a;
   border-bottom: 5px solid #1a1a1a;
   padding-bottom: 10px;
@@ -108,8 +108,8 @@ body {
 .sg-total {
   position: absolute;
   z-index: 4;
-  left: 960px;
-  top: 860px;
+  left: 50%;
+  top: 80%;
   transform: translateX(-50%);
   display: flex;
   align-items: baseline;
