@@ -2,21 +2,32 @@
    GLOW vs SMOOTH サイネージ
    ======================================== */
 
+const W = 1920;
+const H = 1080;
+
 let prevData   = null;
 let charaIndex = 0;
 const CHARA_COUNT = 3;
 
 // キャラごとの個別位置オフセット（top） index=0:chara1, 1:chara2, 2:chara3
-const glowCharaTop = ['45%', '45%', '45%'];
+const glowCharaTop = ['160px', '160px', '160px'];
 
 // SMOOTHキャラの表示順（コメントindexに対してどのS_characterを表示するか）
-// index0(毛穴・テカり)→S_character3(セルフィー), index1(肌ノイズ)→S_character2, index2(ノイズレス)→S_character1(マント)
 const smoothCharaOrder = [3, 2, 1];
 
-// 吹き出しごとの個別サイズ（width）
-// index=0:comment1, 1:comment2, 2:comment3
-const glowCommentWidths   = ['15%', '16%', '19%'];  // G1丸大文字→小, G2雲型, G3横長→大
-const smoothCommentWidths = ['19%', '18%', '18%'];  // S1基準, S2横長, S3丸型
+// 吹き出しごとの個別サイズ（width）— 1920px基準
+const glowCommentWidths   = ['288px', '307px', '365px'];  // G1丸大文字, G2雲型, G3横長
+const smoothCommentWidths = ['365px', '346px', '346px'];  // S1基準, S2横長, S3丸型
+
+/* ── 1920×1080 固定キャンバスをビューポートに合わせてスケール ── */
+function scaleToFit() {
+  const s  = Math.min(window.innerWidth / W, window.innerHeight / H);
+  const ml = (window.innerWidth  - W * s) / 2;
+  const mt = (window.innerHeight - H * s) / 2;
+  document.body.style.transform  = `scale(${s})`;
+  document.body.style.marginLeft = ml + 'px';
+  document.body.style.marginTop  = mt + 'px';
+}
 
 function applyCommentWidths(i) {
   const gComment = document.querySelector('.sg-comment-glow');
@@ -50,6 +61,9 @@ function cycleAssets() {
 }
 
 function init() {
+  scaleToFit();
+  window.addEventListener('resize', scaleToFit);
+
   applyCommentWidths(0);
   setInterval(cycleAssets, 30000);
 
@@ -81,8 +95,8 @@ function updateNum(id, val, anim) {
 function spawnConfetti(type) {
   const isGlow = type === 'glow';
   const colors = ['#d42b2b', '#e05555', '#ff9999', '#ffcccc', '#ffffff', '#ffaaaa'];
-  const xMin = isGlow ? 50 : 0;
-  const xMax = isGlow ? 100 : 50;
+  const xMin = isGlow ? W * 0.5 : 0;
+  const xMax = isGlow ? W       : W * 0.5;
 
   for (let i = 0; i < 55; i++) {
     const el    = document.createElement('div');
@@ -96,7 +110,7 @@ function spawnConfetti(type) {
     const rot   = Math.random() * 360;
 
     el.style.cssText = `
-      left: ${x}vw;
+      left: ${x}px;
       width: ${w}px;
       height: ${h}px;
       background: ${colors[Math.floor(Math.random() * colors.length)]};
@@ -113,14 +127,14 @@ function spawnConfetti(type) {
 function spawnParticles(type) {
   const symbols = ['❤', '❤', '★', '★', '✦', '✧', '💕', '✨'];
   const isGlow  = type === 'glow';
-  // 発生源: 票数の数字あたり
-  const originX = isGlow ? window.innerWidth * 0.82 : window.innerWidth * 0.25;
-  const originY = window.innerHeight * 0.78;
+  // 発生源: 1920×1080 座標系での票数位置
+  const originX = isGlow ? W * 0.82 : W * 0.15;
+  const originY = H * 0.80;
 
   for (let i = 0; i < 20; i++) {
     const el     = document.createElement('span');
     el.className = 'particle';
-    const angle  = (Math.random() * 220 - 110) * (Math.PI / 180); // 上方向に広がる扇形
+    const angle  = (Math.random() * 220 - 110) * (Math.PI / 180);
     const dist   = 120 + Math.random() * 260;
     const size   = 20 + Math.random() * 28;
     const dur    = 0.8 + Math.random() * 0.7;
