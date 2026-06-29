@@ -785,8 +785,8 @@ function printByWebPRNT() {
   Promise.all([
     _loadImageCanvas(r.imgPathMono, 375),
     _loadImageCanvas(productImgPath, 100),
-    _loadImageCanvas(cosmeQrPath, 300),
-    _loadImageCanvas(xQrPath, 300),
+    _loadImageCanvas(cosmeQrPath, 160),
+    _loadImageCanvas(xQrPath, 220),
     _loadImageCanvas('../assets/receipt/SHISEIDOGINZATOKYO.webp', 400),
   ]).then(function (images) {
     const charaImg       = _trimCanvasVertical(images[0]);
