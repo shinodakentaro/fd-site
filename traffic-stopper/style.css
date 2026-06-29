@@ -774,8 +774,10 @@ body.result-mode .bg-full-layer {
 }
 
 .result-body {
-  flex: 1; padding: 12px 40px 8px;
-  display: flex; flex-direction: column; gap: 16px;
+  flex: 1; padding: 0 40px;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 16px;
 }
 
 @keyframes chara-fadein {
@@ -786,7 +788,7 @@ body.result-mode .bg-full-layer {
 /* キャラクター画像 */
 .result-chara-img {
   display: block;
-  width: 360px; height: 360px;
+  width: 540px; height: 540px;
   object-fit: contain;
   margin: 0 auto;
   opacity: 0;
