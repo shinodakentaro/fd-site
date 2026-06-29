@@ -49,14 +49,30 @@ function cycleAssets() {
 
   els.forEach(el => { if (el) el.style.opacity = '0'; });
 
+  const newSrcs = [
+    `../assets/images/G_character${idx}.png`,
+    `../assets/images/G_comment${idx}.png`,
+    `../assets/images/S_comment${idx}.png`,
+    `../assets/images/S_character${smoothCharaOrder[charaIndex]}.png`,
+  ];
+
   setTimeout(() => {
     const [gChara, gComment, sComment, sChara] = els;
-    if (gChara)   { gChara.src = `../assets/images/G_character${idx}.png`; gChara.style.top = glowCharaTop[charaIndex]; }
-    if (gComment) gComment.src = `../assets/images/G_comment${idx}.png`;
-    if (sComment) sComment.src = `../assets/images/S_comment${idx}.png`;
-    if (sChara)   sChara.src   = `../assets/images/S_character${smoothCharaOrder[charaIndex]}.png`;
-    applyCommentWidths(charaIndex);
-    els.forEach(el => { if (el) el.style.opacity = '1'; });
+    if (gChara) gChara.style.top = glowCharaTop[charaIndex];
+
+    const loadPromises = els.map((el, i) => {
+      if (!el) return Promise.resolve();
+      return new Promise(resolve => {
+        el.onload = resolve;
+        el.onerror = resolve;
+        el.src = newSrcs[i];
+      });
+    });
+
+    Promise.all(loadPromises).then(() => {
+      applyCommentWidths(charaIndex);
+      els.forEach(el => { if (el) el.style.opacity = '1'; });
+    });
   }, 500);
 }
 
