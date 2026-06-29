@@ -1,21 +1,26 @@
 /* ========================================
    GLOW vs SMOOTH サイネージ
-   1920×1080 landscape モニター
+   固定キャンバス 1920×1080px — scale-to-fit
    ======================================== */
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+html {
+  background: #000; /* レターボックス部分 */
+}
+
 body {
   font-family: 'Noto Sans JP', sans-serif;
-  width: 100vw;
-  height: 100vh;
+  width: 1920px;
+  height: 1080px;
   overflow: hidden;
   position: relative;
+  transform-origin: top left;
 }
 
 /* ── display_bg 背景 ── */
 .bg-display-layer {
-  position: fixed;
+  position: absolute;
   inset: 0;
   background: url('../assets/bg/display_bg.png') center center / cover no-repeat;
   pointer-events: none;
@@ -24,40 +29,38 @@ body {
 
 /* ── キャラクター ── */
 .sg-chara {
-  position: fixed;
+  position: absolute;
   pointer-events: none;
   z-index: 3;
   transition: opacity 0.5s ease;
 }
 .sg-chara-glow {
-  left: 83%;
+  left: 79%;
   top: 45%;
-  width: 18%;
+  width: 21%;
 }
 .sg-chara-smooth {
-  left: -2%;
-  top: 52%;
-  width: 15%;
+  left: 0%;
+  top: 45%;
+  width: 20%;
 }
 
 /* ── 吹き出し ── */
 .sg-comment {
-  position: fixed;
+  position: absolute;
   pointer-events: none;
   z-index: 2;
   transition: opacity 0.5s ease;
   animation: bubble-float 2s ease-in-out infinite;
 }
 .sg-comment-glow {
-  left: 70%;
-  top: 43%;
-  width: 18%;
+  left: 68%;
+  top: 40%;
   animation-delay: -1s;
 }
 .sg-comment-smooth {
-  left: 9%;
-  top: 43%;
-  width: 19%;
+  left: 11%;
+  top: 40%;
 }
 @keyframes bubble-float {
   0%, 100% { transform: translateY(0)    rotate(-1.5deg); }
@@ -67,43 +70,43 @@ body {
 
 /* ── GLOW / SMOOTH 票数 ── */
 .sg-vote {
-  position: fixed;
+  position: absolute;
   z-index: 4;
   display: flex;
   align-items: baseline;
   gap: 0.12em;
 }
 .sg-vote span:first-child {
-  font-size: 10vw;
+  font-size: 180px;
   font-weight: 900;
   line-height: 1;
   letter-spacing: -0.03em;
 }
 .sg-unit {
-  font-size: 2.5vw;
+  font-size: 44px;
   font-weight: 700;
 }
 .sg-vote-glow {
-  left: 72%;
+  left: 75%;
   top: 73%;
   color: #d42b2b;
-  border-bottom: 4px solid #d42b2b;
-  padding-bottom: 8px;
+  border-bottom: 5px solid #d42b2b;
+  padding-bottom: 10px;
 }
 .sg-vote-glow .sg-unit {
   color: #1a1a1a;
 }
 .sg-vote-smooth {
-  left: 9%;
+  left: 18%;
   top: 73%;
   color: #1a1a1a;
-  border-bottom: 4px solid #1a1a1a;
-  padding-bottom: 8px;
+  border-bottom: 5px solid #1a1a1a;
+  padding-bottom: 10px;
 }
 
-/* ── 投票総数（中央円内） ── */
+/* ── 投票総数（中央） ── */
 .sg-total {
-  position: fixed;
+  position: absolute;
   z-index: 4;
   left: 50%;
   top: 80%;
@@ -115,20 +118,20 @@ body {
   white-space: nowrap;
 }
 .sg-total span:first-child {
-  font-size: 6vw;
+  font-size: 108px;
   font-weight: 900;
   line-height: 1;
   letter-spacing: -0.03em;
 }
 .sg-unit-sm {
-  font-size: 1.8vw;
+  font-size: 34px;
   font-weight: 700;
   color: #1a1a1a;
 }
 
 /* ── 紙吹雪 ── */
 .confetti {
-  position: fixed;
+  position: absolute;
   top: -16px;
   pointer-events: none;
   z-index: 10;
@@ -136,12 +139,12 @@ body {
 @keyframes confetti-fall {
   0%   { transform: translateY(0) translateX(0) rotate(0deg); opacity: 1; }
   85%  { opacity: 1; }
-  100% { transform: translateY(110vh) translateX(var(--drift)) rotate(calc(var(--rot) * 4)); opacity: 0; }
+  100% { transform: translateY(1188px) translateX(var(--drift)) rotate(calc(var(--rot) * 4)); opacity: 0; }
 }
 
 /* ── ハート・星パーティクル ── */
 .particle {
-  position: fixed;
+  position: absolute;
   pointer-events: none;
   z-index: 11;
   font-size: var(--size);

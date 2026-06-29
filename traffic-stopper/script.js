@@ -1078,7 +1078,15 @@ function stopSparkles() {
 document.addEventListener('DOMContentLoaded', () => {
   showScreen('screen-top');
   startSparkles();
+  preloadCharaImages();
 });
+
+function preloadCharaImages() {
+  const paths = Object.values(results)
+    .map(r => r.imgPath)
+    .filter(Boolean);
+  paths.forEach(src => { new Image().src = src; });
+}
 
 /* ========================================
    DEV: レシートプレビュー直行（本番では非表示）
