@@ -55,7 +55,7 @@ body {
   animation-delay: -1s;
 }
 .sg-comment-smooth {
-  left: 13%;
+  left: 9%;
   top: 43%;
   width: 19%;
 }
@@ -94,7 +94,7 @@ body {
   color: #1a1a1a;
 }
 .sg-vote-smooth {
-  left: 13%;
+  left: 9%;
   top: 73%;
   color: #1a1a1a;
   border-bottom: 4px solid #1a1a1a;
