@@ -36,12 +36,12 @@ body {
 }
 .sg-chara-glow {
   left: 79%;
-  top: 30%;
+  top: 45%;
   width: 21%;
 }
 .sg-chara-smooth {
   left: 0%;
-  top: 30%;
+  top: 45%;
   width: 20%;
 }
 
@@ -55,12 +55,12 @@ body {
 }
 .sg-comment-glow {
   left: 58%;
-  top: 28%;
+  top: 40%;
   animation-delay: -1s;
 }
 .sg-comment-smooth {
   left: 20%;
-  top: 28%;
+  top: 40%;
 }
 @keyframes bubble-float {
   0%, 100% { transform: translateY(0)    rotate(-1.5deg); }
