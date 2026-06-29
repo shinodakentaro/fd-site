@@ -100,7 +100,7 @@ const results = {
     desc:      '光をまとうようなツヤ感で、どんな場所でも視線を集める存在に。あなたの魅力を最大限に引き出すGLOW仕上げが、今日の主役にしてくれます。',
     color1:    '#ffd700',
     color2:    '#ff85a1',
-    imgPath:     '../assets/images/chara01.webp',
+    imgPath:     '../assets/images/chara01.png',
     imgPathMono: '../assets/images/chara01_mono.png',
     luck: {
       work:    '★★★★★',
@@ -130,7 +130,7 @@ const results = {
     desc:      '雑味のない、透き通るような光感が魅力。くすみゼロの肌で、素肌が完璧に整ったような自然な輝きを放てます。',
     color1:    '#7ecfd6',
     color2:    '#f2a7c3',
-    imgPath:     '../assets/images/chara02.webp',
+    imgPath:     '../assets/images/chara02.png',
     imgPathMono: '../assets/images/chara02_mono.png',
     luck: {
       work:    '★★★★☆',
@@ -160,7 +160,7 @@ const results = {
     desc:      'ふんわりとした光感と、自然な血色感が合わさったような幸せオーラが魅力。見ているだけで元気をもらえる、ポジティブな輝きがあなたの個性です。',
     color1:    '#ffb347',
     color2:    '#ff85a1',
-    imgPath:     '../assets/images/chara03.webp',
+    imgPath:     '../assets/images/chara03.png',
     imgPathMono: '../assets/images/chara03_mono.png',
     luck: {
       work:    '★★★☆☆',
@@ -190,7 +190,7 @@ const results = {
     desc:      'カバー力と仕上がりの美しさを両立。毛穴・シミ・色ムラをしっかりカバーしながら、やりすぎ感のないスムース仕上がりで"盛れ確定"の肌を演出します。',
     color1:    '#a8c8d8',
     color2:    '#c8b89a',
-    imgPath:     '../assets/images/chara06.webp',
+    imgPath:     '../assets/images/chara06.png',
     imgPathMono: '../assets/images/chara06_mono.png',
     luck: {
       work:    '★★★★★',
@@ -220,7 +220,7 @@ const results = {
     desc:      '素肌感を残しながらキレイに整えたような、ナチュラルビューティーが光ります。「そのまま？」と言われる無敵の素肌仕上がりを実現。',
     color1:    '#d4b8e8',
     color2:    '#c8b89a',
-    imgPath:     '../assets/images/chara05.webp',
+    imgPath:     '../assets/images/chara05.png',
     imgPathMono: '../assets/images/chara05_mono.png',
     luck: {
       work:    '★★★☆☆',
@@ -250,7 +250,7 @@ const results = {
     desc:      'テカりゼロのマット肌で、どんな場面でも清潔感あふれる印象を作れます。時間が経っても崩れにくく、凛とした美しさが続きます。',
     color1:    '#5a7a8f',
     color2:    '#a8c8d8',
-    imgPath:     '../assets/images/chara04.webp',
+    imgPath:     '../assets/images/chara04.png',
     imgPathMono: '../assets/images/chara04_mono.png',
     luck: {
       work:    '★★★★★',
