@@ -54,12 +54,12 @@ body {
   animation: bubble-float 2s ease-in-out infinite;
 }
 .sg-comment-glow {
-  left: 58%;
+  left: 68%;
   top: 40%;
   animation-delay: -1s;
 }
 .sg-comment-smooth {
-  left: 20%;
+  left: 5%;
   top: 40%;
 }
 @keyframes bubble-float {
