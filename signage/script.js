@@ -19,7 +19,7 @@ const smoothCharaOrder = [3, 2, 1];
 // 吹き出しごとの個別サイズ（width）— 1920px基準の%
 const glowCommentWidths   = ['15%', '16%', '19%'];  // G1丸大文字, G2雲型, G3横長
 const smoothCommentWidths = ['19%', '18%', '18%'];  // S1基準, S2横長, S3丸型
-const smoothCommentLefts  = ['10%', '13%', '15%'];  // S1毛穴, S2ノイズなし, S3赤ちゃん肌
+const smoothCommentLefts  = ['10%', '11%', '15%'];  // S1毛穴, S2ノイズなし, S3赤ちゃん肌
 
 /* ── 1920×1080 固定キャンバスをビューポートに合わせてスケール ── */
 function scaleToFit() {
