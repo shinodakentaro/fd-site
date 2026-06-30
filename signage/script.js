@@ -9,8 +9,9 @@ let prevData   = null;
 let charaIndex = 0;
 const CHARA_COUNT = 3;
 
-// キャラごとの個別位置オフセット（top） index=0:chara1, 1:chara2, 2:chara3
-const glowCharaTop = ['45%', '45%', '45%'];
+// キャラごとの個別位置オフセット（top/left） index=0:chara1, 1:chara2, 2:chara3
+const glowCharaTop  = ['45%', '41%', '47%'];
+const glowCharaLeft = ['79%', '76%', '79%'];
 
 // SMOOTHキャラの表示順（コメントindexに対してどのS_characterを表示するか）
 const smoothCharaOrder = [3, 2, 1];
@@ -18,6 +19,7 @@ const smoothCharaOrder = [3, 2, 1];
 // 吹き出しごとの個別サイズ（width）— 1920px基準の%
 const glowCommentWidths   = ['15%', '16%', '19%'];  // G1丸大文字, G2雲型, G3横長
 const smoothCommentWidths = ['19%', '18%', '18%'];  // S1基準, S2横長, S3丸型
+const smoothCommentLefts  = ['10%', '16%', '22%'];  // S1毛穴, S2ノイズなし, S3赤ちゃん肌
 
 /* ── 1920×1080 固定キャンバスをビューポートに合わせてスケール ── */
 function scaleToFit() {
@@ -33,7 +35,10 @@ function applyCommentWidths(i) {
   const gComment = document.querySelector('.sg-comment-glow');
   const sComment = document.querySelector('.sg-comment-smooth');
   if (gComment) gComment.style.width = glowCommentWidths[i];
-  if (sComment) sComment.style.width = smoothCommentWidths[i];
+  if (sComment) {
+    sComment.style.width = smoothCommentWidths[i];
+    sComment.style.left  = smoothCommentLefts[i];
+  }
 }
 
 function cycleAssets() {
@@ -58,7 +63,10 @@ function cycleAssets() {
 
   setTimeout(() => {
     const [gChara, gComment, sComment, sChara] = els;
-    if (gChara) gChara.style.top = glowCharaTop[charaIndex];
+    if (gChara) {
+      gChara.style.top  = glowCharaTop[charaIndex];
+      gChara.style.left = glowCharaLeft[charaIndex];
+    }
 
     const loadPromises = els.map((el, i) => {
       if (!el) return Promise.resolve();
