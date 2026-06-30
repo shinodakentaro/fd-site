@@ -329,7 +329,7 @@ const eventConfig = {
     GLOW: {
       brand: 'SHISEIDO',
       name:  'エッセンス スキングロウ\nファンデーション',
-      desc:  '圧巻のつや肌。満たされる一日。\n素肌からうつくしい仕上がり。\n美容液レベルの肌体験',
+      desc:  '圧巻のつや肌。満たされる一日。\n素肌から美しい仕上がり。\n美容液レベルの肌体験',
     },
     SMOOTH: {
       brand: 'SHISEIDO',
@@ -810,7 +810,7 @@ function _buildProductRowCanvas(r, productImgData) {
 
   const brandSize = 22;
   const nameSize  = 24;
-  const descSize  = 18;
+  const descSize  = 20;
 
   function wrapText(ctx, text, maxW) {
     const result = [];
