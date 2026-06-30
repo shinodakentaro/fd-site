@@ -887,8 +887,34 @@ function _buildProductRowCanvas(r, productImgData) {
 /** テキストをキャンバスにレンダリングしてビットマップ用データを返す */
 function _buildTextCanvas(lines, fontSize, bold, align, fontFamily) {
   const w = 560;
+  const pad = 8;
   const lineH = Math.ceil(fontSize * 1.5);
-  const h = lines.length * lineH + 8;
+  const font = (bold ? 'bold ' : '') + fontSize + 'px ' + (fontFamily || '"Noto Sans JP", sans-serif');
+
+  const tmpCanvas = document.createElement('canvas');
+  tmpCanvas.width = w; tmpCanvas.height = 10;
+  const tmpCtx = tmpCanvas.getContext('2d');
+  tmpCtx.font = font;
+
+  const wrappedLines = [];
+  for (const line of lines) {
+    if (tmpCtx.measureText(line).width <= w - pad * 2) {
+      wrappedLines.push(line);
+    } else {
+      let current = '';
+      for (const ch of line) {
+        if (tmpCtx.measureText(current + ch).width > w - pad * 2 && current) {
+          wrappedLines.push(current);
+          current = ch;
+        } else {
+          current += ch;
+        }
+      }
+      if (current) wrappedLines.push(current);
+    }
+  }
+
+  const h = wrappedLines.length * lineH + 8;
   const canvas = document.createElement('canvas');
   canvas.width = w; canvas.height = h;
   const ctx = canvas.getContext('2d');
@@ -897,9 +923,9 @@ function _buildTextCanvas(lines, fontSize, bold, align, fontFamily) {
   ctx.fillStyle = '#111';
   ctx.textBaseline = 'top';
   ctx.textAlign = align || 'center';
-  ctx.font = (bold ? 'bold ' : '') + fontSize + 'px ' + (fontFamily || '"Noto Sans JP", sans-serif');
-  const x = align === 'left' ? 4 : w / 2;
-  lines.forEach((line, i) => { ctx.fillText(line, x, 4 + i * lineH); });
+  ctx.font = font;
+  const x = align === 'left' ? pad : w / 2;
+  wrappedLines.forEach((line, i) => { ctx.fillText(line, x, 4 + i * lineH); });
   return { ctx, w, h };
 }
 
@@ -1093,9 +1119,12 @@ function preloadCharaImages() {
    ======================================== */
 function devJumpToReceipt(resultKey) {
   const r = results[resultKey];
+  const matchingKeys = Object.keys(resultMap).filter(k => resultMap[k] === resultKey);
+  const answerKey = pickRandom(matchingKeys);
+  const m = messageMap[answerKey] || { sub: r.subCopy, msg: pickRandom(r.messages) };
   state.resultKey  = resultKey;
-  state.subMessage = r.subCopy;
-  state.message    = pickRandom(r.messages);
+  state.subMessage = m.sub;
+  state.message    = m.msg;
   state.luck       = { work: randomStars(2), love: randomStars(2), money: randomStars(2) };
   buildReceiptDOM();
   showScreen('screen-receipt');
