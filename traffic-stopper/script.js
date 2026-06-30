@@ -810,7 +810,7 @@ function _buildProductRowCanvas(r, productImgData) {
 
   const brandSize = 22;
   const nameSize  = 24;
-  const descSize  = 20;
+  const descSize  = 22;
 
   function wrapText(ctx, text, maxW) {
     const result = [];
