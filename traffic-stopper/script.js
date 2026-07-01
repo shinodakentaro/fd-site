@@ -566,7 +566,7 @@ function calcResult() {
   state.resultKey   = resultId;
   state.subMessage  = m.sub;
   state.message     = m.msg;
-  state.luck        = { work: randomStars(2), love: randomStars(2), money: randomStars(2) };
+  state.luck        = { work: randomStars(3), love: randomStars(3), money: randomStars(3) };
 }
 
 /* ========================================
