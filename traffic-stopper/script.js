@@ -616,13 +616,13 @@ function buildReceiptDOM() {
     : '../assets/receipt/qr_x_smooth.png';
 
   const xHashtags = r.category === 'GLOW'
-    ? `#SHISEIDO<br>#２つのファンデ美容液体験<br>#アットコスメトーキョー<br>#エッセンススキングロウファンデーション`
-    : `#SHISEIDO<br>#２つのファンデ美容液体験<br>#アットコスメトーキョー　#エッセンススキンスムースファンデーション`;
+    ? `#SHISEIDO<br>#２つのファンデ美容液体験<br>#アットコスメナゴヤ<br>#エッセンススキングロウファンデーション`
+    : `#SHISEIDO<br>#２つのファンデ美容液体験<br>#アットコスメナゴヤ　#エッセンススキンスムースファンデーション`;
 
   const prod = eventConfig.products[r.category];
 
   const html = `
-    <div class="rc-event-header">@cosme TOKYO　SHISEIDO POPUP EVENT</div>
+    <div class="rc-event-header">@cosme NAGOYA　SHISEIDO POPUP EVENT</div>
 
     <div class="rc-main-title">肌運命を導く<br>素肌美キャラ占い</div>
 
@@ -938,7 +938,7 @@ function _sendWebPRNTRequest(r, printerUrl, charaImg, productRowImg, cosmeQrImg,
   request += builder.createAlignmentElement({ position: 'center' });
 
   // イベントヘッダー
-  request += builder.createTextElement({ codepage: 'utf8', data: '@cosme TOKYO\n' });
+  request += builder.createTextElement({ codepage: 'utf8', data: '@cosme NAGOYA\n' });
   request += builder.createTextElement({ codepage: 'utf8', data: 'SHISEIDO POPUP EVENT\n' });
   const titleCanvas = _buildTextCanvas(['肌運命を導く', '素肌美キャラ占い'], 44, true);
   request += builder.createBitImageElement({
@@ -1001,8 +1001,8 @@ function _sendWebPRNTRequest(r, printerUrl, charaImg, productRowImg, cosmeQrImg,
       context: xQrImg.ctx, x: 0, y: 0, width: xQrImg.w, height: xQrImg.h });
   }
   const xHashtags = r.category === 'GLOW'
-    ? '#SHISEIDO\n#２つのファンデ美容液体験\n#アットコスメトーキョー\n#エッセンススキングロウファンデーション\n'
-    : '#SHISEIDO\n#２つのファンデ美容液体験\n#アットコスメトーキョー\n#エッセンススキンスムースファンデーション\n';
+    ? '#SHISEIDO\n#２つのファンデ美容液体験\n#アットコスメナゴヤ\n#エッセンススキングロウファンデーション\n'
+    : '#SHISEIDO\n#２つのファンデ美容液体験\n#アットコスメナゴヤ\n#エッセンススキンスムースファンデーション\n';
   request += builder.createTextElement({ codepage: 'utf8', data: xHashtags });
 
   // フッター
