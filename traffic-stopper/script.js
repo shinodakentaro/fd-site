@@ -684,6 +684,11 @@ function buildReceiptDOM() {
     <div class="rc-message-footer">${state.message}</div>
 
     <img class="rc-logo-img" src="../assets/receipt/SHISEIDOGINZATOKYO.webp" alt="SHISEIDO GINZA TOKYO">
+
+    <div class="rc-stamp-area">
+      <div class="rc-stamp-label">パウチサンプル進呈</div>
+      <div class="rc-stamp-box"></div>
+    </div>
   `;
 
   document.getElementById('receipt-content').innerHTML      = html;
@@ -929,6 +934,24 @@ function _buildTextCanvas(lines, fontSize, bold, align, fontFamily) {
   return { ctx, w, h };
 }
 
+/**
+ * パウチサンプル進呈スタンプ欄（点線の正方形）をキャンバスに描画
+ * mC-Print3 は 203dpi（≒8dot/mm）のため、sizeMm * 8 でドット数に変換
+ */
+function _buildStampBoxCanvas(sizeMm) {
+  const size = Math.round(sizeMm * 8);
+  const canvas = document.createElement('canvas');
+  canvas.width = size; canvas.height = size;
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#fff';
+  ctx.fillRect(0, 0, size, size);
+  ctx.strokeStyle = '#000';
+  ctx.lineWidth = 2;
+  ctx.setLineDash([6, 6]);
+  ctx.strokeRect(1, 1, size - 2, size - 2);
+  return { ctx, w: size, h: size };
+}
+
 /** コマンド組み立て & 送信 */
 function _sendWebPRNTRequest(r, printerUrl, charaImg, productRowImg, cosmeQrImg, xQrImg, logoImg) {
   const builder = new StarWebPrintBuilder();
@@ -1015,10 +1038,21 @@ function _sendWebPRNTRequest(r, printerUrl, charaImg, productRowImg, cosmeQrImg,
     request += builder.createBitImageElement({
       context: logoImg.ctx, x: 0, y: 0, width: logoImg.w, height: logoImg.h });
   }
+
+  // 本体レシートと切り離せるよう部分カット（中央のみ繋がったミシン目状）
+  request += builder.createFeedElement({ line: 2 });
+  request += builder.createCutPaperElement({ feed: true, type: 'partial' });
+
+  // パウチサンプル進呈スタンプ欄（実寸30mm×30mm）
+  request += builder.createTextElement({ codepage: 'utf8', data: 'パウチサンプル進呈\n' });
+  const stampCanvas = _buildStampBoxCanvas(30);
+  request += builder.createBitImageElement({
+    context: stampCanvas.ctx, x: 0, y: 0, width: stampCanvas.w, height: stampCanvas.h });
+
   request += builder.createFeedElement({ line: 2 });
 
-  // カット
-  request += builder.createCutPaperElement({ feed: true });
+  // カット（お客様渡し用に完全に切り離す）
+  request += builder.createCutPaperElement({ feed: true, type: 'full' });
 
   const trader = new StarWebPrintTrader({ url: printerUrl });
 

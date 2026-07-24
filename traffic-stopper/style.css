@@ -1204,6 +1204,25 @@ body.result-mode .bg-full-layer {
   margin: 4px auto 2px;
 }
 
+/* ── スタンプ欄（パウチサンプル進呈） ── */
+.rc-stamp-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  margin: 10px 0 4px;
+}
+.rc-stamp-label {
+  font-size: 11px;
+  color: #333;
+  letter-spacing: .08em;
+}
+.rc-stamp-box {
+  width: 30mm;
+  height: 30mm;
+  border: 1px dashed #555;
+}
+
 /* ========================================
    DEV: レシートプレビュー確認パネル
    ======================================== */
