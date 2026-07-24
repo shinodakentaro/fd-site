@@ -685,6 +685,8 @@ function buildReceiptDOM() {
 
     <img class="rc-logo-img" src="../assets/receipt/SHISEIDOGINZATOKYO.webp" alt="SHISEIDO GINZA TOKYO">
 
+    <hr class="rc-hr-dot">
+
     <div class="rc-stamp-area">
       <div class="rc-stamp-label">パウチサンプル進呈</div>
       <div class="rc-stamp-box"></div>
@@ -1039,9 +1041,9 @@ function _sendWebPRNTRequest(r, printerUrl, charaImg, productRowImg, cosmeQrImg,
       context: logoImg.ctx, x: 0, y: 0, width: logoImg.w, height: logoImg.h });
   }
 
-  // 本体レシートと切り離せるよう部分カット（中央のみ繋がったミシン目状）
-  request += builder.createFeedElement({ line: 2 });
-  request += builder.createCutPaperElement({ feed: true, type: 'partial' });
+  // 本体レシートとの区切り罫線（物理カットはせず、他セクションと同じ罫線表現）
+  request += builder.createTextElement({ codepage: 'utf8',
+    data: '--------------------------------\n' });
 
   // パウチサンプル進呈スタンプ欄（実寸30mm×30mm）
   request += builder.createTextElement({ codepage: 'utf8', data: 'パウチサンプル進呈\n' });
@@ -1051,8 +1053,8 @@ function _sendWebPRNTRequest(r, printerUrl, charaImg, productRowImg, cosmeQrImg,
 
   request += builder.createFeedElement({ line: 2 });
 
-  // カット（お客様渡し用に完全に切り離す）
-  request += builder.createCutPaperElement({ feed: true, type: 'full' });
+  // カット
+  request += builder.createCutPaperElement({ feed: true });
 
   const trader = new StarWebPrintTrader({ url: printerUrl });
 
